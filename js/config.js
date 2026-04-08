@@ -43,6 +43,19 @@ var REACTOR_CONFIG = {
         scramRadiationDecay: 0.9,
         maxEnergyMW: 1000,
         voltageBase: 15.75,
-        alertDeduplicateWindow: 5000
+        alertDeduplicateWindow: 5000,
+        extraPumpCoolingBoost: 0.3,
+        emergencyCoolingFactor: 2.0,
+        coolantInletBase: 185,
+        coolingOffsetConstant: 0.5,
+        pressurizerBase: 50,
+        pressurizerFlowDivisor: 200,
+        temperatureSmoothFactor: 0.02,
+        minCoreTemperature: 20,
+        pressureMin: 5,
+        pressureMax: 25,
+        radiationTempThreshold: 250,
+        radiationTempDivisor: 100,
+        frequencyJitter: 0.1
     }
 };

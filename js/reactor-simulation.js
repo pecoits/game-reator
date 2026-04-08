@@ -106,8 +106,8 @@ var ReactorSimulation = (function() {
 
     ReactorSimulation.prototype.updateCoolingSystem = function() {
         var pumpEfficiency = this.mainPumpSpeed / 100;
-        var extraCooling = this.extraPumpActive ? 0.3 : 0;
-        var emergencyFactor = this.emergencyCoolingActive ? 2.0 : 1.0;
+        var extraCooling = this.extraPumpActive ? REACTOR_CONFIG.physics.extraPumpCoolingBoost : 0;
+        var emergencyFactor = this.emergencyCoolingActive ? REACTOR_CONFIG.physics.emergencyCoolingFactor : 1.0;
 
         var totalCooling = (pumpEfficiency + extraCooling) * emergencyFactor;
 
@@ -118,11 +118,11 @@ var ReactorSimulation = (function() {
         var heatFromReactor = this.reactorPower * REACTOR_CONFIG.physics.heatPerPowerUnit;
         var coolingCapacity = totalCooling * REACTOR_CONFIG.physics.coolingCapacityFactor;
 
-        this.tempOutlet = 185 + (heatFromReactor / (totalCooling + 0.5));
+        this.tempOutlet = REACTOR_CONFIG.physics.coolantInletBase + (heatFromReactor / (totalCooling + REACTOR_CONFIG.physics.coolingOffsetConstant));
         this.tempInlet = this.tempOutlet - (coolingCapacity / 100);
 
         // Pressurizer level
-        this.pressurizerLevel = 50 + (this.coolantFlow / 200);
+        this.pressurizerLevel = REACTOR_CONFIG.physics.pressurizerBase + (this.coolantFlow / REACTOR_CONFIG.physics.pressurizerFlowDivisor);
         this.pressurizerLevel = Math.min(100, Math.max(0, this.pressurizerLevel));
     };
 
@@ -133,21 +133,21 @@ var ReactorSimulation = (function() {
         var emergencyCooling = this.emergencyCoolingActive ? REACTOR_CONFIG.physics.emergencyCoolingBonus : 0;
 
         var targetTemp = 200 + (heatGeneration - heatDissipation - emergencyCooling);
-        this.coreTemperature += (targetTemp - this.coreTemperature) * 0.02;
-        this.coreTemperature = Math.max(20, this.coreTemperature);
+        this.coreTemperature += (targetTemp - this.coreTemperature) * REACTOR_CONFIG.physics.temperatureSmoothFactor;
+        this.coreTemperature = Math.max(REACTOR_CONFIG.physics.minCoreTemperature, this.coreTemperature);
     };
 
     ReactorSimulation.prototype.updatePressure = function() {
         // Pressure related to temperature
         var tempPressure = REACTOR_CONFIG.physics.tempPressureBase + (this.coreTemperature - 200) * REACTOR_CONFIG.physics.tempPressureFactor;
         this.pressure += (tempPressure - this.pressure) * REACTOR_CONFIG.physics.pressureSmoothFactor;
-        this.pressure = Math.max(5, Math.min(25, this.pressure));
+        this.pressure = Math.max(REACTOR_CONFIG.physics.pressureMin, Math.min(REACTOR_CONFIG.physics.pressureMax, this.pressure));
     };
 
     ReactorSimulation.prototype.updateRadiation = function() {
         // Base radiation + temperature factor
         var baseRadiation = REACTOR_CONFIG.physics.radiationBase;
-        var tempFactor = Math.max(0, (this.coreTemperature - 250) / 100);
+        var tempFactor = Math.max(0, (this.coreTemperature - REACTOR_CONFIG.physics.radiationTempThreshold) / REACTOR_CONFIG.physics.radiationTempDivisor);
         var powerFactor = this.reactorPower / 100;
 
         this.radiationLevel = baseRadiation + (tempFactor * REACTOR_CONFIG.physics.tempRadiationFactor) + (powerFactor * REACTOR_CONFIG.physics.powerRadiationFactor);
@@ -161,7 +161,7 @@ var ReactorSimulation = (function() {
         // Energy generation based on reactor power
         this.energyGeneration = (this.reactorPower / 100) * REACTOR_CONFIG.physics.maxEnergyMW;
         this.voltage = REACTOR_CONFIG.physics.voltageBase * (this.reactorPower / 100);
-        this.frequency = 50.0 + (Math.random() - 0.5) * 0.1;
+        this.frequency = 50.0 + (Math.random() - 0.5) * REACTOR_CONFIG.physics.frequencyJitter;
     };
 
     ReactorSimulation.prototype.updateGridParameters = function() {
