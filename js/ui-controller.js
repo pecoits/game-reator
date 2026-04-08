@@ -4,8 +4,8 @@ if (typeof SoundSystem === 'undefined') {
     console.error('SoundSystem not loaded!');
 }
 
-var UIController = (function() {
-    function UIController(simulation, viewport) {
+class UIController {
+    constructor(simulation, viewport) {
         this.simulation = simulation;
         this.viewport = viewport;
         this.soundSystem = new SoundSystem();
@@ -14,24 +14,23 @@ var UIController = (function() {
         this.warningSoundCooldown = 3000;
         this.currentManualPage = 1;
         this.totalManualPages = 1;
-        
+
         this.elements = {};
         this.currentTab = 'main';
-        
+
         this.init();
     }
 
-    UIController.prototype.init = function() {
-        var self = this;
+    init() {
         this.cacheElements();
         this.setupEventListeners();
-        
-        this.simulation.onUpdate = function(state) { self.updateUI(state); };
-        this.simulation.onAlert = function(alert) { self.handleAlert(alert); };
-        this.simulation.onEvent = function(event) { self.addLogEntry(event); };
-    };
 
-    UIController.prototype.cacheElements = function() {
+        this.simulation.onUpdate = state => this.updateUI(state);
+        this.simulation.onAlert = alert => this.handleAlert(alert);
+        this.simulation.onEvent = event => this.addLogEntry(event);
+    }
+
+    cacheElements() {
         this.elements.tempCore = document.getElementById('temp-core');
         this.elements.pressure = document.getElementById('pressure');
         this.elements.radiation = document.getElementById('radiation');
@@ -71,303 +70,339 @@ var UIController = (function() {
         this.elements.alertEntries = document.getElementById('alert-entries');
         this.elements.tabButtons = document.querySelectorAll('.tab-btn');
         this.elements.tabContents = document.querySelectorAll('.tab-content');
-    };
+    }
 
-    UIController.prototype.setupEventListeners = function() {
-        var self = this;
-        
+    setupEventListeners() {
         // Initialize sound system on first user interaction
-        var initSound = function() {
-            self.soundSystem.init();
+        var initSound = () => {
+            this.soundSystem.init();
             document.removeEventListener('click', initSound);
         };
         document.addEventListener('click', initSound);
-        
+
         // Sound controls
         if (this.elements.btnMute) {
-            this.elements.btnMute.addEventListener('click', function() {
-                var muted = self.soundSystem.toggleMute();
-                self.elements.btnMute.textContent = muted ? '🔇' : '🔊';
-                self.elements.btnMute.classList.toggle('muted', muted);
+            this.elements.btnMute.addEventListener('click', () => {
+                var muted = this.soundSystem.toggleMute();
+                this.elements.btnMute.textContent = muted ? '🔇' : '🔊';
+                this.elements.btnMute.classList.toggle('muted', muted);
             });
         }
-        
+
         if (this.elements.volumeSlider) {
-            this.elements.volumeSlider.addEventListener('input', function(e) {
+            this.elements.volumeSlider.addEventListener('input', e => {
                 var vol = parseInt(e.target.value) / 100;
-                self.soundSystem.setVolume(vol);
-                if (self.elements.btnMute) {
-                    self.elements.btnMute.textContent = vol === 0 ? '🔇' : '🔊';
-                    self.elements.btnMute.classList.toggle('muted', vol === 0);
+                this.soundSystem.setVolume(vol);
+                if (this.elements.btnMute) {
+                    this.elements.btnMute.textContent = vol === 0 ? '🔇' : '🔊';
+                    this.elements.btnMute.classList.toggle('muted', vol === 0);
                 }
             });
         }
-        
+
         // Control rods
         if (this.elements.controlRods) {
-            this.elements.controlRods.addEventListener('input', function(e) {
+            this.elements.controlRods.addEventListener('input', e => {
                 var value = parseInt(e.target.value);
-                self.elements.rodsValue.textContent = value + '%';
-                self.simulation.setControlRods(value);
-                self.viewport.updateControlRodsVisual(value);
+                this.elements.rodsValue.textContent = value + '%';
+                this.simulation.setControlRods(value);
+                this.viewport.updateControlRodsVisual(value);
             });
         }
-        
+
         // Main pump
         if (this.elements.mainPump) {
-            this.elements.mainPump.addEventListener('input', function(e) {
+            this.elements.mainPump.addEventListener('input', e => {
                 var value = parseInt(e.target.value);
-                self.elements.pumpValue.textContent = value + '%';
-                self.simulation.setMainPump(value);
+                this.elements.pumpValue.textContent = value + '%';
+                this.simulation.setMainPump(value);
             });
         }
-        
+
         // Emergency cooling
         if (this.elements.btnEmergencyCool) {
-            this.elements.btnEmergencyCool.addEventListener('click', function() {
-                self.simulation.toggleEmergencyCooling();
-                self.elements.btnEmergencyCool.textContent = 
-                    self.simulation.emergencyCoolingActive ? 'ДЕАКТИВИРОВАТЬ' : 'АКТИВИРОВАТЬ';
-                self.elements.btnEmergencyCool.classList.toggle('btn-danger');
+            this.elements.btnEmergencyCool.addEventListener('click', () => {
+                this.simulation.toggleEmergencyCooling();
+                this.elements.btnEmergencyCool.textContent =
+                    this.simulation.emergencyCoolingActive ? 'ДЕАКТИВИРОВАТЬ' : 'АКТИВИРОВАТЬ';
+                this.elements.btnEmergencyCool.classList.toggle('btn-danger');
             });
         }
-        
+
         // Extra pump
         if (this.elements.btnExtraPump) {
-            this.elements.btnExtraPump.addEventListener('click', function() {
-                self.simulation.toggleExtraPump();
-                self.elements.btnExtraPump.textContent = 
-                    self.simulation.extraPumpActive ? 'ВЫКЛ' : 'ВКЛ';
+            this.elements.btnExtraPump.addEventListener('click', () => {
+                this.simulation.toggleExtraPump();
+                this.elements.btnExtraPump.textContent =
+                    this.simulation.extraPumpActive ? 'ВЫКЛ' : 'ВКЛ';
             });
         }
-        
+
         // Grid connection
         if (this.elements.btnGridConnect) {
-            this.elements.btnGridConnect.addEventListener('click', function() {
-                self.simulation.toggleGridConnection();
-                self.elements.btnGridConnect.textContent = 
-                    self.simulation.gridConnected ? 'ПОДКЛЮЧЕНО' : 'ОТКЛЮЧЕНО';
-                self.elements.btnGridConnect.classList.toggle('btn-success');
+            this.elements.btnGridConnect.addEventListener('click', () => {
+                this.simulation.toggleGridConnection();
+                this.elements.btnGridConnect.textContent =
+                    this.simulation.gridConnected ? 'ПОДКЛЮЧЕНО' : 'ОТКЛЮЧЕНО';
+                this.elements.btnGridConnect.classList.toggle('btn-success');
             });
         }
-        
+
         // SCRAM
         if (this.elements.btnScram) {
-            this.elements.btnScram.addEventListener('click', function() {
-                if (!self.simulation.scramActive) {
-                    if (confirm('АКТИВИРОВАТЬ АЗ-5? Это приведет к аварийной остановке реактора.')) {
-                        self.simulation.activateSCRAM();
-                    }
+            this.elements.btnScram.addEventListener('click', () => {
+                if (!this.simulation.scramActive) {
+                    showGameConfirm(
+                        'АЗ-5 АВАРИЙНАЯ ЗАЩИТА',
+                        'Активировать АЗ-5? Реактор будет аварийно остановлен.',
+                        () => { this.simulation.activateSCRAM(); }
+                    );
                 } else {
-                    self.simulation.resetSCRAM();
-                    self.elements.btnScram.textContent = 'АЗ-5';
+                    this.simulation.resetSCRAM();
+                    this.elements.btnScram.textContent = 'АЗ-5';
                 }
             });
         }
-        
+
         // Clear log
         if (this.elements.btnClearLog) {
-            this.elements.btnClearLog.addEventListener('click', function() {
-                self.simulation.clearEvents();
-                self.elements.logEntries.innerHTML = '';
+            this.elements.btnClearLog.addEventListener('click', () => {
+                this.simulation.clearEvents();
+                this.elements.logEntries.innerHTML = '';
             });
         }
-        
+
         // Manual modal
         if (this.elements.btnManual) {
-            this.elements.btnManual.addEventListener('click', function() {
-                self.openManual();
+            this.elements.btnManual.addEventListener('click', () => {
+                this.openManual();
             });
         }
-        
+
         if (this.elements.btnCloseManual) {
-            this.elements.btnCloseManual.addEventListener('click', function() {
-                self.elements.manualModal.style.display = 'none';
+            this.elements.btnCloseManual.addEventListener('click', () => {
+                this.elements.manualModal.style.display = 'none';
             });
         }
-        
+
         // Alert modal
         if (this.elements.btnAlerts) {
-            this.elements.btnAlerts.addEventListener('click', function() {
-                self.showAlerts();
+            this.elements.btnAlerts.addEventListener('click', () => {
+                this.showAlerts();
             });
         }
-        
+
         if (this.elements.btnCloseAlerts) {
-            this.elements.btnCloseAlerts.addEventListener('click', function() {
-                self.elements.alertModal.style.display = 'none';
+            this.elements.btnCloseAlerts.addEventListener('click', () => {
+                this.elements.alertModal.style.display = 'none';
             });
         }
-        
+
         // Tabs
         if (this.elements.tabButtons) {
-            this.elements.tabButtons.forEach(function(btn) {
-                btn.addEventListener('click', function() {
+            this.elements.tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
                     var tab = btn.getAttribute('data-tab');
-                    self.switchTab(tab);
+                    this.switchTab(tab);
                 });
             });
         }
-        
+
         // Close modals on outside click
-        window.addEventListener('click', function(e) {
-            if (self.elements.manualModal && e.target === self.elements.manualModal) {
-                self.elements.manualModal.style.display = 'none';
+        window.addEventListener('click', e => {
+            if (this.elements.manualModal && e.target === this.elements.manualModal) {
+                this.elements.manualModal.style.display = 'none';
             }
-            if (self.elements.alertModal && e.target === self.elements.alertModal) {
-                self.elements.alertModal.style.display = 'none';
+            if (this.elements.alertModal && e.target === this.elements.alertModal) {
+                this.elements.alertModal.style.display = 'none';
             }
         });
-    };
+    }
 
-    UIController.prototype.openManual = function() {
+    renderManualPage(page) {
+        var parts = ['<div class="manual-page active">'];
+        parts.push('<h3 class="manual-title">' + page.title + '</h3>');
+        for (var i = 0; i < page.sections.length; i++) {
+            var section = page.sections[i];
+            if (section.type === 'text') {
+                parts.push('<p>' + section.content + '</p>');
+            } else if (section.type === 'heading') {
+                parts.push('<h4>' + section.content + '</h4>');
+            } else if (section.type === 'list') {
+                var tag = section.ordered ? 'ol' : 'ul';
+                var items = section.items.map(function(item) { return '<li>' + item + '</li>'; }).join('');
+                parts.push('<' + tag + '>' + items + '</' + tag + '>');
+            } else if (section.type === 'table') {
+                var rows = section.rows;
+                var header = rows[0];
+                var dataRows = rows.slice(1);
+                var th = header.map(function(h) { return '<th>' + h + '</th>'; }).join('');
+                var trs = dataRows.map(function(r) {
+                    return '<tr>' + r.map(function(c) { return '<td>' + c + '</td>'; }).join('') + '</tr>';
+                }).join('');
+                parts.push('<table class="manual-table"><thead><tr>' + th + '</tr></thead><tbody>' + trs + '</tbody></table>');
+            } else if (section.type === 'warning') {
+                parts.push('<div class="warning-box">' + section.content + '</div>');
+            } else if (section.type === 'cover' || section.type === 'footer') {
+                parts.push(section.content);
+            }
+        }
+        parts.push('</div>');
+        return parts.join('');
+    }
+
+    openManual() {
         var lang = window.selectedLanguage || 'en';
-        var pages = lang === 'pt' ? manualPagesPT : manualPagesEN;
-        
+        var pages = (MANUAL_PAGES && MANUAL_PAGES[lang]) ? MANUAL_PAGES[lang] : (MANUAL_PAGES ? MANUAL_PAGES.pt : null);
+
         if (!pages || pages.length === 0) {
             console.error('Manual pages not found!');
             return;
         }
-        
+
+        this.currentManualPage = 1;
+        this.totalManualPages = pages.length;
+
         var html = '<button class="manual-close-float" id="manual-close-float">×</button>';
         html += '<div class="manual-content" id="manual-pages-container">';
-        
-        pages.forEach(function(page) {
-            html += page;
-        });
-        
+        html += this.renderManualPage(pages[0]);
         html += '<div class="manual-nav">';
         html += '<button class="manual-nav-btn" id="manual-prev-btn" disabled>← ANTERIOR</button>';
         html += '<span class="manual-page-indicator" id="manual-page-indicator">1 / ' + pages.length + '</span>';
-        html += '<button class="manual-nav-btn" id="manual-next-btn">PRÓXIMO →</button>';
+        html += '<button class="manual-nav-btn" id="manual-next-btn"' + (pages.length <= 1 ? ' disabled' : '') + '>PRÓXIMO →</button>';
         html += '</div>';
         html += '</div>';
-        
+
         this.elements.manualContent.innerHTML = html;
         this.elements.manualModal.style.display = 'flex';
-        
-        this.currentManualPage = 1;
-        this.totalManualPages = pages.length;
-        this.setupManualNavigation();
-    };
 
-    UIController.prototype.setupManualNavigation = function() {
-        var self = this;
+        this.setupManualNavigation();
+    }
+
+    setupManualNavigation() {
         var prevBtn = document.getElementById('manual-prev-btn');
         var nextBtn = document.getElementById('manual-next-btn');
         var closeFloat = document.getElementById('manual-close-float');
-        
-        if (closeFloat) {
-            closeFloat.addEventListener('click', function() {
-                self.elements.manualModal.style.display = 'none';
-            });
-        }
-        
-        if (prevBtn) {
-            prevBtn.addEventListener('click', function() {
-                if (self.currentManualPage > 1) {
-                    self.goToManualPage(self.currentManualPage - 1);
-                }
-            });
-        }
-        
-        if (nextBtn) {
-            nextBtn.addEventListener('click', function() {
-                if (self.currentManualPage < self.totalManualPages) {
-                    self.goToManualPage(self.currentManualPage + 1);
-                }
-            });
-        }
-    };
 
-    UIController.prototype.goToManualPage = function(pageNum) {
-        var pages = document.querySelectorAll('.manual-page');
+        if (closeFloat) {
+            closeFloat.addEventListener('click', () => {
+                this.elements.manualModal.style.display = 'none';
+            });
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                if (this.currentManualPage > 1) {
+                    this.goToManualPage(this.currentManualPage - 1);
+                }
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                if (this.currentManualPage < this.totalManualPages) {
+                    this.goToManualPage(this.currentManualPage + 1);
+                }
+            });
+        }
+    }
+
+    goToManualPage(pageNum) {
+        var lang = window.selectedLanguage || 'en';
+        var pages = (MANUAL_PAGES && MANUAL_PAGES[lang]) ? MANUAL_PAGES[lang] : (MANUAL_PAGES ? MANUAL_PAGES.pt : null);
         var indicator = document.getElementById('manual-page-indicator');
         var prevBtn = document.getElementById('manual-prev-btn');
         var nextBtn = document.getElementById('manual-next-btn');
-        
-        pages.forEach(function(page) {
-            page.classList.remove('active');
-        });
-        
-        var targetPage = document.querySelector('.manual-page[data-page="' + pageNum + '"]');
-        if (targetPage) {
-            targetPage.classList.add('active');
+        var container = document.getElementById('manual-pages-container');
+
+        if (!pages || pageNum < 1 || pageNum > pages.length) return;
+
+        // Replace the rendered page (first child of container, before the nav div)
+        if (container) {
+            var existingPage = container.querySelector('.manual-page');
+            var newPageHtml = this.renderManualPage(pages[pageNum - 1]);
+            var temp = document.createElement('div');
+            temp.innerHTML = newPageHtml;
+            var newPageEl = temp.firstChild;
+            if (existingPage) {
+                container.replaceChild(newPageEl, existingPage);
+            } else {
+                container.insertBefore(newPageEl, container.firstChild);
+            }
         }
-        
+
         this.currentManualPage = pageNum;
-        
+
         if (indicator) {
             indicator.textContent = pageNum + ' / ' + this.totalManualPages;
         }
-        
+
         if (prevBtn) prevBtn.disabled = (pageNum === 1);
         if (nextBtn) nextBtn.disabled = (pageNum === this.totalManualPages);
-    };
+    }
 
-    UIController.prototype.switchTab = function(tabName) {
-        var self = this;
+    switchTab(tabName) {
         this.currentTab = tabName;
-        
+
         this.elements.tabButtons.forEach(function(btn) {
             btn.classList.toggle('active', btn.getAttribute('data-tab') === tabName);
         });
-        
+
         this.elements.tabContents.forEach(function(content) {
             content.classList.toggle('active', content.id === 'tab-' + tabName);
         });
-    };
+    }
 
-    UIController.prototype.updateUI = function(state) {
+    updateUI(state) {
         if (this.elements.tempCore) this.elements.tempCore.textContent = state.coreTemperature.toFixed(1) + '°C';
         if (this.elements.pressure) this.elements.pressure.textContent = state.pressure.toFixed(2) + ' МПа';
         if (this.elements.radiation) this.elements.radiation.textContent = state.radiationLevel.toFixed(3) + ' мЗв/ч';
         if (this.elements.powerOutput) this.elements.powerOutput.textContent = state.reactorPower.toFixed(1) + '%';
-        
+
         if (this.elements.tempBar) {
             var tempPercent = Math.min(100, (state.coreTemperature / 400) * 100);
             this.elements.tempBar.style.width = tempPercent + '%';
             this.updateBarColor(this.elements.tempBar, tempPercent);
         }
-        
+
         if (this.elements.pressureBar) {
             var pressurePercent = Math.min(100, (state.pressure / 25) * 100);
             this.elements.pressureBar.style.width = pressurePercent + '%';
             this.updateBarColor(this.elements.pressureBar, pressurePercent);
         }
-        
+
         if (this.elements.radiationBar) {
             var radiationPercent = Math.min(100, (state.radiationLevel / 10) * 100);
             this.elements.radiationBar.style.width = radiationPercent + '%';
             this.updateBarColor(this.elements.radiationBar, radiationPercent);
         }
-        
+
         if (this.elements.powerBar) {
             var powerPercent = Math.min(100, state.reactorPower);
             this.elements.powerBar.style.width = powerPercent + '%';
             this.updateBarColor(this.elements.powerBar, powerPercent);
         }
-        
+
         if (this.elements.tempInlet) this.elements.tempInlet.textContent = state.tempInlet.toFixed(1) + '°C';
         if (this.elements.tempOutlet) this.elements.tempOutlet.textContent = state.tempOutlet.toFixed(1) + '°C';
         if (this.elements.coolantFlow) this.elements.coolantFlow.textContent = state.coolantFlow.toFixed(0) + ' м³/ч';
         if (this.elements.pressurizerLevel) this.elements.pressurizerLevel.textContent = state.pressurizerLevel.toFixed(1) + '%';
-        
+
         if (this.elements.energyGen) this.elements.energyGen.textContent = state.energyGeneration.toFixed(1) + ' МВт';
         if (this.elements.voltage) this.elements.voltage.textContent = state.voltage.toFixed(2) + ' кВ';
         if (this.elements.frequency) this.elements.frequency.textContent = state.frequency.toFixed(2) + ' Гц';
         if (this.elements.gridLoad) this.elements.gridLoad.textContent = state.gridLoad.toFixed(1) + '%';
-        
+
         this.updateStatusIndicator(state);
-        
+
         if (this.elements.alertsBtn) {
             var alertCount = this.simulation.getAlertCount();
             this.elements.alertsBtn.textContent = '⚠ ' + alertCount;
             this.elements.alertsBtn.classList.toggle('has-alerts', alertCount > 0);
         }
-        
+
         this.viewport.updateIndicators(state);
-        
+
         // Sound logic
         if (state.coreTemperature > 350 || state.pressure > 19 || state.scramActive) {
             if (!this.hasCriticalAlarm) {
@@ -380,20 +415,20 @@ var UIController = (function() {
                 this.hasCriticalAlarm = false;
             }
         }
-    };
+    }
 
-    UIController.prototype.updateBarColor = function(element, percent) {
+    updateBarColor(element, percent) {
         element.classList.remove('warning', 'danger');
         if (percent > 80) element.classList.add('danger');
         else if (percent > 60) element.classList.add('warning');
-    };
+    }
 
-    UIController.prototype.updateStatusIndicator = function(state) {
+    updateStatusIndicator(state) {
         var statusEl = this.elements.reactorStatus;
         if (!statusEl) return;
-        
+
         statusEl.classList.remove('warning', 'danger');
-        
+
         if (state.gracePeriodActive) {
             statusEl.textContent = 'ОБКАТКА';
             statusEl.style.background = '#003366';
@@ -414,68 +449,65 @@ var UIController = (function() {
             statusEl.style.borderColor = '';
             statusEl.style.color = '';
         }
-    };
+    }
 
-    UIController.prototype.handleAlert = function(alert) {
+    handleAlert(alert) {
         var now = Date.now();
-        
+
         if (now - this.lastWarningSound > this.warningSoundCooldown) {
             this.soundSystem.playWarning();
             this.lastWarningSound = now;
         }
-        
+
         if (alert.level === 'critical') {
             if (!this.hasCriticalAlarm) {
                 this.soundSystem.playAlarm();
                 this.hasCriticalAlarm = true;
             }
         }
-    };
+    }
 
-    UIController.prototype.addLogEntry = function(event) {
+    addLogEntry(event) {
         var entry = document.createElement('div');
         entry.className = 'log-entry';
         entry.innerHTML = '<span class="log-time">' + event.timestamp + '</span>' +
             '<span class="log-type ' + event.type + '">[' + event.type.toUpperCase() + ']</span>' +
             '<span class="log-message">' + event.message + '</span>';
-        
+
         this.elements.logEntries.appendChild(entry);
         this.elements.logEntries.scrollTop = this.elements.logEntries.scrollHeight;
-        
+
         while (this.elements.logEntries.children.length > 100) {
             this.elements.logEntries.removeChild(this.elements.logEntries.firstChild);
         }
-    };
+    }
 
-    UIController.prototype.showAlerts = function() {
+    showAlerts() {
         var alerts = this.simulation.alerts.slice(-20);
-        var self = this;
-        
+
         if (alerts.length === 0) {
             this.elements.alertEntries.innerHTML = '<p style="text-align: center; color: #888;">Нет активных сигналов</p>';
         } else {
-            this.elements.alertEntries.innerHTML = alerts.map(function(alert) {
-                var timeStr = self.formatTime(alert.time);
+            this.elements.alertEntries.innerHTML = alerts.map(alert => {
+                var timeStr = this.formatTime(alert.time);
                 return '<div class="alert-item ' + (alert.level === 'critical' ? 'critical' : '') + '">' +
                     '<h4>' + (alert.level === 'critical' ? '🔴' : alert.level === 'danger' ? '🟠' : '🟡') + ' ' + alert.message + '</h4>' +
                     '<p class="alert-time">Время: ' + timeStr + '</p></div>';
             }).join('');
         }
-        
-        this.elements.alertModal.style.display = 'flex';
-    };
 
-    UIController.prototype.formatTime = function(ms) {
+        this.elements.alertModal.style.display = 'flex';
+    }
+
+    formatTime(ms) {
         var seconds = Math.floor(ms / 1000);
         var minutes = Math.floor(seconds / 60);
         var hours = Math.floor(minutes / 60);
-        return hours.toString().padStart(2, '0') + ':' + 
-               (minutes % 60).toString().padStart(2, '0') + ':' + 
+        return hours.toString().padStart(2, '0') + ':' +
+               (minutes % 60).toString().padStart(2, '0') + ':' +
                (seconds % 60).toString().padStart(2, '0');
-    };
-
-    return UIController;
-})();
+    }
+}
 
 // Export
 if (typeof module !== 'undefined' && module.exports) {

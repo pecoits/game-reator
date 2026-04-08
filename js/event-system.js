@@ -84,6 +84,7 @@ class EventSystem {
     }
 
     completeMission() {
+        this.currentMission.completed = true;
         this.currentMission.active = false;
         this.simulation.addEvent('success', `═══ МИССИЯ ВЫПОЛНЕНА ═══`);
         this.simulation.addEvent('success', this.currentMission.reward);
@@ -116,7 +117,7 @@ class EventSystem {
                 trigger: () => Math.random() < 0.001 && this.simulation.reactorPower > 50,
                 execute: () => {
                     this.simulation.addEvent('danger', 'АВАРИЯ: Отказ датчика давления контура №2');
-                    this.simulation.pressure += 2;
+                    this.simulation.applyExternalPressureShock(2);
                 }
             },
             {
