@@ -1,4 +1,9 @@
 // ===== UI CONTROLLER =====
+// Ensure SoundSystem is available
+if (typeof SoundSystem === 'undefined') {
+    console.error('SoundSystem not loaded!');
+}
+
 var UIController = (function() {
     function UIController(simulation, viewport) {
         this.simulation = simulation;
@@ -218,6 +223,11 @@ var UIController = (function() {
     UIController.prototype.openManual = function() {
         var lang = window.selectedLanguage || 'en';
         var pages = lang === 'pt' ? manualPagesPT : manualPagesEN;
+        
+        if (!pages || pages.length === 0) {
+            console.error('Manual pages not found!');
+            return;
+        }
         
         var html = '<button class="manual-close-float" id="manual-close-float">×</button>';
         html += '<div class="manual-content" id="manual-pages-container">';
