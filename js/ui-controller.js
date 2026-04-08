@@ -6,7 +6,9 @@ var UIController = (function() {
         this.soundSystem = new SoundSystem();
         this.hasCriticalAlarm = false;
         this.lastWarningSound = 0;
-        this.warningSoundCooldown = 3000; // 3 seconds between warning beeps
+        this.warningSoundCooldown = 3000;
+        this.currentManualPage = 1;
+        this.totalManualPages = 1;
         
         this.elements = {};
         this.currentTab = 'main';
@@ -76,7 +78,7 @@ var UIController = (function() {
         };
         document.addEventListener('click', initSound);
         
-        // Sound controls (with null check)
+        // Sound controls
         if (this.elements.btnMute) {
             this.elements.btnMute.addEventListener('click', function() {
                 var muted = self.soundSystem.toggleMute();
@@ -166,7 +168,7 @@ var UIController = (function() {
             });
         }
         
-        // Manual modal - uses selected language with pagination
+        // Manual modal
         if (this.elements.btnManual) {
             this.elements.btnManual.addEventListener('click', function() {
                 self.openManual();
@@ -178,100 +180,6 @@ var UIController = (function() {
                 self.elements.manualModal.style.display = 'none';
             });
         }
-    };
-
-    UIController.prototype.openManual = function() {
-        var lang = window.selectedLanguage || 'en';
-        var pages = lang === 'pt' ? manualPagesPT : manualPagesEN;
-        
-        // Build manual HTML with floating close button and navigation
-        var html = '<button class="manual-close-float" id="manual-close-float">×</button>';
-        html += '<div class="manual-content" id="manual-pages-container">';
-        
-        // Add all pages
-        pages.forEach(function(page) {
-            html += page;
-        });
-        
-        // Add navigation bar
-        html += '<div class="manual-nav">';
-        html += '<button class="manual-nav-btn" id="manual-prev-btn" disabled>← ANTERIOR</button>';
-        html += '<span class="manual-page-indicator" id="manual-page-indicator">1 / ' + pages.length + '</span>';
-        html += '<button class="manual-nav-btn" id="manual-next-btn">PRÓXIMO →</button>';
-        html += '</div>';
-        html += '</div>';
-        
-        this.elements.manualContent.innerHTML = html;
-        this.elements.manualModal.style.display = 'flex';
-        
-        // Initialize pagination
-        this.currentManualPage = 1;
-        this.totalManualPages = pages.length;
-        this.setupManualNavigation();
-    };
-
-    UIController.prototype.setupManualNavigation = function() {
-        var self = this;
-        var prevBtn = document.getElementById('manual-prev-btn');
-        var nextBtn = document.getElementById('manual-next-btn');
-        var closeFloat = document.getElementById('manual-close-float');
-        var indicator = document.getElementById('manual-page-indicator');
-        
-        if (!prevBtn || !nextBtn || !closeFloat) return;
-        
-        // Floating close button
-        closeFloat.addEventListener('click', function() {
-            self.elements.manualModal.style.display = 'none';
-        });
-        
-        // Previous page
-        prevBtn.addEventListener('click', function() {
-            if (self.currentManualPage > 1) {
-                self.goToManualPage(self.currentManualPage - 1);
-            }
-        });
-        
-        // Next page
-        nextBtn.addEventListener('click', function() {
-            if (self.currentManualPage < self.totalManualPages) {
-                self.goToManualPage(self.currentManualPage + 1);
-            }
-        });
-    };
-
-    UIController.prototype.goToManualPage = function(pageNum) {
-        var pages = document.querySelectorAll('.manual-page');
-        var indicator = document.getElementById('manual-page-indicator');
-        var prevBtn = document.getElementById('manual-prev-btn');
-        var nextBtn = document.getElementById('manual-next-btn');
-        
-        // Hide all pages
-        pages.forEach(function(page) {
-            page.classList.remove('active');
-        });
-        
-        // Show target page
-        var targetPage = document.querySelector('.manual-page[data-page="' + pageNum + '"]');
-        if (targetPage) {
-            targetPage.classList.add('active');
-        }
-        
-        // Update state
-        this.currentManualPage = pageNum;
-        
-        // Update indicator
-        if (indicator) {
-            indicator.textContent = pageNum + ' / ' + this.totalManualPages;
-        }
-        
-        // Update buttons
-        if (prevBtn) {
-            prevBtn.disabled = (pageNum === 1);
-        }
-        if (nextBtn) {
-            nextBtn.disabled = (pageNum === this.totalManualPages);
-        }
-    };
         
         // Alert modal
         if (this.elements.btnAlerts) {
@@ -307,6 +215,86 @@ var UIController = (function() {
         });
     };
 
+    UIController.prototype.openManual = function() {
+        var lang = window.selectedLanguage || 'en';
+        var pages = lang === 'pt' ? manualPagesPT : manualPagesEN;
+        
+        var html = '<button class="manual-close-float" id="manual-close-float">×</button>';
+        html += '<div class="manual-content" id="manual-pages-container">';
+        
+        pages.forEach(function(page) {
+            html += page;
+        });
+        
+        html += '<div class="manual-nav">';
+        html += '<button class="manual-nav-btn" id="manual-prev-btn" disabled>← ANTERIOR</button>';
+        html += '<span class="manual-page-indicator" id="manual-page-indicator">1 / ' + pages.length + '</span>';
+        html += '<button class="manual-nav-btn" id="manual-next-btn">PRÓXIMO →</button>';
+        html += '</div>';
+        html += '</div>';
+        
+        this.elements.manualContent.innerHTML = html;
+        this.elements.manualModal.style.display = 'flex';
+        
+        this.currentManualPage = 1;
+        this.totalManualPages = pages.length;
+        this.setupManualNavigation();
+    };
+
+    UIController.prototype.setupManualNavigation = function() {
+        var self = this;
+        var prevBtn = document.getElementById('manual-prev-btn');
+        var nextBtn = document.getElementById('manual-next-btn');
+        var closeFloat = document.getElementById('manual-close-float');
+        
+        if (closeFloat) {
+            closeFloat.addEventListener('click', function() {
+                self.elements.manualModal.style.display = 'none';
+            });
+        }
+        
+        if (prevBtn) {
+            prevBtn.addEventListener('click', function() {
+                if (self.currentManualPage > 1) {
+                    self.goToManualPage(self.currentManualPage - 1);
+                }
+            });
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', function() {
+                if (self.currentManualPage < self.totalManualPages) {
+                    self.goToManualPage(self.currentManualPage + 1);
+                }
+            });
+        }
+    };
+
+    UIController.prototype.goToManualPage = function(pageNum) {
+        var pages = document.querySelectorAll('.manual-page');
+        var indicator = document.getElementById('manual-page-indicator');
+        var prevBtn = document.getElementById('manual-prev-btn');
+        var nextBtn = document.getElementById('manual-next-btn');
+        
+        pages.forEach(function(page) {
+            page.classList.remove('active');
+        });
+        
+        var targetPage = document.querySelector('.manual-page[data-page="' + pageNum + '"]');
+        if (targetPage) {
+            targetPage.classList.add('active');
+        }
+        
+        this.currentManualPage = pageNum;
+        
+        if (indicator) {
+            indicator.textContent = pageNum + ' / ' + this.totalManualPages;
+        }
+        
+        if (prevBtn) prevBtn.disabled = (pageNum === 1);
+        if (nextBtn) nextBtn.disabled = (pageNum === this.totalManualPages);
+    };
+
     UIController.prototype.switchTab = function(tabName) {
         var self = this;
         this.currentTab = tabName;
@@ -321,53 +309,56 @@ var UIController = (function() {
     };
 
     UIController.prototype.updateUI = function(state) {
-        // Main indicators
-        this.elements.tempCore.textContent = state.coreTemperature.toFixed(1) + '°C';
-        this.elements.pressure.textContent = state.pressure.toFixed(2) + ' МПа';
-        this.elements.radiation.textContent = state.radiationLevel.toFixed(3) + ' мЗв/ч';
-        this.elements.powerOutput.textContent = state.reactorPower.toFixed(1) + '%';
+        if (this.elements.tempCore) this.elements.tempCore.textContent = state.coreTemperature.toFixed(1) + '°C';
+        if (this.elements.pressure) this.elements.pressure.textContent = state.pressure.toFixed(2) + ' МПа';
+        if (this.elements.radiation) this.elements.radiation.textContent = state.radiationLevel.toFixed(3) + ' мЗв/ч';
+        if (this.elements.powerOutput) this.elements.powerOutput.textContent = state.reactorPower.toFixed(1) + '%';
         
-        // Indicator bars
-        var tempPercent = Math.min(100, (state.coreTemperature / 400) * 100);
-        this.elements.tempBar.style.width = tempPercent + '%';
-        this.updateBarColor(this.elements.tempBar, tempPercent);
+        if (this.elements.tempBar) {
+            var tempPercent = Math.min(100, (state.coreTemperature / 400) * 100);
+            this.elements.tempBar.style.width = tempPercent + '%';
+            this.updateBarColor(this.elements.tempBar, tempPercent);
+        }
         
-        var pressurePercent = Math.min(100, (state.pressure / 25) * 100);
-        this.elements.pressureBar.style.width = pressurePercent + '%';
-        this.updateBarColor(this.elements.pressureBar, pressurePercent);
+        if (this.elements.pressureBar) {
+            var pressurePercent = Math.min(100, (state.pressure / 25) * 100);
+            this.elements.pressureBar.style.width = pressurePercent + '%';
+            this.updateBarColor(this.elements.pressureBar, pressurePercent);
+        }
         
-        var radiationPercent = Math.min(100, (state.radiationLevel / 10) * 100);
-        this.elements.radiationBar.style.width = radiationPercent + '%';
-        this.updateBarColor(this.elements.radiationBar, radiationPercent);
+        if (this.elements.radiationBar) {
+            var radiationPercent = Math.min(100, (state.radiationLevel / 10) * 100);
+            this.elements.radiationBar.style.width = radiationPercent + '%';
+            this.updateBarColor(this.elements.radiationBar, radiationPercent);
+        }
         
-        var powerPercent = Math.min(100, state.reactorPower);
-        this.elements.powerBar.style.width = powerPercent + '%';
-        this.updateBarColor(this.elements.powerBar, powerPercent);
+        if (this.elements.powerBar) {
+            var powerPercent = Math.min(100, state.reactorPower);
+            this.elements.powerBar.style.width = powerPercent + '%';
+            this.updateBarColor(this.elements.powerBar, powerPercent);
+        }
         
-        // Cooling indicators
-        this.elements.tempInlet.textContent = state.tempInlet.toFixed(1) + '°C';
-        this.elements.tempOutlet.textContent = state.tempOutlet.toFixed(1) + '°C';
-        this.elements.coolantFlow.textContent = state.coolantFlow.toFixed(0) + ' м³/ч';
-        this.elements.pressurizerLevel.textContent = state.pressurizerLevel.toFixed(1) + '%';
+        if (this.elements.tempInlet) this.elements.tempInlet.textContent = state.tempInlet.toFixed(1) + '°C';
+        if (this.elements.tempOutlet) this.elements.tempOutlet.textContent = state.tempOutlet.toFixed(1) + '°C';
+        if (this.elements.coolantFlow) this.elements.coolantFlow.textContent = state.coolantFlow.toFixed(0) + ' м³/ч';
+        if (this.elements.pressurizerLevel) this.elements.pressurizerLevel.textContent = state.pressurizerLevel.toFixed(1) + '%';
         
-        // Power indicators
-        this.elements.energyGen.textContent = state.energyGeneration.toFixed(1) + ' МВт';
-        this.elements.voltage.textContent = state.voltage.toFixed(2) + ' кВ';
-        this.elements.frequency.textContent = state.frequency.toFixed(2) + ' Гц';
-        this.elements.gridLoad.textContent = state.gridLoad.toFixed(1) + '%';
+        if (this.elements.energyGen) this.elements.energyGen.textContent = state.energyGeneration.toFixed(1) + ' МВт';
+        if (this.elements.voltage) this.elements.voltage.textContent = state.voltage.toFixed(2) + ' кВ';
+        if (this.elements.frequency) this.elements.frequency.textContent = state.frequency.toFixed(2) + ' Гц';
+        if (this.elements.gridLoad) this.elements.gridLoad.textContent = state.gridLoad.toFixed(1) + '%';
         
-        // Status indicator
         this.updateStatusIndicator(state);
         
-        // Alerts count
-        var alertCount = this.simulation.getAlertCount();
-        this.elements.alertsBtn.textContent = '⚠ ' + alertCount;
-        this.elements.alertsBtn.classList.toggle('has-alerts', alertCount > 0);
+        if (this.elements.alertsBtn) {
+            var alertCount = this.simulation.getAlertCount();
+            this.elements.alertsBtn.textContent = '⚠ ' + alertCount;
+            this.elements.alertsBtn.classList.toggle('has-alerts', alertCount > 0);
+        }
         
-        // Update 3D viewport
         this.viewport.updateIndicators(state);
         
-        // Play alarm sound if critical
+        // Sound logic
         if (state.coreTemperature > 350 || state.pressure > 19 || state.scramActive) {
             if (!this.hasCriticalAlarm) {
                 this.soundSystem.playAlarm();
@@ -383,15 +374,14 @@ var UIController = (function() {
 
     UIController.prototype.updateBarColor = function(element, percent) {
         element.classList.remove('warning', 'danger');
-        if (percent > 80) {
-            element.classList.add('danger');
-        } else if (percent > 60) {
-            element.classList.add('warning');
-        }
+        if (percent > 80) element.classList.add('danger');
+        else if (percent > 60) element.classList.add('warning');
     };
 
     UIController.prototype.updateStatusIndicator = function(state) {
         var statusEl = this.elements.reactorStatus;
+        if (!statusEl) return;
+        
         statusEl.classList.remove('warning', 'danger');
         
         if (state.gracePeriodActive) {
@@ -419,13 +409,11 @@ var UIController = (function() {
     UIController.prototype.handleAlert = function(alert) {
         var now = Date.now();
         
-        // Play warning beep for any alert (with cooldown to avoid spam)
         if (now - this.lastWarningSound > this.warningSoundCooldown) {
             this.soundSystem.playWarning();
             this.lastWarningSound = now;
         }
         
-        // Play continuous alarm for critical situations
         if (alert.level === 'critical') {
             if (!this.hasCriticalAlarm) {
                 this.soundSystem.playAlarm();
@@ -444,7 +432,6 @@ var UIController = (function() {
         this.elements.logEntries.appendChild(entry);
         this.elements.logEntries.scrollTop = this.elements.logEntries.scrollHeight;
         
-        // Keep only last 100 entries
         while (this.elements.logEntries.children.length > 100) {
             this.elements.logEntries.removeChild(this.elements.logEntries.firstChild);
         }
