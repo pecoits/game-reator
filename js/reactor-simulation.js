@@ -1,6 +1,6 @@
 // ===== REACTOR SIMULATION ENGINE =====
-var ReactorSimulation = (function() {
-    function ReactorSimulation() {
+class ReactorSimulation {
+    constructor() {
         // Core parameters from config
         var c = REACTOR_CONFIG.initial;
         this.coreTemperature      = c.coreTemperature;
@@ -46,29 +46,28 @@ var ReactorSimulation = (function() {
         this.onEvent  = null;
     }
 
-    ReactorSimulation.prototype.start = function() {
+    start() {
         this.running = true;
         this.addEvent('info', 'Система запущена. Реактор в стабильном режиме.');
         this.addEvent('info', 'Период обкатки: 2 минуты до первых событий.');
-        
+
         // Enable events after grace period
-        var self = this;
-        setTimeout(function() {
-            self.eventsEnabled = true;
-            self.addEvent('warning', 'Период обкатки завершен. Ожидайте события.');
+        setTimeout(() => {
+            this.eventsEnabled = true;
+            this.addEvent('warning', 'Период обкатки завершен. Ожидайте события.');
         }, this.gracePeriod);
-    };
+    }
 
-    ReactorSimulation.prototype.stop = function() {
+    stop() {
         this.running = false;
-    };
+    }
 
-    ReactorSimulation.prototype.tick = function(deltaTime) {
+    tick(deltaTime) {
         if (!this.running) return;
-        
+
         this.time += deltaTime;
         this.ticks++;
-        
+
         // Update simulation physics
         this.updateControlRodsEffect();
         this.updateCoolingSystem();
@@ -77,7 +76,7 @@ var ReactorSimulation = (function() {
         this.updateRadiation();
         this.updatePowerGeneration();
         this.updateGridParameters();
-        
+
         // Check for alarms (always check, even during grace period)
         this.checkAlarms();
 
@@ -85,14 +84,14 @@ var ReactorSimulation = (function() {
         if (this.eventsEnabled && Math.random() < REACTOR_CONFIG.randomEventChance) {
             this.triggerRandomEvent();
         }
-        
+
         // Notify update
         if (this.onUpdate) {
             this.onUpdate(this.getState());
         }
-    };
+    }
 
-    ReactorSimulation.prototype.updateControlRodsEffect = function() {
+    updateControlRodsEffect() {
         // More rods inserted = less power
         var rodsEffect = (100 - this.controlRodsPosition) / 100;
         var targetPower = rodsEffect * 100;
@@ -102,9 +101,9 @@ var ReactorSimulation = (function() {
         } else {
             this.reactorPower *= REACTOR_CONFIG.physics.scramShutdownRate; // Rapid shutdown
         }
-    };
+    }
 
-    ReactorSimulation.prototype.updateCoolingSystem = function() {
+    updateCoolingSystem() {
         var pumpEfficiency = this.mainPumpSpeed / 100;
         var extraCooling = this.extraPumpActive ? REACTOR_CONFIG.physics.extraPumpCoolingBoost : 0;
         var emergencyFactor = this.emergencyCoolingActive ? REACTOR_CONFIG.physics.emergencyCoolingFactor : 1.0;
@@ -124,9 +123,9 @@ var ReactorSimulation = (function() {
         // Pressurizer level
         this.pressurizerLevel = REACTOR_CONFIG.physics.pressurizerBase + (this.coolantFlow / REACTOR_CONFIG.physics.pressurizerFlowDivisor);
         this.pressurizerLevel = Math.min(100, Math.max(0, this.pressurizerLevel));
-    };
+    }
 
-    ReactorSimulation.prototype.updateTemperature = function() {
+    updateTemperature() {
         // Core temperature based on power and cooling
         var heatGeneration = this.reactorPower * REACTOR_CONFIG.physics.coreHeatFactor;
         var heatDissipation = (this.mainPumpSpeed / 100) * REACTOR_CONFIG.physics.coreDissipationFactor;
@@ -135,16 +134,16 @@ var ReactorSimulation = (function() {
         var targetTemp = REACTOR_CONFIG.physics.baseTemperatureOffset + (heatGeneration - heatDissipation - emergencyCooling);
         this.coreTemperature += (targetTemp - this.coreTemperature) * REACTOR_CONFIG.physics.temperatureSmoothFactor;
         this.coreTemperature = Math.max(REACTOR_CONFIG.physics.minCoreTemperature, this.coreTemperature);
-    };
+    }
 
-    ReactorSimulation.prototype.updatePressure = function() {
+    updatePressure() {
         // Pressure related to temperature
         var tempPressure = REACTOR_CONFIG.physics.tempPressureBase + (this.coreTemperature - 200) * REACTOR_CONFIG.physics.tempPressureFactor;
         this.pressure += (tempPressure - this.pressure) * REACTOR_CONFIG.physics.pressureSmoothFactor;
         this.pressure = Math.max(REACTOR_CONFIG.physics.pressureMin, Math.min(REACTOR_CONFIG.physics.pressureMax, this.pressure));
-    };
+    }
 
-    ReactorSimulation.prototype.updateRadiation = function() {
+    updateRadiation() {
         // Base radiation + temperature factor
         var baseRadiation = REACTOR_CONFIG.physics.radiationBase;
         var tempFactor = Math.max(0, (this.coreTemperature - REACTOR_CONFIG.physics.radiationTempThreshold) / REACTOR_CONFIG.physics.radiationTempDivisor);
@@ -155,44 +154,43 @@ var ReactorSimulation = (function() {
         if (this.scramActive) {
             this.radiationLevel *= REACTOR_CONFIG.physics.scramRadiationDecay;
         }
-    };
+    }
 
-    ReactorSimulation.prototype.updatePowerGeneration = function() {
+    updatePowerGeneration() {
         // Energy generation based on reactor power
         this.energyGeneration = (this.reactorPower / 100) * REACTOR_CONFIG.physics.maxEnergyMW;
         this.voltage = REACTOR_CONFIG.physics.voltageBase * (this.reactorPower / 100);
         this.frequency = REACTOR_CONFIG.physics.frequencyBase + (Math.random() - 0.5) * REACTOR_CONFIG.physics.frequencyJitter;
-    };
+    }
 
-    ReactorSimulation.prototype.updateGridParameters = function() {
+    updateGridParameters() {
         if (this.gridConnected) {
             this.gridLoad = (this.energyGeneration / REACTOR_CONFIG.physics.maxEnergyMW) * 100;
         } else {
             this.gridLoad = 0;
         }
-    };
+    }
 
-    ReactorSimulation.prototype.checkAlarms = function() {
-        var self = this;
+    checkAlarms() {
         var checks = [
             { value: this.coreTemperature, thresholds: this.alarmThresholds.temp, name: 'temp' },
             { value: this.pressure, thresholds: this.alarmThresholds.pressure, name: 'pressure' },
             { value: this.radiationLevel, thresholds: this.alarmThresholds.radiation, name: 'radiation' },
             { value: this.reactorPower, thresholds: this.alarmThresholds.power, name: 'power' }
         ];
-        
-        checks.forEach(function(check) {
+
+        checks.forEach(check => {
             if (check.value >= check.thresholds.critical) {
-                self.addAlert('critical', 'КРИТИЧЕСКИЙ: ' + self.getAlertName(check.name) + ' - ' + check.value.toFixed(2));
+                this.addAlert('critical', 'КРИТИЧЕСКИЙ: ' + this.getAlertName(check.name) + ' - ' + check.value.toFixed(2));
             } else if (check.value >= check.thresholds.danger) {
-                self.addAlert('danger', 'ОПАСНОСТЬ: ' + self.getAlertName(check.name) + ' превышен');
+                this.addAlert('danger', 'ОПАСНОСТЬ: ' + this.getAlertName(check.name) + ' превышен');
             } else if (check.value >= check.thresholds.warning) {
-                self.addAlert('warning', 'ВНИМАНИЕ: ' + self.getAlertName(check.name) + ' повышен');
+                this.addAlert('warning', 'ВНИМАНИЕ: ' + this.getAlertName(check.name) + ' повышен');
             }
         });
-    };
+    }
 
-    ReactorSimulation.prototype.getAlertName = function(name) {
+    getAlertName(name) {
         var names = {
             temp: 'Температура',
             pressure: 'Давление',
@@ -200,9 +198,9 @@ var ReactorSimulation = (function() {
             power: 'Мощность'
         };
         return names[name] || name;
-    };
+    }
 
-    ReactorSimulation.prototype.addAlert = function(level, message) {
+    addAlert(level, message) {
         // Avoid duplicate alerts
         var recentAlert = null;
         for (var i = 0; i < this.alerts.length; i++) {
@@ -225,9 +223,9 @@ var ReactorSimulation = (function() {
                 this.onAlert(alert);
             }
         }
-    };
+    }
 
-    ReactorSimulation.prototype.addEvent = function(type, message) {
+    addEvent(type, message) {
         var event = {
             type: type,
             message: message,
@@ -235,13 +233,13 @@ var ReactorSimulation = (function() {
             timestamp: new Date().toLocaleTimeString('ru-RU')
         };
         this.events.push(event);
-        
+
         if (this.onEvent) {
             this.onEvent(event);
         }
-    };
+    }
 
-    ReactorSimulation.prototype.triggerRandomEvent = function() {
+    triggerRandomEvent() {
         var events = [
             { type: 'warning', message: 'Колебания давления в контуре охлаждения' },
             { type: 'info', message: 'Плановая проверка систем завершена' },
@@ -252,59 +250,59 @@ var ReactorSimulation = (function() {
             { type: 'danger', message: 'Сбой в системе охлаждения контура №2' },
             { type: 'info', message: 'Получена директива министерства №1994' }
         ];
-        
+
         var event = events[Math.floor(Math.random() * events.length)];
         this.addEvent(event.type, event.message);
-    };
+    }
 
     // Control methods
-    ReactorSimulation.prototype.setControlRods = function(position) {
+    setControlRods(position) {
         this.controlRodsPosition = Math.max(0, Math.min(100, position));
         this.addEvent('info', 'Стержни установлены на ' + this.controlRodsPosition.toFixed(0) + '%');
-    };
+    }
 
-    ReactorSimulation.prototype.setMainPump = function(speed) {
+    setMainPump(speed) {
         this.mainPumpSpeed = Math.max(0, Math.min(100, speed));
         this.addEvent('info', 'Скорость ГЦН: ' + this.mainPumpSpeed.toFixed(0) + '%');
-    };
+    }
 
-    ReactorSimulation.prototype.toggleEmergencyCooling = function() {
+    toggleEmergencyCooling() {
         this.emergencyCoolingActive = !this.emergencyCoolingActive;
         var msg = this.emergencyCoolingActive ? 'АВАРИЙНОЕ ОХЛАЖДЕНИЕ АКТИВИРОВАНО' : 'Аварийное охлаждение отключено';
         this.addEvent(this.emergencyCoolingActive ? 'danger' : 'info', msg);
-    };
+    }
 
-    ReactorSimulation.prototype.toggleExtraPump = function() {
+    toggleExtraPump() {
         this.extraPumpActive = !this.extraPumpActive;
         var msg = this.extraPumpActive ? 'Дополнительный насос ВКЛ' : 'Дополнительный насос ВЫКЛ';
         this.addEvent('info', msg);
-    };
+    }
 
-    ReactorSimulation.prototype.toggleGridConnection = function() {
+    toggleGridConnection() {
         this.gridConnected = !this.gridConnected;
         var msg = this.gridConnected ? 'Подключение к сети восстановлено' : 'Отключение от сети';
         this.addEvent(this.gridConnected ? 'success' : 'warning', msg);
-    };
+    }
 
-    ReactorSimulation.prototype.activateSCRAM = function() {
+    activateSCRAM() {
         this.scramActive = true;
         this.controlRodsPosition = 100;
         this.emergencyCoolingActive = true;
         this.addEvent('danger', 'АЗ-5 АКТИВИРОВАНА! АВАРИЙНАЯ ЗАЩИТА РЕАКТОРА!');
-    };
+    }
 
-    ReactorSimulation.prototype.resetSCRAM = function() {
+    resetSCRAM() {
         this.scramActive = false;
         this.addEvent('info', 'Аварийная защита сброшена');
-    };
+    }
 
-    ReactorSimulation.prototype.applyExternalPressureShock = function(deltaMPa) {
+    applyExternalPressureShock(deltaMPa) {
         var p = REACTOR_CONFIG.physics;
         this.pressure = Math.max(p.pressureMin, Math.min(p.pressureMax, this.pressure + deltaMPa));
         this.addEvent('danger', 'Скачок давления: +' + deltaMPa.toFixed(1) + ' МПа');
-    };
+    }
 
-    ReactorSimulation.prototype.getState = function() {
+    getState() {
         return {
             coreTemperature: this.coreTemperature,
             pressure: this.pressure,
@@ -328,9 +326,9 @@ var ReactorSimulation = (function() {
             time: this.time,
             gracePeriodActive: !this.eventsEnabled
         };
-    };
+    }
 
-    ReactorSimulation.prototype.getAlertCount = function() {
+    getAlertCount() {
         var count = 0;
         for (var i = 0; i < this.alerts.length; i++) {
             if ((this.time - this.alerts[i].time) < REACTOR_CONFIG.physics.alertRecentWindow) {
@@ -338,22 +336,20 @@ var ReactorSimulation = (function() {
             }
         }
         return count;
-    };
+    }
 
-    ReactorSimulation.prototype.clearAlerts = function() {
+    clearAlerts() {
         this.alerts = [];
-    };
+    }
 
-    ReactorSimulation.prototype.getEvents = function() {
+    getEvents() {
         return this.events;
-    };
+    }
 
-    ReactorSimulation.prototype.clearEvents = function() {
+    clearEvents() {
         this.events = [];
-    };
-
-    return ReactorSimulation;
-})();
+    }
+}
 
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {

@@ -1,6 +1,6 @@
 // ===== MAIN APPLICATION =====
-var GameApp = (function() {
-    function GameApp() {
+class GameApp {
+    constructor() {
         this.simulation = null;
         this.viewport = null;
         this.uiController = null;
@@ -9,56 +9,55 @@ var GameApp = (function() {
         this.gameLoop = null;
         this.lastTime = 0;
         this.loadingComplete = false;
-        
+
         // Call init
         this.init();
     }
 
-    GameApp.prototype.init = function() {
+    init() {
         console.log('GameApp.init() called');
         // Show language selection and intro FIRST
         this.introSystem = new IntroSystem(this);
-    };
+    }
 
     // This is called after the intro is complete
-    GameApp.prototype.continueInit = function() {
-        var self = this;
+    continueInit() {
         console.log('Starting game initialization...');
-        
+
         // Show loading screen
-        this.showLoadingScreen(function() {
+        this.showLoadingScreen(() => {
             // Initialize systems
-            self.initializeSystems();
-            
+            this.initializeSystems();
+
             // Hide loading, show game
-            self.hideLoadingScreen();
-            
+            this.hideLoadingScreen();
+
             // Start game loop
-            self.startGameLoop();
-            
+            this.startGameLoop();
+
             // Start first mission after delay
-            setTimeout(function() {
-                if (self.eventSystem) {
-                    self.eventSystem.startMission('startup');
+            setTimeout(() => {
+                if (this.eventSystem) {
+                    this.eventSystem.startMission('startup');
                 }
             }, 5000);
         });
-    };
+    }
 
-    GameApp.prototype.showLoadingScreen = function(callback) {
+    showLoadingScreen(callback) {
         var loadingScreen = document.getElementById('loading-screen');
         var progressBar = document.getElementById('loading-progress');
         var loadingText = document.getElementById('loading-text');
-        
+
         if (!loadingScreen || !progressBar || !loadingText) {
             console.error('Loading elements not found');
             if (callback) callback();
             return;
         }
-        
+
         // Show loading screen
         loadingScreen.style.display = 'flex';
-        
+
         var loadingSteps = [
             { progress: 20, text: 'Инициализация систем реактора...' },
             { progress: 40, text: 'Загрузка моделей...' },
@@ -66,95 +65,80 @@ var GameApp = (function() {
             { progress: 80, text: 'Проверка систем безопасности...' },
             { progress: 100, text: 'Запуск завершен...' }
         ];
-        
+
         var currentStep = 0;
-        var loadingInterval = setInterval(function() {
+        var loadingInterval = setInterval(() => {
             if (currentStep < loadingSteps.length) {
                 var step = loadingSteps[currentStep];
                 progressBar.style.width = step.progress + '%';
                 loadingText.textContent = step.text;
                 currentStep++;
-                
+
                 // When we reach 100%, wait a bit then callback
                 if (step.progress === 100) {
                     clearInterval(loadingInterval);
-                    setTimeout(function() {
+                    setTimeout(() => {
                         if (callback) callback();
                     }, 500);
                 }
             }
         }, 400);
-    };
+    }
 
-    GameApp.prototype.initializeSystems = function() {
+    initializeSystems() {
         try {
             console.log('Initializing simulation...');
             this.simulation = new ReactorSimulation();
-            
+
             console.log('Initializing viewport...');
             this.viewport = new ReactorViewport('reactor-viewport');
-            
+
             console.log('Initializing UI controller...');
             this.uiController = new UIController(this.simulation, this.viewport);
-            
+
             console.log('Initializing event system...');
             this.eventSystem = new EventSystem(this.simulation);
-            
+
             console.log('Starting simulation...');
             this.simulation.start();
-            
+
             console.log('All systems initialized successfully');
         } catch (error) {
             console.error('Error initializing systems:', error);
             showGameError('Ошибка инициализации: ' + error.message);
         }
-    };
+    }
 
-    GameApp.prototype.hideLoadingScreen = function() {
+    hideLoadingScreen() {
         var loadingScreen = document.getElementById('loading-screen');
         var gameContainer = document.getElementById('game-container');
-        
+
         if (!loadingScreen || !gameContainer) {
             console.error('Game elements not found');
             return;
         }
-        
+
         loadingScreen.style.display = 'none';
         gameContainer.style.display = 'flex';
-        
+
         console.log('Game started!');
-    };
+    }
 
-    GameApp.prototype.startGameLoop = function() {
-        var self = this;
-        var tickRate = 1000; // 1 second ticks
+    startGameLoop() {
+        const tickRate = 1000;
         this.lastTime = performance.now();
-        
-        var gameLoop = function(currentTime) {
-            var deltaTime = currentTime - self.lastTime;
-            
-            if (deltaTime >= tickRate) {
-                // Update simulation
-                if (self.simulation && self.simulation.running) {
-                    self.simulation.tick(deltaTime);
-                }
-                
-                // Update event system
-                if (self.eventSystem) {
-                    self.eventSystem.update(deltaTime);
-                }
-                
-                self.lastTime = currentTime;
+        const loop = currentTime => {
+            const delta = currentTime - this.lastTime;
+            if (delta >= tickRate) {
+                if (this.simulation && this.simulation.running) this.simulation.tick(delta);
+                if (this.eventSystem) this.eventSystem.update(delta);
+                this.lastTime = currentTime;
             }
-            
-            requestAnimationFrame(gameLoop);
+            requestAnimationFrame(loop);
         };
-        
-        requestAnimationFrame(gameLoop);
-    };
-
-    return GameApp;
-})();
+        requestAnimationFrame(loop);
+    }
+}
 
 function showGameError(message) {
     var modal = document.getElementById('error-modal');
@@ -195,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, starting game...');
     console.log('IntroSystem available:', typeof IntroSystem !== 'undefined');
     console.log('ReactorSimulation available:', typeof ReactorSimulation !== 'undefined');
-    
+
     try {
         window.game = new GameApp();
         console.log('GameApp initialized successfully');
