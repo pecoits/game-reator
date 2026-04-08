@@ -166,16 +166,10 @@ var UIController = (function() {
             });
         }
         
-        // Manual modal - uses selected language
+        // Manual modal - uses selected language with pagination
         if (this.elements.btnManual) {
             this.elements.btnManual.addEventListener('click', function() {
-                var lang = window.selectedLanguage || 'en';
-                if (lang === 'pt' && typeof manualContentPT !== 'undefined') {
-                    self.elements.manualContent.innerHTML = manualContentPT;
-                } else {
-                    self.elements.manualContent.innerHTML = manualContentHTML;
-                }
-                self.elements.manualModal.style.display = 'flex';
+                self.openManual();
             });
         }
         
@@ -184,6 +178,100 @@ var UIController = (function() {
                 self.elements.manualModal.style.display = 'none';
             });
         }
+    };
+
+    UIController.prototype.openManual = function() {
+        var lang = window.selectedLanguage || 'en';
+        var pages = lang === 'pt' ? manualPagesPT : manualPagesEN;
+        
+        // Build manual HTML with floating close button and navigation
+        var html = '<button class="manual-close-float" id="manual-close-float">×</button>';
+        html += '<div class="manual-content" id="manual-pages-container">';
+        
+        // Add all pages
+        pages.forEach(function(page) {
+            html += page;
+        });
+        
+        // Add navigation bar
+        html += '<div class="manual-nav">';
+        html += '<button class="manual-nav-btn" id="manual-prev-btn" disabled>← ANTERIOR</button>';
+        html += '<span class="manual-page-indicator" id="manual-page-indicator">1 / ' + pages.length + '</span>';
+        html += '<button class="manual-nav-btn" id="manual-next-btn">PRÓXIMO →</button>';
+        html += '</div>';
+        html += '</div>';
+        
+        this.elements.manualContent.innerHTML = html;
+        this.elements.manualModal.style.display = 'flex';
+        
+        // Initialize pagination
+        this.currentManualPage = 1;
+        this.totalManualPages = pages.length;
+        this.setupManualNavigation();
+    };
+
+    UIController.prototype.setupManualNavigation = function() {
+        var self = this;
+        var prevBtn = document.getElementById('manual-prev-btn');
+        var nextBtn = document.getElementById('manual-next-btn');
+        var closeFloat = document.getElementById('manual-close-float');
+        var indicator = document.getElementById('manual-page-indicator');
+        
+        if (!prevBtn || !nextBtn || !closeFloat) return;
+        
+        // Floating close button
+        closeFloat.addEventListener('click', function() {
+            self.elements.manualModal.style.display = 'none';
+        });
+        
+        // Previous page
+        prevBtn.addEventListener('click', function() {
+            if (self.currentManualPage > 1) {
+                self.goToManualPage(self.currentManualPage - 1);
+            }
+        });
+        
+        // Next page
+        nextBtn.addEventListener('click', function() {
+            if (self.currentManualPage < self.totalManualPages) {
+                self.goToManualPage(self.currentManualPage + 1);
+            }
+        });
+    };
+
+    UIController.prototype.goToManualPage = function(pageNum) {
+        var pages = document.querySelectorAll('.manual-page');
+        var indicator = document.getElementById('manual-page-indicator');
+        var prevBtn = document.getElementById('manual-prev-btn');
+        var nextBtn = document.getElementById('manual-next-btn');
+        
+        // Hide all pages
+        pages.forEach(function(page) {
+            page.classList.remove('active');
+        });
+        
+        // Show target page
+        var targetPage = document.querySelector('.manual-page[data-page="' + pageNum + '"]');
+        if (targetPage) {
+            targetPage.classList.add('active');
+        }
+        
+        // Update state
+        this.currentManualPage = pageNum;
+        
+        // Update indicator
+        if (indicator) {
+            indicator.textContent = pageNum + ' / ' + this.totalManualPages;
+        }
+        
+        // Update buttons
+        if (prevBtn) {
+            prevBtn.disabled = (pageNum === 1);
+        }
+        if (nextBtn) {
+            nextBtn.disabled = (pageNum === this.totalManualPages);
+        }
+    };
         
         // Alert modal
         if (this.elements.btnAlerts) {
