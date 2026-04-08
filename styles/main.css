@@ -179,6 +179,60 @@ body {
     animation: blink 1s infinite;
 }
 
+.sound-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 10px;
+    padding-left: 10px;
+    border-left: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.btn-sound {
+    padding: 6px 10px;
+    font-size: 16px;
+    background: transparent;
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    color: #ffd700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-sound:hover {
+    background: rgba(255, 215, 0, 0.2);
+}
+
+.btn-sound.muted {
+    opacity: 0.5;
+}
+
+.volume-slider {
+    width: 80px;
+    height: 4px;
+    -webkit-appearance: none;
+    background: rgba(255, 215, 0, 0.3);
+    border: none;
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    background: #ffd700;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    background: #ffd700;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
 @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }

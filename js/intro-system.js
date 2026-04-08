@@ -334,6 +334,9 @@ var IntroSystem = (function() {
             introScreen.parentNode.removeChild(introScreen);
         }
         
+        // Store selected language globally
+        window.selectedLanguage = this.selectedLanguage;
+        
         if (this.gameApp) {
             this.gameApp.continueInit();
         }
