@@ -1,53 +1,49 @@
 // ===== REACTOR SIMULATION ENGINE =====
 var ReactorSimulation = (function() {
     function ReactorSimulation() {
-        // Core parameters - STABLE initial configuration
-        this.coreTemperature = 280; // °C (stable operating temp)
-        this.pressure = 15.5; // MPa (normal)
-        this.radiationLevel = 0.15; // mSv/h (low, safe)
-        this.reactorPower = 75; // % (normal operating power)
-        this.controlRodsPosition = 50; // % (mid-range, stable)
-        this.mainPumpSpeed = 65; // % (good cooling)
-        
+        // Core parameters from config
+        var c = REACTOR_CONFIG.initial;
+        this.coreTemperature      = c.coreTemperature;
+        this.pressure             = c.pressure;
+        this.radiationLevel       = c.radiationLevel;
+        this.reactorPower         = c.reactorPower;
+        this.controlRodsPosition  = c.controlRodsPosition;
+        this.mainPumpSpeed        = c.mainPumpSpeed;
+
         // Cooling system
-        this.tempInlet = 185; // °C
-        this.tempOutlet = 275; // °C
-        this.coolantFlow = 8200; // m³/h
-        this.pressurizerLevel = 60; // %
+        this.tempInlet            = c.tempInlet;
+        this.tempOutlet           = c.tempOutlet;
+        this.coolantFlow          = c.coolantFlow;
+        this.pressurizerLevel     = c.pressurizerLevel;
         this.emergencyCoolingActive = false;
-        this.extraPumpActive = false;
-        
+        this.extraPumpActive        = false;
+
         // Power generation
-        this.energyGeneration = 750; // MW
-        this.voltage = 15.75; // kV
-        this.frequency = 50.0; // Hz
-        this.gridLoad = 75; // %
-        this.gridConnected = true;
-        
+        this.energyGeneration     = c.energyGeneration;
+        this.voltage              = c.voltage;
+        this.frequency            = c.frequency;
+        this.gridLoad             = c.gridLoad;
+        this.gridConnected        = true;
+
         // Safety
-        this.scramActive = false;
-        this.alarmThresholds = {
-            temp: { warning: 300, danger: 350, critical: 400 },
-            pressure: { warning: 17, danger: 19, critical: 22 },
-            radiation: { warning: 1.0, danger: 5.0, critical: 20.0 },
-            power: { warning: 90, danger: 100, critical: 110 }
-        };
-        
+        this.scramActive          = false;
+        this.alarmThresholds      = REACTOR_CONFIG.alarmThresholds;
+
         // Simulation state
-        this.time = 0;
-        this.ticks = 0;
-        this.alerts = [];
-        this.events = [];
-        this.running = false;
-        
-        // Grace period - no problems for first 2 minutes (120 seconds)
-        this.gracePeriod = 120000; // 2 minutes in milliseconds
-        this.eventsEnabled = false;
-        
+        this.time                 = 0;
+        this.ticks                = 0;
+        this.alerts               = [];
+        this.events               = [];
+        this.running              = false;
+
+        // Grace period from config
+        this.gracePeriod          = REACTOR_CONFIG.gracePeriod;
+        this.eventsEnabled        = false;
+
         // Callbacks
         this.onUpdate = null;
-        this.onAlert = null;
-        this.onEvent = null;
+        this.onAlert  = null;
+        this.onEvent  = null;
     }
 
     ReactorSimulation.prototype.start = function() {
@@ -84,9 +80,9 @@ var ReactorSimulation = (function() {
         
         // Check for alarms (always check, even during grace period)
         this.checkAlarms();
-        
+
         // Random events (only after grace period)
-        if (this.eventsEnabled && Math.random() < 0.003) {
+        if (this.eventsEnabled && Math.random() < REACTOR_CONFIG.randomEventChance) {
             this.triggerRandomEvent();
         }
         
@@ -100,11 +96,11 @@ var ReactorSimulation = (function() {
         // More rods inserted = less power
         var rodsEffect = (100 - this.controlRodsPosition) / 100;
         var targetPower = rodsEffect * 100;
-        
+
         if (!this.scramActive) {
-            this.reactorPower += (targetPower - this.reactorPower) * 0.01;
+            this.reactorPower += (targetPower - this.reactorPower) * REACTOR_CONFIG.physics.powerRodsSmoothFactor;
         } else {
-            this.reactorPower *= 0.95; // Rapid shutdown
+            this.reactorPower *= REACTOR_CONFIG.physics.scramShutdownRate; // Rapid shutdown
         }
     };
 
@@ -112,19 +108,19 @@ var ReactorSimulation = (function() {
         var pumpEfficiency = this.mainPumpSpeed / 100;
         var extraCooling = this.extraPumpActive ? 0.3 : 0;
         var emergencyFactor = this.emergencyCoolingActive ? 2.0 : 1.0;
-        
+
         var totalCooling = (pumpEfficiency + extraCooling) * emergencyFactor;
-        
+
         // Coolant flow rate
-        this.coolantFlow = 8200 * totalCooling;
-        
+        this.coolantFlow = REACTOR_CONFIG.physics.coolantFlowBase * totalCooling;
+
         // Temperature calculations
-        var heatFromReactor = this.reactorPower * 3.8;
-        var coolingCapacity = totalCooling * 290;
-        
+        var heatFromReactor = this.reactorPower * REACTOR_CONFIG.physics.heatPerPowerUnit;
+        var coolingCapacity = totalCooling * REACTOR_CONFIG.physics.coolingCapacityFactor;
+
         this.tempOutlet = 185 + (heatFromReactor / (totalCooling + 0.5));
         this.tempInlet = this.tempOutlet - (coolingCapacity / 100);
-        
+
         // Pressurizer level
         this.pressurizerLevel = 50 + (this.coolantFlow / 200);
         this.pressurizerLevel = Math.min(100, Math.max(0, this.pressurizerLevel));
@@ -132,10 +128,10 @@ var ReactorSimulation = (function() {
 
     ReactorSimulation.prototype.updateTemperature = function() {
         // Core temperature based on power and cooling
-        var heatGeneration = this.reactorPower * 4.5;
-        var heatDissipation = (this.mainPumpSpeed / 100) * 195;
-        var emergencyCooling = this.emergencyCoolingActive ? 150 : 0;
-        
+        var heatGeneration = this.reactorPower * REACTOR_CONFIG.physics.coreHeatFactor;
+        var heatDissipation = (this.mainPumpSpeed / 100) * REACTOR_CONFIG.physics.coreDissipationFactor;
+        var emergencyCooling = this.emergencyCoolingActive ? REACTOR_CONFIG.physics.emergencyCoolingBonus : 0;
+
         var targetTemp = 200 + (heatGeneration - heatDissipation - emergencyCooling);
         this.coreTemperature += (targetTemp - this.coreTemperature) * 0.02;
         this.coreTemperature = Math.max(20, this.coreTemperature);
@@ -143,28 +139,28 @@ var ReactorSimulation = (function() {
 
     ReactorSimulation.prototype.updatePressure = function() {
         // Pressure related to temperature
-        var tempPressure = 10 + (this.coreTemperature - 200) * 0.02;
-        this.pressure += (tempPressure - this.pressure) * 0.01;
+        var tempPressure = REACTOR_CONFIG.physics.tempPressureBase + (this.coreTemperature - 200) * REACTOR_CONFIG.physics.tempPressureFactor;
+        this.pressure += (tempPressure - this.pressure) * REACTOR_CONFIG.physics.pressureSmoothFactor;
         this.pressure = Math.max(5, Math.min(25, this.pressure));
     };
 
     ReactorSimulation.prototype.updateRadiation = function() {
         // Base radiation + temperature factor
-        var baseRadiation = 0.12;
+        var baseRadiation = REACTOR_CONFIG.physics.radiationBase;
         var tempFactor = Math.max(0, (this.coreTemperature - 250) / 100);
         var powerFactor = this.reactorPower / 100;
-        
-        this.radiationLevel = baseRadiation + (tempFactor * 0.3) + (powerFactor * 0.15);
-        
+
+        this.radiationLevel = baseRadiation + (tempFactor * REACTOR_CONFIG.physics.tempRadiationFactor) + (powerFactor * REACTOR_CONFIG.physics.powerRadiationFactor);
+
         if (this.scramActive) {
-            this.radiationLevel *= 0.9;
+            this.radiationLevel *= REACTOR_CONFIG.physics.scramRadiationDecay;
         }
     };
 
     ReactorSimulation.prototype.updatePowerGeneration = function() {
         // Energy generation based on reactor power
-        this.energyGeneration = (this.reactorPower / 100) * 1000;
-        this.voltage = 15.75 * (this.reactorPower / 100);
+        this.energyGeneration = (this.reactorPower / 100) * REACTOR_CONFIG.physics.maxEnergyMW;
+        this.voltage = REACTOR_CONFIG.physics.voltageBase * (this.reactorPower / 100);
         this.frequency = 50.0 + (Math.random() - 0.5) * 0.1;
     };
 
@@ -211,12 +207,12 @@ var ReactorSimulation = (function() {
         var recentAlert = null;
         for (var i = 0; i < this.alerts.length; i++) {
             var a = this.alerts[i];
-            if (a.message === message && (this.time - a.time) < 5000) {
+            if (a.message === message && (this.time - a.time) < REACTOR_CONFIG.physics.alertDeduplicateWindow) {
                 recentAlert = a;
                 break;
             }
         }
-        
+
         if (!recentAlert) {
             var alert = {
                 level: level,
@@ -224,7 +220,7 @@ var ReactorSimulation = (function() {
                 time: this.time
             };
             this.alerts.push(alert);
-            
+
             if (this.onAlert) {
                 this.onAlert(alert);
             }

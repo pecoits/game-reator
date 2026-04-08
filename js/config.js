@@ -1,0 +1,48 @@
+// ===== REACTOR PHYSICS CONFIG =====
+// Central location for all tunable simulation parameters.
+var REACTOR_CONFIG = {
+    initial: {
+        coreTemperature: 280,
+        pressure: 15.5,
+        radiationLevel: 0.15,
+        reactorPower: 75,
+        controlRodsPosition: 50,
+        mainPumpSpeed: 65,
+        tempInlet: 185,
+        tempOutlet: 275,
+        coolantFlow: 8200,
+        pressurizerLevel: 60,
+        energyGeneration: 750,
+        voltage: 15.75,
+        frequency: 50.0,
+        gridLoad: 75
+    },
+    alarmThresholds: {
+        temp:      { warning: 300, danger: 350, critical: 400 },
+        pressure:  { warning: 17,  danger: 19,  critical: 22  },
+        radiation: { warning: 1.0, danger: 5.0, critical: 20.0 },
+        power:     { warning: 90,  danger: 100, critical: 110 }
+    },
+    gracePeriod: 120000,
+    randomEventChance: 0.003,
+    physics: {
+        powerRodsSmoothFactor: 0.01,
+        scramShutdownRate: 0.95,
+        coolantFlowBase: 8200,
+        heatPerPowerUnit: 3.8,
+        coolingCapacityFactor: 290,
+        coreHeatFactor: 4.5,
+        coreDissipationFactor: 195,
+        emergencyCoolingBonus: 150,
+        tempPressureBase: 10,
+        tempPressureFactor: 0.02,
+        pressureSmoothFactor: 0.01,
+        radiationBase: 0.12,
+        tempRadiationFactor: 0.3,
+        powerRadiationFactor: 0.15,
+        scramRadiationDecay: 0.9,
+        maxEnergyMW: 1000,
+        voltageBase: 15.75,
+        alertDeduplicateWindow: 5000
+    }
+};
