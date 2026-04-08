@@ -630,7 +630,7 @@ body {
 .manual-page {
     display: none;
     padding: 15px 20px 20px;
-    height: calc(100% - 55px); /* 100% minus nav bar height */
+    height: calc(100% - 55px);
     overflow: hidden;
     animation: fadeIn 0.3s;
     font-size: 13px;
@@ -647,7 +647,7 @@ body {
 
 .manual-content h1 {
     color: var(--gold);
-    font-size: 20px;
+    font-size: 22px;
     border-bottom: 2px solid var(--gold);
     padding-bottom: 8px;
     margin: 0 0 12px;
@@ -673,7 +673,7 @@ body {
 
 .manual-content ul, .manual-content ol {
     margin: 6px 0 6px 18px;
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1.5;
 }
 
@@ -703,25 +703,25 @@ body {
     width: 100%;
     border-collapse: collapse;
     margin: 8px 0;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .manual-content table th,
 .manual-content table td {
     border: 1px solid var(--gray-light);
-    padding: 4px 6px;
+    padding: 5px 6px;
     text-align: left;
 }
 
 .manual-content table th {
     background: var(--gray-medium);
     color: var(--gold);
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .manual-content table td {
     background: var(--black);
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .manual-content code {
@@ -729,7 +729,7 @@ body {
     padding: 2px 4px;
     border: 1px solid var(--gray-light);
     font-family: 'Courier New', monospace;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 /* Manual Navigation */
@@ -770,7 +770,7 @@ body {
     font-size: 11px;
 }
 
-/* Floating Close Button */
+/* Floating Close Button - Only this one, remove default */
 .manual-close-float {
     position: absolute;
     top: 8px;
@@ -793,6 +793,11 @@ body {
 .manual-close-float:hover {
     background: var(--red-bright);
     transform: scale(1.1);
+}
+
+/* Hide default close button in manual modal header */
+.modal-manual .modal-header .btn-close {
+    display: none;
 }
 
 /* ===== ALERT ENTRIES ===== */

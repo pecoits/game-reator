@@ -4,12 +4,12 @@
 var manualPagesPT = [
     // Page 1: Cover
     '<div class="manual-page active" data-page="1">' +
-    '<div style="text-align: center; padding: 40px 20px;">' +
+    '<div style="text-align: center; padding: 60px 20px;">' +
     '<div style="font-size: 60px; color: #cc0000; margin-bottom: 20px;">★</div>' +
     '<h1 style="font-size: 28px; margin-bottom: 10px;">ESTAÇÃO NUCLEAR RBMK-1000</h1>' +
-    '<h2 style="color: #888; font-weight: normal;">Manual de Operações Técnicas</h2>' +
+    '<h2 style="color: #888; font-weight: normal; font-size: 18px;">Manual de Operações Técnicas</h2>' +
     '<div style="margin-top: 40px; padding: 20px; border: 2px solid #cc0000; display: inline-block;">' +
-    '<p style="color: #cc0000; font-weight: bold; margin: 0;">DOCUMENTO RESTRITO</p>' +
+    '<p style="color: #cc0000; font-weight: bold; margin: 0; font-size: 14px;">DOCUMENTO RESTRITO</p>' +
     '<p style="color: #888; font-size: 12px; margin: 5px 0 0;">UEN-1994-047</p>' +
     '</div>' +
     '<div style="margin-top: 40px; color: #888; font-size: 13px;">' +
@@ -22,7 +22,7 @@ var manualPagesPT = [
     // Page 2: Index
     '<div class="manual-page" data-page="2">' +
     '<h1>ÍNDICE</h1>' +
-    '<ol style="font-size: 14px; line-height: 2;">' +
+    '<ol style="font-size: 14px; line-height: 2.2;">' +
     '<li>Especificações do Reator</li>' +
     '<li>Barras de Controle (Стержни)</li>' +
     '<li>Sistema de Resfriamento</li>' +
@@ -31,7 +31,7 @@ var manualPagesPT = [
     '<li>Emergências</li>' +
     '<li>Solução de Problemas</li>' +
     '</ol>' +
-    '<div class="warning-box" style="margin-top: 30px;">' +
+    '<div class="warning-box" style="margin-top: 20px;">' +
     '<h3>⚠ LEIA COM ATENÇÃO</h3>' +
     '<p>Este manual contém informações vitais para operação segura. Consulte sempre que tiver dúvidas.</p>' +
     '</div></div>',
@@ -81,21 +81,18 @@ var manualPagesPT = [
     '<h3>Bomba Principal - Главный насос (ГЦН)</h3>' +
     '<p>8 bombas de circulação. Velocidade normal: <strong>60-80%</strong></p>' +
     '<h3>Resfriamento Emergência - Аварийное охлаждение</h3>' +
-    '<p>Ative quando:</p>' +
-    '<ul>' +
-    '<li>Temperatura &gt; 320°C</li>' +
-    '<li>Pressão cai abaixo de 5.0 MPa</li>' +
-    '<li>Antes de usar АЗ-5</li>' +
-    '</ul>' +
+    '<p>Botão "Аварийное охлаждение" = Resfriamento de Emergência</p>' +
+    '<p>Ative quando temperatura &gt; 320°C ou pressão cai.</p>' +
     '<h3>Bomba Extra - Дополнительный насос</h3>' +
-    '<p>Use em emergências para reforçar resfriamento.</p>' +
-    '<h3>Parâmetros do Circuito:</h3>' +
+    '<p>Botão "Дополнительный насос" = Bomba adicional</p>' +
+    '<p>Use para reforçar resfriamento em emergências.</p>' +
+    '<h3>Parâmetros:</h3>' +
     '<table>' +
     '<tr><th>Parâmetro</th><th>Normal</th></tr>' +
-    '<tr><td>Entrada (на входе)</td><td>170-190°C</td></tr>' +
-    '<tr><td>Saída (на выходе)</td><td>270-290°C</td></tr>' +
-    '<tr><td>Fluxo (Расход)</td><td>8000-9000 m³/h</td></tr>' +
-    '<tr><td>Pressurizador (Уровень)</td><td>50-70%</td></tr>' +
+    '<tr><td>Entrada</td><td>170-190°C</td></tr>' +
+    '<tr><td>Saída</td><td>270-290°C</td></tr>' +
+    '<tr><td>Fluxo</td><td>8000-9000 m³/h</td></tr>' +
+    '<tr><td>Pressurizador</td><td>50-70%</td></tr>' +
     '</table></div>',
     
     // Page 6: Power
@@ -135,8 +132,8 @@ var manualPagesPT = [
     '<table>' +
     '<tr><th>Nível</th><th>Leitura</th></tr>' +
     '<tr><td>Normal</td><td>&lt; 0.5 мЗв/ч</td></tr>' +
-    '<tr><td>ВНИМАНИЕ</td><td>1.0 - 5.0 мЗв/ч</td></tr>' +
-    '<tr><td>ОПАСНОСТЬ</td><td>&gt; 5.0 мЗв/ч</td></tr>' +
+    '<tr><td>ВНИМАНИЕ (Atenção)</td><td>1.0 - 5.0 мЗв/ч</td></tr>' +
+    '<tr><td>ОПАСНОСТЬ (Perigo)</td><td>&gt; 5.0 мЗв/ч</td></tr>' +
     '</table></div>',
     
     // Page 8: Emergencies
@@ -145,15 +142,15 @@ var manualPagesPT = [
     '<h2>Аварийные процедуры</h2>' +
     '<h3>Alta Temperatura (Высокая температура)</h3>' +
     '<ol>' +
-    '<li>Ative <strong>"Аварийное охлаждение"</strong></li>' +
-    '<li>Aumente <strong>"Стержни"</strong> para 80%+</li>' +
-    '<li>Ative <strong>"Дополнительный насос"</strong></li>' +
+    '<li>Ative <strong>"Аварийное охлаждение"</strong> (Resfriamento Emergência)</li>' +
+    '<li>Aumente <strong>"Стержни"</strong> para 80%+ (Barras)</li>' +
+    '<li>Ative <strong>"Дополнительный насос"</strong> (Bomba Extra)</li>' +
     '<li>Se &gt; 400°C → pressione <strong>АЗ-5</strong></li>' +
     '</ol>' +
     '<h3>Alta Pressão (Высокое давление)</h3>' +
     '<ol>' +
     '<li>Reduza potência com <strong>"Стержни"</strong></li>' +
-    '<li>Aumente <strong>"Главный насос"</strong></li>' +
+    '<li>Aumente <strong>"Главный насос"</strong> (Bomba Principal)</li>' +
     '<li>Monitore pressão</li>' +
     '</ol>' +
     '<h3>Alta Radiação (Высокая радиация)</h3>' +
@@ -165,7 +162,7 @@ var manualPagesPT = [
     
     // Page 9: Troubleshooting
     '<div class="manual-page" data-page="9">' +
-    '<h1>PROBLEMAS</h1>' +
+    '<h1>COLUÇÕES RÁPIDAS</h1>' +
     '<h2>Сolução rápida</h2>' +
     '<table>' +
     '<tr><th>Sintoma</th><th>Ação</th></tr>' +
@@ -194,10 +191,10 @@ var manualPagesPT = [
     '<tr><td>Министерство</td><td>9000</td></tr>' +
     '<tr><td>Экстренные службы</td><td>9999</td></tr>' +
     '</table>' +
-    '<div style="margin-top: 40px; text-align: center; color: #888; padding: 20px;">' +
+    '<div style="margin-top: 30px; text-align: center; color: #888; padding: 15px;">' +
     '<p style="font-size: 24px;">★</p>' +
     '<p><em>"O átomo é um bom servo,<br>mas um mau mestre."</em></p>' +
-    '<p style="margin-top: 20px; font-size: 11px;">FIM DO MANUAL</p>' +
+    '<p style="margin-top: 15px; font-size: 11px;">FIM DO MANUAL</p>' +
     '<p style="font-size: 10px;">UEN-1994-047 Rev. 3</p>' +
     '</div></div>'
 ];
@@ -206,12 +203,12 @@ var manualPagesPT = [
 var manualPagesEN = [
     // Page 1: Cover
     '<div class="manual-page active" data-page="1">' +
-    '<div style="text-align: center; padding: 40px 20px;">' +
+    '<div style="text-align: center; padding: 60px 20px;">' +
     '<div style="font-size: 60px; color: #cc0000; margin-bottom: 20px;">★</div>' +
     '<h1 style="font-size: 28px; margin-bottom: 10px;">RBMK-1000 NUCLEAR STATION</h1>' +
-    '<h2 style="color: #888; font-weight: normal;">Technical Operations Manual</h2>' +
+    '<h2 style="color: #888; font-weight: normal; font-size: 18px;">Technical Operations Manual</h2>' +
     '<div style="margin-top: 40px; padding: 20px; border: 2px solid #cc0000; display: inline-block;">' +
-    '<p style="color: #cc0000; font-weight: bold; margin: 0;">RESTRICTED DOCUMENT</p>' +
+    '<p style="color: #cc0000; font-weight: bold; margin: 0; font-size: 14px;">RESTRICTED DOCUMENT</p>' +
     '<p style="color: #888; font-size: 12px; margin: 5px 0 0;">NPS-1994-047</p>' +
     '</div>' +
     '<div style="margin-top: 40px; color: #888; font-size: 13px;">' +
@@ -224,7 +221,7 @@ var manualPagesEN = [
     // Page 2: Index
     '<div class="manual-page" data-page="2">' +
     '<h1>TABLE OF CONTENTS</h1>' +
-    '<ol style="font-size: 14px; line-height: 2;">' +
+    '<ol style="font-size: 14px; line-height: 2.2;">' +
     '<li>Reactor Specifications</li>' +
     '<li>Control Rods (Стержни)</li>' +
     '<li>Cooling System</li>' +
@@ -233,7 +230,7 @@ var manualPagesEN = [
     '<li>Emergencies</li>' +
     '<li>Troubleshooting</li>' +
     '</ol>' +
-    '<div class="warning-box" style="margin-top: 30px;">' +
+    '<div class="warning-box" style="margin-top: 20px;">' +
     '<h3>⚠ READ CAREFULLY</h3>' +
     '<p>This manual contains vital information for safe operation. Consult whenever in doubt.</p>' +
     '</div></div>',
@@ -283,21 +280,18 @@ var manualPagesEN = [
     '<h3>Main Pump - Главный насос (ГЦН)</h3>' +
     '<p>8 circulation pumps. Normal speed: <strong>60-80%</strong></p>' +
     '<h3>Emergency Cooling - Аварийное охлаждение</h3>' +
-    '<p>Activate when:</p>' +
-    '<ul>' +
-    '<li>Temperature &gt; 320°C</li>' +
-    '<li>Pressure drops below 5.0 MPa</li>' +
-    '<li>Before using АЗ-5</li>' +
-    '</ul>' +
+    '<p>Button "Аварийное охлаждение" = Emergency Cooling</p>' +
+    '<p>Activate when temp &gt; 320°C or pressure drops.</p>' +
     '<h3>Extra Pump - Дополнительный насос</h3>' +
-    '<p>Use in emergencies for additional cooling.</p>' +
-    '<h3>Circuit Parameters:</h3>' +
+    '<p>Button "Дополнительный насос" = Extra Pump</p>' +
+    '<p>Use to reinforce cooling in emergencies.</p>' +
+    '<h3>Parameters:</h3>' +
     '<table>' +
     '<tr><th>Parameter</th><th>Normal</th></tr>' +
-    '<tr><td>Inlet (на входе)</td><td>170-190°C</td></tr>' +
-    '<tr><td>Outlet (на выходе)</td><td>270-290°C</td></tr>' +
-    '<tr><td>Flow (Расход)</td><td>8000-9000 m³/h</td></tr>' +
-    '<tr><td>Pressurizer (Уровень)</td><td>50-70%</td></tr>' +
+    '<tr><td>Inlet</td><td>170-190°C</td></tr>' +
+    '<tr><td>Outlet</td><td>270-290°C</td></tr>' +
+    '<tr><td>Flow</td><td>8000-9000 m³/h</td></tr>' +
+    '<tr><td>Pressurizer</td><td>50-70%</td></tr>' +
     '</table></div>',
     
     // Page 6: Power
@@ -337,8 +331,8 @@ var manualPagesEN = [
     '<table>' +
     '<tr><th>Level</th><th>Reading</th></tr>' +
     '<tr><td>Normal</td><td>&lt; 0.5 мЗв/ч</td></tr>' +
-    '<tr><td>ВНИМАНИЕ</td><td>1.0 - 5.0 мЗв/ч</td></tr>' +
-    '<tr><td>ОПАСНОСТЬ</td><td>&gt; 5.0 мЗв/ч</td></tr>' +
+    '<tr><td>ВНИМАНИЕ (Warning)</td><td>1.0 - 5.0 мЗв/ч</td></tr>' +
+    '<tr><td>ОПАСНОСТЬ (Danger)</td><td>&gt; 5.0 мЗв/ч</td></tr>' +
     '</table></div>',
     
     // Page 8: Emergencies
@@ -347,15 +341,15 @@ var manualPagesEN = [
     '<h2>Аварийные процедуры</h2>' +
     '<h3>High Temperature (Высокая температура)</h3>' +
     '<ol>' +
-    '<li>Activate <strong>"Аварийное охлаждение"</strong></li>' +
-    '<li>Increase <strong>"Стержни"</strong> to 80%+</li>' +
-    '<li>Activate <strong>"Дополнительный насос"</strong></li>' +
+    '<li>Activate <strong>"Аварийное охлаждение"</strong> (Emergency Cooling)</li>' +
+    '<li>Increase <strong>"Стержни"</strong> to 80%+ (Control Rods)</li>' +
+    '<li>Activate <strong>"Дополнительный насос"</strong> (Extra Pump)</li>' +
     '<li>If &gt; 400°C → press <strong>АЗ-5</strong></li>' +
     '</ol>' +
     '<h3>High Pressure (Высокое давление)</h3>' +
     '<ol>' +
     '<li>Reduce power with <strong>"Стержни"</strong></li>' +
-    '<li>Increase <strong>"Главный насос"</strong></li>' +
+    '<li>Increase <strong>"Главный насос"</strong> (Main Pump)</li>' +
     '<li>Monitor pressure</li>' +
     '</ol>' +
     '<h3>High Radiation (Высокая радиация)</h3>' +
@@ -396,22 +390,18 @@ var manualPagesEN = [
     '<tr><td>Министерство</td><td>9000</td></tr>' +
     '<tr><td>Экстренные службы</td><td>9999</td></tr>' +
     '</table>' +
-    '<div style="margin-top: 40px; text-align: center; color: #888; padding: 20px;">' +
+    '<div style="margin-top: 30px; text-align: center; color: #888; padding: 15px;">' +
     '<p style="font-size: 24px;">★</p>' +
     '<p><em>"The atom is a good servant,<br>but a bad master."</em></p>' +
-    '<p style="margin-top: 20px; font-size: 11px;">END OF MANUAL</p>' +
+    '<p style="margin-top: 15px; font-size: 11px;">END OF MANUAL</p>' +
     '<p style="font-size: 10px;">NPS-1994-047 Rev. 3</p>' +
     '</div></div>'
 ];
 
-// Legacy variables for compatibility
-var manualContentPT = manualPagesPT.join('');
-var manualContentHTML = manualPagesEN.join('');
-
 // Export
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { 
-        pt: { pages: manualPagesPT, full: manualContentPT },
-        en: { pages: manualPagesEN, full: manualContentHTML }
+        pt: { pages: manualPagesPT },
+        en: { pages: manualPagesEN }
     };
 }
