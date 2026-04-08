@@ -146,18 +146,36 @@ var SoundSystem = (function() {
     SoundSystem.prototype.playWarning = function() {
         if (!this.initialized || this.muted) return;
         
+        var self = this;
+        var now = this.audioContext.currentTime;
+        
+        // Single beep for warning
         var oscillator = this.audioContext.createOscillator();
         var gain = this.audioContext.createGain();
         
-        oscillator.type = 'triangle';
-        oscillator.frequency.value = 440;
-        gain.gain.value = this.volume * 0.2;
+        oscillator.type = 'square';
+        oscillator.frequency.value = 880; // A5 - clear beep
+        gain.gain.value = this.volume * 0.15;
         
         oscillator.connect(gain);
         gain.connect(this.audioContext.destination);
         
-        oscillator.start();
-        oscillator.stop(this.audioContext.currentTime + 0.3);
+        oscillator.start(now);
+        oscillator.stop(now + 0.15); // Short beep
+        
+        // Second beep after a pause
+        var oscillator2 = this.audioContext.createOscillator();
+        var gain2 = this.audioContext.createGain();
+        
+        oscillator2.type = 'square';
+        oscillator2.frequency.value = 880;
+        gain2.gain.value = this.volume * 0.15;
+        
+        oscillator2.connect(gain2);
+        gain2.connect(self.audioContext.destination);
+        
+        oscillator2.start(now + 0.3);
+        oscillator2.stop(now + 0.45);
     };
 
     SoundSystem.prototype.getState = function() {

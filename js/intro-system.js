@@ -80,8 +80,7 @@ var introTexts = {
             title: "MANUAL TÉCNICO",
             text: '<p>Durante o jogo, você pode acessar o <span class="highlight">Manual Técnico</span> clicando no botão ' +
                 '<strong>"РУКОВОДСТВО"</strong> no topo da tela.</p>' +
-                '<p>O manual está em <span class="highlight">inglês</span> (já que todos os manuais técnicos ' +
-                'internacionais são em inglês) e contém:</p>' +
+                '<p>O manual estará <span class="highlight">no idioma que você selecionou</span> e contém:</p>' +
                 '<ul style="color: #b0b0b0; margin-left: 20px;">' +
                 '<li>Especificações técnicas do reator RBMK-1000</li>' +
                 '<li>Procedimentos de operação normal</li>' +
@@ -189,8 +188,7 @@ var introTexts = {
             title: "TECHNICAL MANUAL",
             text: '<p>During the game, you can access the <span class="highlight">Technical Manual</span> by clicking the ' +
                 '<strong>"РУКОВОДСТВО"</strong> button at the top of the screen.</p>' +
-                '<p>The manual is in <span class="highlight">English</span> (since all international technical manuals ' +
-                'are in English) and contains:</p>' +
+                '<p>The manual will be in <span class="highlight">the language you selected</span> and contains:</p>' +
                 '<ul style="color: #b0b0b0; margin-left: 20px;">' +
                 '<li>RBMK-1000 reactor technical specifications</li>' +
                 '<li>Normal operating procedures</li>' +

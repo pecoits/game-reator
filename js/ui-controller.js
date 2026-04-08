@@ -5,6 +5,8 @@ var UIController = (function() {
         this.viewport = viewport;
         this.soundSystem = new SoundSystem();
         this.hasCriticalAlarm = false;
+        this.lastWarningSound = 0;
+        this.warningSoundCooldown = 3000; // 3 seconds between warning beeps
         
         this.elements = {};
         this.currentTab = 'main';
@@ -302,9 +304,20 @@ var UIController = (function() {
     };
 
     UIController.prototype.handleAlert = function(alert) {
-        // Play warning sound
-        if (alert.level === 'danger' || alert.level === 'critical') {
+        var now = Date.now();
+        
+        // Play warning beep for any alert (with cooldown to avoid spam)
+        if (now - this.lastWarningSound > this.warningSoundCooldown) {
             this.soundSystem.playWarning();
+            this.lastWarningSound = now;
+        }
+        
+        // Play continuous alarm for critical situations
+        if (alert.level === 'critical') {
+            if (!this.hasCriticalAlarm) {
+                this.soundSystem.playAlarm();
+                this.hasCriticalAlarm = true;
+            }
         }
     };
 
