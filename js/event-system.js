@@ -84,6 +84,7 @@ class EventSystem {
     }
 
     completeMission() {
+        this.currentMission.completed = true;
         this.currentMission.active = false;
         this.simulation.addEvent('success', `═══ МИССИЯ ВЫПОЛНЕНА ═══`);
         this.simulation.addEvent('success', this.currentMission.reward);

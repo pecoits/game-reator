@@ -9,6 +9,7 @@ class GameApp {
         this.gameLoop = null;
         this.lastTime = 0;
         this.loadingComplete = false;
+        this.saveSystem = new SaveSystem();
 
         // Call init
         this.init();
@@ -90,6 +91,24 @@ class GameApp {
             console.log('Initializing simulation...');
             this.simulation = new ReactorSimulation();
 
+            // Restore saved state if available
+            const saved = this.saveSystem.load();
+            if (saved) {
+                const s = saved.sim;
+                this.simulation.coreTemperature        = s.coreTemperature;
+                this.simulation.pressure               = s.pressure;
+                this.simulation.radiationLevel         = s.radiationLevel;
+                this.simulation.reactorPower           = s.reactorPower;
+                this.simulation.controlRodsPosition    = s.controlRodsPosition;
+                this.simulation.mainPumpSpeed          = s.mainPumpSpeed;
+                this.simulation.emergencyCoolingActive = s.emergencyCoolingActive;
+                this.simulation.extraPumpActive        = s.extraPumpActive;
+                this.simulation.gridConnected          = s.gridConnected;
+                this.simulation.scramActive            = s.scramActive;
+                this.simulation.time                   = s.time;
+                this.simulation.addEvent('info', 'Состояние восстановлено из архива.');
+            }
+
             console.log('Initializing viewport...');
             this.viewport = new ReactorViewport('reactor-viewport');
 
@@ -132,6 +151,15 @@ class GameApp {
             if (delta >= tickRate) {
                 if (this.simulation && this.simulation.running) this.simulation.tick(delta);
                 if (this.eventSystem) this.eventSystem.update(delta);
+                // Auto-save every 10 ticks
+                if (this.simulation.ticks % 10 === 0 && this.saveSystem) {
+                    const completedMissions = this.eventSystem
+                        ? this.eventSystem.missions
+                            .filter(m => m.completed)
+                            .map(m => m.id)
+                        : [];
+                    this.saveSystem.save(this.simulation.getState(), completedMissions);
+                }
                 this.lastTime = currentTime;
             }
             requestAnimationFrame(loop);
