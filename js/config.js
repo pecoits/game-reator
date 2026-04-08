@@ -56,6 +56,9 @@ var REACTOR_CONFIG = {
         pressureMax: 25,
         radiationTempThreshold: 250,
         radiationTempDivisor: 100,
-        frequencyJitter: 0.1
+        frequencyJitter: 0.1,
+        baseTemperatureOffset: 200,
+        frequencyBase: 50.0,
+        alertRecentWindow: 30000
     }
 };

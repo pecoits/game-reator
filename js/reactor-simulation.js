@@ -132,7 +132,7 @@ var ReactorSimulation = (function() {
         var heatDissipation = (this.mainPumpSpeed / 100) * REACTOR_CONFIG.physics.coreDissipationFactor;
         var emergencyCooling = this.emergencyCoolingActive ? REACTOR_CONFIG.physics.emergencyCoolingBonus : 0;
 
-        var targetTemp = 200 + (heatGeneration - heatDissipation - emergencyCooling);
+        var targetTemp = REACTOR_CONFIG.physics.baseTemperatureOffset + (heatGeneration - heatDissipation - emergencyCooling);
         this.coreTemperature += (targetTemp - this.coreTemperature) * REACTOR_CONFIG.physics.temperatureSmoothFactor;
         this.coreTemperature = Math.max(REACTOR_CONFIG.physics.minCoreTemperature, this.coreTemperature);
     };
@@ -161,12 +161,12 @@ var ReactorSimulation = (function() {
         // Energy generation based on reactor power
         this.energyGeneration = (this.reactorPower / 100) * REACTOR_CONFIG.physics.maxEnergyMW;
         this.voltage = REACTOR_CONFIG.physics.voltageBase * (this.reactorPower / 100);
-        this.frequency = 50.0 + (Math.random() - 0.5) * REACTOR_CONFIG.physics.frequencyJitter;
+        this.frequency = REACTOR_CONFIG.physics.frequencyBase + (Math.random() - 0.5) * REACTOR_CONFIG.physics.frequencyJitter;
     };
 
     ReactorSimulation.prototype.updateGridParameters = function() {
         if (this.gridConnected) {
-            this.gridLoad = (this.energyGeneration / 1000) * 100;
+            this.gridLoad = (this.energyGeneration / REACTOR_CONFIG.physics.maxEnergyMW) * 100;
         } else {
             this.gridLoad = 0;
         }
@@ -327,7 +327,7 @@ var ReactorSimulation = (function() {
     ReactorSimulation.prototype.getAlertCount = function() {
         var count = 0;
         for (var i = 0; i < this.alerts.length; i++) {
-            if ((this.time - this.alerts[i].time) < 30000) {
+            if ((this.time - this.alerts[i].time) < REACTOR_CONFIG.physics.alertRecentWindow) {
                 count++;
             }
         }
