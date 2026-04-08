@@ -219,34 +219,63 @@ class UIController {
         });
     }
 
+    renderManualPage(page) {
+        var parts = ['<div class="manual-page active">'];
+        parts.push('<h3 class="manual-title">' + page.title + '</h3>');
+        for (var i = 0; i < page.sections.length; i++) {
+            var section = page.sections[i];
+            if (section.type === 'text') {
+                parts.push('<p>' + section.content + '</p>');
+            } else if (section.type === 'heading') {
+                parts.push('<h4>' + section.content + '</h4>');
+            } else if (section.type === 'list') {
+                var tag = section.ordered ? 'ol' : 'ul';
+                var items = section.items.map(function(item) { return '<li>' + item + '</li>'; }).join('');
+                parts.push('<' + tag + '>' + items + '</' + tag + '>');
+            } else if (section.type === 'table') {
+                var rows = section.rows;
+                var header = rows[0];
+                var dataRows = rows.slice(1);
+                var th = header.map(function(h) { return '<th>' + h + '</th>'; }).join('');
+                var trs = dataRows.map(function(r) {
+                    return '<tr>' + r.map(function(c) { return '<td>' + c + '</td>'; }).join('') + '</tr>';
+                }).join('');
+                parts.push('<table class="manual-table"><thead><tr>' + th + '</tr></thead><tbody>' + trs + '</tbody></table>');
+            } else if (section.type === 'warning') {
+                parts.push('<div class="warning-box">' + section.content + '</div>');
+            } else if (section.type === 'cover' || section.type === 'footer') {
+                parts.push(section.content);
+            }
+        }
+        parts.push('</div>');
+        return parts.join('');
+    }
+
     openManual() {
         var lang = window.selectedLanguage || 'en';
-        var pages = lang === 'pt' ? manualPagesPT : manualPagesEN;
+        var pages = (MANUAL_PAGES && MANUAL_PAGES[lang]) ? MANUAL_PAGES[lang] : (MANUAL_PAGES ? MANUAL_PAGES.pt : null);
 
         if (!pages || pages.length === 0) {
             console.error('Manual pages not found!');
             return;
         }
 
+        this.currentManualPage = 1;
+        this.totalManualPages = pages.length;
+
         var html = '<button class="manual-close-float" id="manual-close-float">×</button>';
         html += '<div class="manual-content" id="manual-pages-container">';
-
-        pages.forEach(function(page) {
-            html += page;
-        });
-
+        html += this.renderManualPage(pages[0]);
         html += '<div class="manual-nav">';
         html += '<button class="manual-nav-btn" id="manual-prev-btn" disabled>← ANTERIOR</button>';
         html += '<span class="manual-page-indicator" id="manual-page-indicator">1 / ' + pages.length + '</span>';
-        html += '<button class="manual-nav-btn" id="manual-next-btn">PRÓXIMO →</button>';
+        html += '<button class="manual-nav-btn" id="manual-next-btn"' + (pages.length <= 1 ? ' disabled' : '') + '>PRÓXIMO →</button>';
         html += '</div>';
         html += '</div>';
 
         this.elements.manualContent.innerHTML = html;
         this.elements.manualModal.style.display = 'flex';
 
-        this.currentManualPage = 1;
-        this.totalManualPages = pages.length;
         this.setupManualNavigation();
     }
 
@@ -279,18 +308,27 @@ class UIController {
     }
 
     goToManualPage(pageNum) {
-        var pages = document.querySelectorAll('.manual-page');
+        var lang = window.selectedLanguage || 'en';
+        var pages = (MANUAL_PAGES && MANUAL_PAGES[lang]) ? MANUAL_PAGES[lang] : (MANUAL_PAGES ? MANUAL_PAGES.pt : null);
         var indicator = document.getElementById('manual-page-indicator');
         var prevBtn = document.getElementById('manual-prev-btn');
         var nextBtn = document.getElementById('manual-next-btn');
+        var container = document.getElementById('manual-pages-container');
 
-        pages.forEach(function(page) {
-            page.classList.remove('active');
-        });
+        if (!pages || pageNum < 1 || pageNum > pages.length) return;
 
-        var targetPage = document.querySelector('.manual-page[data-page="' + pageNum + '"]');
-        if (targetPage) {
-            targetPage.classList.add('active');
+        // Replace the rendered page (first child of container, before the nav div)
+        if (container) {
+            var existingPage = container.querySelector('.manual-page');
+            var newPageHtml = this.renderManualPage(pages[pageNum - 1]);
+            var temp = document.createElement('div');
+            temp.innerHTML = newPageHtml;
+            var newPageEl = temp.firstChild;
+            if (existingPage) {
+                container.replaceChild(newPageEl, existingPage);
+            } else {
+                container.insertBefore(newPageEl, container.firstChild);
+            }
         }
 
         this.currentManualPage = pageNum;
