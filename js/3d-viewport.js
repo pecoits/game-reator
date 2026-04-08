@@ -22,10 +22,8 @@ class ReactorViewport {
         const checkContainer = () => {
             this.container = document.getElementById(this.containerId);
             if (this.container && this.container.clientWidth > 0) {
-                console.log('Container found, initializing viewport...');
                 this.init();
             } else {
-                console.log('Waiting for container...');
                 setTimeout(checkContainer, 100);
             }
         };
@@ -41,14 +39,10 @@ class ReactorViewport {
     }
 
     init2DFallback() {
-        console.log('Initializing 2D fallback...');
-
         // Create 2D canvas
         this.canvas2D = document.createElement('canvas');
         this.canvas2D.width = Math.max(400, this.container.clientWidth);
         this.canvas2D.height = Math.max(300, this.container.clientHeight);
-
-        console.log('Canvas size:', this.canvas2D.width, 'x', this.canvas2D.height);
 
         try {
             this.ctx2D = this.canvas2D.getContext('2d');
@@ -62,15 +56,11 @@ class ReactorViewport {
             this.container.style.overflow = 'hidden';
             this.container.appendChild(this.canvas2D);
 
-            console.log('Canvas added to container');
-
             // Draw initial frame
             this.drawReactor2D();
 
             // Start animation loop
             this.animate2D();
-
-            console.log('2D animation started');
 
         } catch (error) {
             console.error('Error in init2DFallback:', error);
@@ -239,7 +229,7 @@ class ReactorViewport {
         if (this.scramActive) {
             statusText = 'АЗ-5';
             statusColor = '#ff0000';
-        } else if (temps[0] > 350 || temps[1] > 19) {
+        } else if (temps[0] > 350 || temps[1] > 20) {
             statusText = 'ОПАСНОСТЬ';
             statusColor = '#ff0000';
         } else if (temps[0] > 300 || temps[1] > 17) {
@@ -297,11 +287,6 @@ class ReactorViewport {
     animate2D() {
         this.animationId = requestAnimationFrame(() => this.animate2D());
         this.drawReactor2D();
-    }
-
-    onResize2D() {
-        this.canvas2D.width = this.container.clientWidth;
-        this.canvas2D.height = this.container.clientHeight;
     }
 
     updateIndicators(state) {
