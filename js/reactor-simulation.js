@@ -298,6 +298,12 @@ var ReactorSimulation = (function() {
         this.addEvent('info', 'Аварийная защита сброшена');
     };
 
+    ReactorSimulation.prototype.applyExternalPressureShock = function(deltaMPa) {
+        var p = REACTOR_CONFIG.physics;
+        this.pressure = Math.max(p.pressureMin, Math.min(p.pressureMax, this.pressure + deltaMPa));
+        this.addEvent('danger', 'Скачок давления: +' + deltaMPa.toFixed(1) + ' МПа');
+    };
+
     ReactorSimulation.prototype.getState = function() {
         return {
             coreTemperature: this.coreTemperature,
