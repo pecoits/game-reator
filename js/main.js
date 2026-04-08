@@ -152,7 +152,7 @@ class GameApp {
                 if (this.simulation && this.simulation.running) this.simulation.tick(delta);
                 if (this.eventSystem) this.eventSystem.update(delta);
                 // Auto-save every 10 ticks
-                if (this.simulation.ticks % 10 === 0 && this.saveSystem) {
+                if (this.simulation.ticks > 0 && this.simulation.ticks % 10 === 0 && this.saveSystem) {
                     const completedMissions = this.eventSystem
                         ? this.eventSystem.missions
                             .filter(m => m.completed)
