@@ -155,9 +155,11 @@ var UIController = (function() {
         if (this.elements.btnScram) {
             this.elements.btnScram.addEventListener('click', function() {
                 if (!self.simulation.scramActive) {
-                    if (confirm('АКТИВИРОВАТЬ АЗ-5? Это приведет к аварийной остановке реактора.')) {
-                        self.simulation.activateSCRAM();
-                    }
+                    showGameConfirm(
+                        'АЗ-5 АВАРИЙНАЯ ЗАЩИТА',
+                        'Активировать АЗ-5? Реактор будет аварийно остановлен.',
+                        function() { self.simulation.activateSCRAM(); }
+                    );
                 } else {
                     self.simulation.resetSCRAM();
                     self.elements.btnScram.textContent = 'АЗ-5';

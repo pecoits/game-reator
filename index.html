@@ -183,6 +183,33 @@
                 <div id="log-entries" class="log-entries"></div>
             </section>
         </main>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-box modal-box--error">
+        <div class="modal-header">
+          <span class="soviet-star">★</span>
+          <h2>СИСТЕМНАЯ ОШИБКА</h2>
+        </div>
+        <p id="error-modal-message" class="modal-message"></p>
+        <button id="btn-close-error" class="btn btn-danger">ЗАКРЫТЬ</button>
+      </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-box modal-box--confirm">
+        <div class="modal-header">
+          <span class="soviet-star">★</span>
+          <h2 id="confirm-modal-title">ПОДТВЕРЖДЕНИЕ</h2>
+        </div>
+        <p id="confirm-modal-message" class="modal-message"></p>
+        <div class="modal-actions">
+          <button id="btn-confirm-yes" class="btn btn-danger">ДА</button>
+          <button id="btn-confirm-no" class="btn">НЕТ</button>
+        </div>
+      </div>
+    </div>
     </div>
 
     <!-- Manual Modal -->
@@ -211,6 +238,18 @@
                 <div id="alert-entries" class="alert-entries"></div>
             </div>
         </div>
+    </div>
+
+    <!-- Boot Error Modal -->
+    <div id="boot-error-modal" class="modal-overlay" style="display:none; z-index: 9999;">
+      <div class="modal-box modal-box--error">
+        <div class="modal-header">
+          <span class="soviet-star">★</span>
+          <h2>ОШИБКА ИНИЦИАЛИЗАЦИИ</h2>
+        </div>
+        <p id="boot-error-message" class="modal-message"></p>
+        <button class="btn btn-danger" onclick="document.getElementById('boot-error-modal').style.display='none'">ЗАКРЫТЬ</button>
+      </div>
     </div>
 
     <script src="js/config.js"></script>

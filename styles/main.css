@@ -843,6 +843,66 @@ body {
     margin-top: 5px;
 }
 
+/* ===== GAME MODALS ===== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-box {
+    background: var(--gray-dark);
+    border: 2px solid var(--gold);
+    padding: 24px 32px;
+    min-width: 340px;
+    max-width: 480px;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+}
+
+.modal-box--error {
+    border-color: var(--red-soviet);
+}
+
+.modal-box--confirm {
+    border-color: var(--gold);
+}
+
+.modal-box .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    color: var(--gold);
+    padding: 0;
+    background: transparent;
+    border-bottom: none;
+}
+
+.modal-box .modal-header h2 {
+    font-size: 1rem;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+.modal-message {
+    color: var(--gray-text);
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1200px) {
     .main-content {
