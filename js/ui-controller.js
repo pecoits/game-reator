@@ -76,119 +76,144 @@ var UIController = (function() {
         };
         document.addEventListener('click', initSound);
         
-        // Sound controls
-        this.elements.btnMute.addEventListener('click', function() {
-            var muted = self.soundSystem.toggleMute();
-            self.elements.btnMute.textContent = muted ? '🔇' : '🔊';
-            self.elements.btnMute.classList.toggle('muted', muted);
-        });
+        // Sound controls (with null check)
+        if (this.elements.btnMute) {
+            this.elements.btnMute.addEventListener('click', function() {
+                var muted = self.soundSystem.toggleMute();
+                self.elements.btnMute.textContent = muted ? '🔇' : '🔊';
+                self.elements.btnMute.classList.toggle('muted', muted);
+            });
+        }
         
-        this.elements.volumeSlider.addEventListener('input', function(e) {
-            var vol = parseInt(e.target.value) / 100;
-            self.soundSystem.setVolume(vol);
-            if (vol === 0) {
-                self.elements.btnMute.textContent = '🔇';
-                self.elements.btnMute.classList.add('muted');
-            } else {
-                self.elements.btnMute.textContent = '🔊';
-                self.elements.btnMute.classList.remove('muted');
-            }
-        });
+        if (this.elements.volumeSlider) {
+            this.elements.volumeSlider.addEventListener('input', function(e) {
+                var vol = parseInt(e.target.value) / 100;
+                self.soundSystem.setVolume(vol);
+                if (self.elements.btnMute) {
+                    self.elements.btnMute.textContent = vol === 0 ? '🔇' : '🔊';
+                    self.elements.btnMute.classList.toggle('muted', vol === 0);
+                }
+            });
+        }
         
         // Control rods
-        this.elements.controlRods.addEventListener('input', function(e) {
-            var value = parseInt(e.target.value);
-            self.elements.rodsValue.textContent = value + '%';
-            self.simulation.setControlRods(value);
-            self.viewport.updateControlRodsVisual(value);
-        });
+        if (this.elements.controlRods) {
+            this.elements.controlRods.addEventListener('input', function(e) {
+                var value = parseInt(e.target.value);
+                self.elements.rodsValue.textContent = value + '%';
+                self.simulation.setControlRods(value);
+                self.viewport.updateControlRodsVisual(value);
+            });
+        }
         
         // Main pump
-        this.elements.mainPump.addEventListener('input', function(e) {
-            var value = parseInt(e.target.value);
-            self.elements.pumpValue.textContent = value + '%';
-            self.simulation.setMainPump(value);
-        });
+        if (this.elements.mainPump) {
+            this.elements.mainPump.addEventListener('input', function(e) {
+                var value = parseInt(e.target.value);
+                self.elements.pumpValue.textContent = value + '%';
+                self.simulation.setMainPump(value);
+            });
+        }
         
         // Emergency cooling
-        this.elements.btnEmergencyCool.addEventListener('click', function() {
-            self.simulation.toggleEmergencyCooling();
-            self.elements.btnEmergencyCool.textContent = 
-                self.simulation.emergencyCoolingActive ? 'ДЕАКТИВИРОВАТЬ' : 'АКТИВИРОВАТЬ';
-            self.elements.btnEmergencyCool.classList.toggle('btn-danger');
-        });
+        if (this.elements.btnEmergencyCool) {
+            this.elements.btnEmergencyCool.addEventListener('click', function() {
+                self.simulation.toggleEmergencyCooling();
+                self.elements.btnEmergencyCool.textContent = 
+                    self.simulation.emergencyCoolingActive ? 'ДЕАКТИВИРОВАТЬ' : 'АКТИВИРОВАТЬ';
+                self.elements.btnEmergencyCool.classList.toggle('btn-danger');
+            });
+        }
         
         // Extra pump
-        this.elements.btnExtraPump.addEventListener('click', function() {
-            self.simulation.toggleExtraPump();
-            self.elements.btnExtraPump.textContent = 
-                self.simulation.extraPumpActive ? 'ВЫКЛ' : 'ВКЛ';
-        });
+        if (this.elements.btnExtraPump) {
+            this.elements.btnExtraPump.addEventListener('click', function() {
+                self.simulation.toggleExtraPump();
+                self.elements.btnExtraPump.textContent = 
+                    self.simulation.extraPumpActive ? 'ВЫКЛ' : 'ВКЛ';
+            });
+        }
         
         // Grid connection
-        this.elements.btnGridConnect.addEventListener('click', function() {
-            self.simulation.toggleGridConnection();
-            self.elements.btnGridConnect.textContent = 
-                self.simulation.gridConnected ? 'ПОДКЛЮЧЕНО' : 'ОТКЛЮЧЕНО';
-            self.elements.btnGridConnect.classList.toggle('btn-success');
-        });
+        if (this.elements.btnGridConnect) {
+            this.elements.btnGridConnect.addEventListener('click', function() {
+                self.simulation.toggleGridConnection();
+                self.elements.btnGridConnect.textContent = 
+                    self.simulation.gridConnected ? 'ПОДКЛЮЧЕНО' : 'ОТКЛЮЧЕНО';
+                self.elements.btnGridConnect.classList.toggle('btn-success');
+            });
+        }
         
         // SCRAM
-        this.elements.btnScram.addEventListener('click', function() {
-            if (!self.simulation.scramActive) {
-                if (confirm('АКТИВИРОВАТЬ АЗ-5? Это приведет к аварийной остановке реактора.')) {
-                    self.simulation.activateSCRAM();
+        if (this.elements.btnScram) {
+            this.elements.btnScram.addEventListener('click', function() {
+                if (!self.simulation.scramActive) {
+                    if (confirm('АКТИВИРОВАТЬ АЗ-5? Это приведет к аварийной остановке реактора.')) {
+                        self.simulation.activateSCRAM();
+                    }
+                } else {
+                    self.simulation.resetSCRAM();
+                    self.elements.btnScram.textContent = 'АЗ-5';
                 }
-            } else {
-                self.simulation.resetSCRAM();
-                self.elements.btnScram.textContent = 'АЗ-5';
-            }
-        });
+            });
+        }
         
         // Clear log
-        this.elements.btnClearLog.addEventListener('click', function() {
-            self.simulation.clearEvents();
-            self.elements.logEntries.innerHTML = '';
-        });
+        if (this.elements.btnClearLog) {
+            this.elements.btnClearLog.addEventListener('click', function() {
+                self.simulation.clearEvents();
+                self.elements.logEntries.innerHTML = '';
+            });
+        }
         
         // Manual modal - uses selected language
-        this.elements.btnManual.addEventListener('click', function() {
-            var lang = window.selectedLanguage || 'en';
-            if (lang === 'pt' && typeof manualContentPT !== 'undefined') {
-                self.elements.manualContent.innerHTML = manualContentPT;
-            } else {
-                self.elements.manualContent.innerHTML = manualContentHTML;
-            }
-            self.elements.manualModal.style.display = 'flex';
-        });
+        if (this.elements.btnManual) {
+            this.elements.btnManual.addEventListener('click', function() {
+                var lang = window.selectedLanguage || 'en';
+                if (lang === 'pt' && typeof manualContentPT !== 'undefined') {
+                    self.elements.manualContent.innerHTML = manualContentPT;
+                } else {
+                    self.elements.manualContent.innerHTML = manualContentHTML;
+                }
+                self.elements.manualModal.style.display = 'flex';
+            });
+        }
         
-        this.elements.btnCloseManual.addEventListener('click', function() {
-            self.elements.manualModal.style.display = 'none';
-        });
+        if (this.elements.btnCloseManual) {
+            this.elements.btnCloseManual.addEventListener('click', function() {
+                self.elements.manualModal.style.display = 'none';
+            });
+        }
         
         // Alert modal
-        this.elements.btnAlerts.addEventListener('click', function() {
-            self.showAlerts();
-        });
+        if (this.elements.btnAlerts) {
+            this.elements.btnAlerts.addEventListener('click', function() {
+                self.showAlerts();
+            });
+        }
         
-        this.elements.btnCloseAlerts.addEventListener('click', function() {
-            self.elements.alertModal.style.display = 'none';
-        });
+        if (this.elements.btnCloseAlerts) {
+            this.elements.btnCloseAlerts.addEventListener('click', function() {
+                self.elements.alertModal.style.display = 'none';
+            });
+        }
         
         // Tabs
-        this.elements.tabButtons.forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                var tab = btn.getAttribute('data-tab');
-                self.switchTab(tab);
+        if (this.elements.tabButtons) {
+            this.elements.tabButtons.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var tab = btn.getAttribute('data-tab');
+                    self.switchTab(tab);
+                });
             });
-        });
+        }
         
         // Close modals on outside click
         window.addEventListener('click', function(e) {
-            if (e.target === self.elements.manualModal) {
+            if (self.elements.manualModal && e.target === self.elements.manualModal) {
                 self.elements.manualModal.style.display = 'none';
             }
-            if (e.target === self.elements.alertModal) {
+            if (self.elements.alertModal && e.target === self.elements.alertModal) {
                 self.elements.alertModal.style.display = 'none';
             }
         });
