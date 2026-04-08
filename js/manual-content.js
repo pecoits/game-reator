@@ -1,6 +1,7 @@
 // ===== MANUAL CONTENT - POCKET MANUAL STYLE =====
 
 // Portuguese Manual - Split into pages
+// FORMATO CONSISTENTE: RUSSO (Tradução em português)
 var manualPagesPT = [
     // Page 1: Cover
     '<div class="manual-page active" data-page="1">' +
@@ -9,197 +10,187 @@ var manualPagesPT = [
     '<h1 style="font-size: 28px; margin-bottom: 10px;">ESTAÇÃO NUCLEAR RBMK-1000</h1>' +
     '<h2 style="color: #888; font-weight: normal; font-size: 18px;">Manual de Operações Técnicas</h2>' +
     '<div style="margin-top: 40px; padding: 20px; border: 2px solid #cc0000; display: inline-block;">' +
-    '<p style="color: #cc0000; font-weight: bold; margin: 0; font-size: 14px;">DOCUMENTO RESTRITO</p>' +
-    '<p style="color: #888; font-size: 12px; margin: 5px 0 0;">UEN-1994-047</p>' +
+    '<p style="color: #cc0000; font-weight: bold; margin: 0; font-size: 14px;">ДОКУМЕНТ ОГРАНИЧЕННОГО ДОСТУПА</p>' +
+    '<p style="color: #888; font-size: 12px; margin: 5px 0 0;">(Documento Restrito)</p>' +
+    '<p style="color: #888; font-size: 11px; margin: 3px 0 0;">UEN-1994-047</p>' +
     '</div>' +
     '<div style="margin-top: 40px; color: #888; font-size: 13px;">' +
-    '<p>República Popular Democrática de Krasnostan</p>' +
-    '<p>Ministério da Energia Nuclear</p>' +
-    '<p>Janeiro de 1994</p>' +
+    '<p>Республика Красностан (República de Krasnostan)</p>' +
+    '<p>Министерство Энергетики (Ministério da Energia)</p>' +
+    '<p>Январь 1994 (Janeiro 1994)</p>' +
     '</div>' +
     '</div></div>',
     
     // Page 2: Index
     '<div class="manual-page" data-page="2">' +
-    '<h1>ÍNDICE</h1>' +
+    '<h1>СОДЕРЖАНИЕ (Índice)</h1>' +
     '<ol style="font-size: 14px; line-height: 2.2;">' +
-    '<li>Especificações do Reator</li>' +
-    '<li>Barras de Controle (Стержни)</li>' +
-    '<li>Sistema de Resfriamento</li>' +
-    '<li>Geração de Energia</li>' +
-    '<li>Sistemas de Segurança</li>' +
-    '<li>Emergências</li>' +
-    '<li>Solução de Problemas</li>' +
+    '<li>Характеристики реактора (Especificações)</li>' +
+    '<li>Стержни управления (Barras de Controle)</li>' +
+    '<li>Система охлаждения (Sistema de Resfriamento)</li>' +
+    '<li>Энергия (Geração de Energia)</li>' +
+    '<li>Системы безопасности (Sistemas de Segurança)</li>' +
+    '<li>Аварийные ситуации (Emergências)</li>' +
+    '<li>Быстрое решение проблем (Solução Rápida)</li>' +
     '</ol>' +
-    '<div class="warning-box" style="margin-top: 20px;">' +
-    '<h3>⚠ LEIA COM ATENÇÃO</h3>' +
-    '<p>Este manual contém informações vitais para operação segura. Consulte sempre que tiver dúvidas.</p>' +
+    '<div class="warning-box" style="margin-top: 15px;">' +
+    '<h3>⚠ ВНИМАНИЕ (Atenção)</h3>' +
+    '<p>Este manual contém informações vitais. Consulte sempre que tiver dúvidas.</p>' +
     '</div></div>',
     
     // Page 3: Specifications
     '<div class="manual-page" data-page="3">' +
-    '<h1>ESPECIFICAÇÕES</h1>' +
-    '<h2>Reator RBMK-1000</h2>' +
+    '<h1>ХАРАКТЕРИСТИКИ (Especificações)</h1>' +
+    '<h2>Реактор РБМК-1000</h2>' +
     '<table>' +
-    '<tr><th>Parâmetro</th><th>Russo</th><th>Valor</th></tr>' +
-    '<tr><td>Potência Térmica</td><td>Тепловая мощность</td><td>3200 MW</td></tr>' +
-    '<tr><td>Produção Elétrica</td><td>Электрическая мощность</td><td>1000 MW</td></tr>' +
-    '<tr><td>Refrigerante</td><td>Тип теплоносителя</td><td>Água Leve</td></tr>' +
-    '<tr><td>Moderador</td><td>Замедлитель</td><td>Grafite</td></tr>' +
-    '<tr><td>Combustível</td><td>Топливо</td><td>UO₂ (2.0%)</td></tr>' +
-    '<tr><td>Pressão Operação</td><td>Рабочее давление</td><td>6.9 MPa</td></tr>' +
-    '<tr><td>Temperatura</td><td>Температура</td><td>280-320°C</td></tr>' +
+    '<tr><th>Параметр (Parâmetro)</th><th>Значение (Valor)</th></tr>' +
+    '<tr><td>Тепловая мощность (Potência Térmica)</td><td>3200 МВт</td></tr>' +
+    '<tr><td>Электрическая мощность (Potência Elétrica)</td><td>1000 МВт</td></tr>' +
+    '<tr><td>Тип теплоносителя (Refrigerante)</td><td>Лёгкая вода</td></tr>' +
+    '<tr><td>Замедлитель (Moderador)</td><td>Графит</td></tr>' +
+    '<tr><td>Топливо (Combustível)</td><td>UO₂ (2.0%)</td></tr>' +
+    '<tr><td>Рабочее давление (Pressão)</td><td>6.9 МПа</td></tr>' +
+    '<tr><td>Температура (Temperatura)</td><td>280-320°C</td></tr>' +
     '</table></div>',
     
     // Page 4: Control Rods
     '<div class="manual-page" data-page="4">' +
-    '<h1>BARRAS DE CONTROLE</h1>' +
+    '<h1>СТЕРЖНИ (Barras de Controle)</h1>' +
     '<h2>Стержни регулирования</h2>' +
-    '<p>211 barras absorvem nêutrons e regulam a fissão.</p>' +
-    '<h3>Posições de Operação:</h3>' +
+    '<p>211 стержней поглощают нейтроны e regulam a fissão.</p>' +
+    '<h3>Положение стержней (Posições):</h3>' +
     '<ul>' +
-    '<li><strong>0-30%:</strong> Alta potência (cuidado!)</li>' +
-    '<li><strong>30-70%:</strong> Operação normal ✓</li>' +
-    '<li><strong>70-100%:</strong> Baixa potência / desligamento</li>' +
+    '<li><strong>0-30%:</strong> Высокая мощность (Alta potência)</li>' +
+    '<li><strong>30-70%:</strong> Нормальная работа ✓</li>' +
+    '<li><strong>70-100%:</strong> Низкая мощность (Baixa potência)</li>' +
     '</ul>' +
     '<div class="warning-box">' +
-    '<h3>⚠ IMPORTANTE</h3>' +
-    '<p>Ajuste gradualmente! Máximo 5% por vez para evitar oscilações.</p>' +
+    '<h3>⚠ ВАЖНО (Importante)</h3>' +
+    '<p>Ajuste máximo 5% por vez!</p>' +
     '</div>' +
-    '<p><strong>Temperatura do Núcleo (Температура):</strong></p>' +
+    '<h3>Температура активной зоны:</h3>' +
     '<ul>' +
-    '<li>Normal: &lt; 300°C</li>' +
-    '<li>ВНИМАНИЕ: 300-350°C</li>' +
-    '<li>ОПАСНОСТЬ: &gt; 350°C</li>' +
-    '<li>КРИТИЧЕСКИЙ: &gt; 400°C</li>' +
+    '<li>Норма (Normal): &lt; 300°C</li>' +
+    '<li>Внимание (Atenção): 300-350°C</li>' +
+    '<li>Опасность (Perigo): &gt; 350°C</li>' +
+    '<li>Критический (Crítico): &gt; 400°C</li>' +
     '</ul></div>',
     
-    // Page 5: Cooling
+    // Page 5: Cooling (compact version)
     '<div class="manual-page" data-page="5">' +
-    '<h1>RESFRIAMENTO</h1>' +
-    '<h2>Охлаждение</h2>' +
-    '<h3>Bomba Principal - Главный насос (ГЦН)</h3>' +
-    '<p>8 bombas de circulação. Velocidade normal: <strong>60-80%</strong></p>' +
-    '<h3>Resfriamento Emergência - Аварийное охлаждение</h3>' +
-    '<p>Botão "Аварийное охлаждение" = Resfriamento de Emergência</p>' +
-    '<p>Ative quando temperatura &gt; 320°C ou pressão cai.</p>' +
-    '<h3>Bomba Extra - Дополнительный насос</h3>' +
-    '<p>Botão "Дополнительный насос" = Bomba adicional</p>' +
-    '<p>Use para reforçar resfriamento em emergências.</p>' +
-    '<h3>Parâmetros:</h3>' +
+    '<h1>ОХЛАЖДЕНИЕ (Resfriamento)</h1>' +
     '<table>' +
-    '<tr><th>Parâmetro</th><th>Normal</th></tr>' +
-    '<tr><td>Entrada</td><td>170-190°C</td></tr>' +
-    '<tr><td>Saída</td><td>270-290°C</td></tr>' +
-    '<tr><td>Fluxo</td><td>8000-9000 m³/h</td></tr>' +
-    '<tr><td>Pressurizador</td><td>50-70%</td></tr>' +
+    '<tr><th>Кнопка (Botão)</th><th>Функция (Função)</th></tr>' +
+    '<tr><td><strong>Главный насос</strong><br>(Bomba Principal)</td><td>8 насосов. Норма: 60-80%</td></tr>' +
+    '<tr><td><strong>Аварийное охлаждение</strong><br>(Resfriamento Emergência)</td><td>Ative se temp &gt; 320°C</td></tr>' +
+    '<tr><td><strong>Дополнительный насос</strong><br>(Bomba Extra)</td><td>Reforço em emergências</td></tr>' +
+    '</table>' +
+    '<h3>Параметры (Parâmetros):</h3>' +
+    '<table>' +
+    '<tr><th>Вход (Entrada)</th><th>Выход (Saída)</th></tr>' +
+    '<tr><td>170-190°C</td><td>270-290°C</td></tr>' +
+    '<tr><th>Расход (Fluxo)</th><th>Уровень (Nível)</th></tr>' +
+    '<tr><td>8000-9000 м³/ч</td><td>50-70%</td></tr>' +
     '</table></div>',
     
     // Page 6: Power
     '<div class="manual-page" data-page="6">' +
-    '<h1>ENERGIA</h1>' +
-    '<h2>Энергия</h2>' +
-    '<p>Dois turbo-geradores de 500 MW cada.</p>' +
-    '<h3>Conexão à Rede - Подключено</h3>' +
+    '<h1>ЭНЕРГИЯ (Energia)</h1>' +
+    '<p>Два турбогенератора по 500 МВт cada.</p>' +
+    '<h3>Подключено (Conexão à Rede)</h3>' +
     '<table>' +
-    '<tr><th>Parâmetro</th><th>Valor</th></tr>' +
-    '<tr><td>Tensão (Напряжение)</td><td>15.75 кВ</td></tr>' +
-    '<tr><td>Frequência (Частота)</td><td>50.0 Гц ± 0.2</td></tr>' +
-    '<tr><td>Carga (Нагрузка)</td><td>70-90%</td></tr>' +
+    '<tr><th>Напряжение (Tensão)</th><td>15.75 кВ</td></tr>' +
+    '<tr><th>Частота (Frequência)</th><td>50.0 Гц ± 0.2</td></tr>' +
+    '<tr><th>Нагрузка (Carga)</th><td>70-90%</td></tr>' +
     '</table>' +
-    '<p><strong>Botão Подключено:</strong> Conecta/desconecta da rede. Desconecte antes de ajustes grandes.</p>' +
+    '<p><strong>Кнопка Подключено:</strong> Conecta/desconecta da rede.</p>' +
     '<div class="warning-box">' +
-    '<h3>💡 DICA</h3>' +
-    '<p>Mantenha carga entre 70-90% para operação estável.</p>' +
+    '<h3>💡 СОВЕТ (Dica)</h3>' +
+    '<p> Mantenha carga 70-90% para estabilidade.</p>' +
     '</div></div>',
     
     // Page 7: Safety
     '<div class="manual-page" data-page="7">' +
-    '<h1>SEGURANÇA</h1>' +
-    '<h2>Системы безопасности</h2>' +
-    '<h3>АЗ-5 (Аварийная Защита)</h3>' +
-    '<p>Botão vermelho no painel. Causa:</p>' +
+    '<h1>БЕЗОПАСНОСТЬ (Segurança)</h1>' +
+    '<h2>АЗ-5 (Аварийная Защита)</h2>' +
+    '<p>Красная кнопка на панели. Causa:</p>' +
     '<ul>' +
-    '<li>Barras inseridas 100% automaticamente</li>' +
-    '<li>Resfriamento emergência ativado</li>' +
-    '<li>Geradores desconectados</li>' +
+    '<li>Стержни 100% автоматически</li>' +
+    '<li>Аварийное охлаждение включено</li>' +
+    '<li>Генераторы отключены</li>' +
     '</ul>' +
     '<div class="warning-box">' +
-    '<h3>⚠ IRREVERSÍVEL!</h3>' +
-    '<p>АЗ-5 não pode ser desfeito. Use APENAS em emergências reais.</p>' +
+    '<h3>⚠ НЕОБРАТИМО!</h3>' +
+    '<p>АЗ-5 не может быть отменена. Используйте ТОЛЬКО в чрезвычайных ситуациях.</p>' +
     '</div>' +
-    '<h3>Radiação - Радиация</h3>' +
+    '<h3>Радиация (Radiação):</h3>' +
     '<table>' +
-    '<tr><th>Nível</th><th>Leitura</th></tr>' +
-    '<tr><td>Normal</td><td>&lt; 0.5 мЗв/ч</td></tr>' +
-    '<tr><td>ВНИМАНИЕ (Atenção)</td><td>1.0 - 5.0 мЗв/ч</td></tr>' +
-    '<tr><td>ОПАСНОСТЬ (Perigo)</td><td>&gt; 5.0 мЗв/ч</td></tr>' +
+    '<tr><th>Уровень</th><th>Показание</th></tr>' +
+    '<tr><td>Норма (Normal)</td><td>&lt; 0.5 мЗв/ч</td></tr>' +
+    '<tr><td>Внимание (Atenção)</td><td>1.0 - 5.0 мЗв/ч</td></tr>' +
+    '<tr><td>Опасность (Perigo)</td><td>&gt; 5.0 мЗв/ч</td></tr>' +
     '</table></div>',
     
     // Page 8: Emergencies
     '<div class="manual-page" data-page="8">' +
-    '<h1>EMERGÊNCIAS</h1>' +
-    '<h2>Аварийные процедуры</h2>' +
-    '<h3>Alta Temperatura (Высокая температура)</h3>' +
+    '<h1>АВАРИИ (Emergências)</h1>' +
+    '<h3>Высокая температура:</h3>' +
     '<ol>' +
-    '<li>Ative <strong>"Аварийное охлаждение"</strong> (Resfriamento Emergência)</li>' +
-    '<li>Aumente <strong>"Стержни"</strong> para 80%+ (Barras)</li>' +
-    '<li>Ative <strong>"Дополнительный насос"</strong> (Bomba Extra)</li>' +
-    '<li>Se &gt; 400°C → pressione <strong>АЗ-5</strong></li>' +
+    '<li>Нажмите <strong>"Аварийное охлаждение"</strong> (Resfriamento Emergência)</li>' +
+    '<li>Увеличьте <strong>"Стержни"</strong> до 80%+ (Barras)</li>' +
+    '<li>Включите <strong>"Дополнительный насос"</strong> (Bomba Extra)</li>' +
+    '<li>Se &gt; 400°C → нажмите <strong>АЗ-5</strong></li>' +
     '</ol>' +
-    '<h3>Alta Pressão (Высокое давление)</h3>' +
+    '<h3>Высокое давление:</h3>' +
     '<ol>' +
-    '<li>Reduza potência com <strong>"Стержни"</strong></li>' +
-    '<li>Aumente <strong>"Главный насос"</strong> (Bomba Principal)</li>' +
-    '<li>Monitore pressão</li>' +
+    '<li>Уменьшите мощность <strong>"Стержни"</strong></li>' +
+    '<li>Увеличьте <strong>"Главный насос"</strong> (Bomba Principal)</li>' +
     '</ol>' +
-    '<h3>Alta Radiação (Высокая радиация)</h3>' +
+    '<h3>Высокая радиация:</h3>' +
     '<ol>' +
-    '<li>Reduza potência</li>' +
-    '<li>Investigue fonte</li>' +
-    '<li>Se &gt; 5.0 → evacue</li>' +
+    '<li>Уменьшите мощность</li>' +
+    '<li>Исследуйте источник</li>' +
+    '<li>Se &gt; 5.0 → эвакуация</li>' +
     '</ol></div>',
     
     // Page 9: Troubleshooting
     '<div class="manual-page" data-page="9">' +
-    '<h1>COLUÇÕES RÁPIDAS</h1>' +
-    '<h2>Сolução rápida</h2>' +
+    '<h1>КОЛЮЦИИ (Soluções Rápidas)</h1>' +
     '<table>' +
-    '<tr><th>Sintoma</th><th>Ação</th></tr>' +
-    '<tr><td>Высокая температура</td><td>↑ Главный насос, Аварийное</td></tr>' +
-    '<tr><td>Высокое давление</td><td>↓ Potência, ↑ Стержни</td></tr>' +
-    '<tr><td>Колебания мощности</td><td>Estabilize Стержни</td></tr>' +
-    '<tr><td>Высокая радиация</td><td>↓ Potência, investigue</td></tr>' +
-    '<tr><td>Отклонение частоты</td><td>Ajuste carga</td></tr>' +
-    '<tr><td>Низкий уровень</td><td>↑ Дополнительный насос</td></tr>' +
+    '<tr><th>Симптом</th><th>Действие (Ação)</th></tr>' +
+    '<tr><td>Температура высокая</td><td>↑ Главный насос, Аварийное</td></tr>' +
+    '<tr><td>Давление высокое</td><td>↓ Мощность, ↑ Стержни</td></tr>' +
+    '<tr><td>Колебания мощности</td><td>Стабилизируйте Стержни</td></tr>' +
+    '<tr><td>Радиация высокая</td><td>↓ Мощность</td></tr>' +
+    '<tr><td>Частота нестабильна</td><td>Регулируйте нагрузку</td></tr>' +
+    '<tr><td>Уровень низкий</td><td>↑ Дополнительный насос</td></tr>' +
     '</table>' +
     '<div class="warning-box">' +
-    '<h3>⚠ REGRA DE OURO</h3>' +
-    '<p>Na dúvida, priorize SEGURANÇA sobre produção.</p>' +
-    '<p>Um reator desligado pode ser reiniciado.</p>' +
+    '<h3>⚠ ЗОЛОТОЕ ПРАВИЛО</h3>' +
+    '<p>Na dúvida, SEGURANÇA primeiro.</p>' +
     '</div></div>',
     
     // Page 10: Contacts
     '<div class="manual-page" data-page="10">' +
-    '<h1>CONTATOS</h1>' +
-    '<h2>Emergência</h2>' +
+    '<h1>КОНТАКТЫ (Contatos)</h1>' +
     '<table>' +
-    '<tr><th>Posição</th><th>Ramal</th></tr>' +
+    '<tr><th>Должность (Cargo)</th><th>Номер</th></tr>' +
     '<tr><td>Директор станции</td><td>1001</td></tr>' +
     '<tr><td>Главный инженер</td><td>1002</td></tr>' +
     '<tr><td>Офицер безопасности</td><td>1003</td></tr>' +
     '<tr><td>Министерство</td><td>9000</td></tr>' +
     '<tr><td>Экстренные службы</td><td>9999</td></tr>' +
     '</table>' +
-    '<div style="margin-top: 30px; text-align: center; color: #888; padding: 15px;">' +
+    '<div style="margin-top: 25px; text-align: center; color: #888;">' +
     '<p style="font-size: 24px;">★</p>' +
-    '<p><em>"O átomo é um bom servo,<br>mas um mau mestre."</em></p>' +
-    '<p style="margin-top: 15px; font-size: 11px;">FIM DO MANUAL</p>' +
-    '<p style="font-size: 10px;">UEN-1994-047 Rev. 3</p>' +
+    '<p><em>"Атом - хороший слуга,<br>но плохой хозяин."</em></p>' +
+    '<p style="margin-top: 10px; font-size: 11px;">КОНЕЦ РУКОВОДСТВА</p>' +
+    '<p style="font-size: 10px;">(Fim do Manual)</p>' +
     '</div></div>'
 ];
 
 // English Manual - Split into pages
+// FORMATO CONSISTENTE: RUSSO (English translation)
 var manualPagesEN = [
     // Page 1: Cover
     '<div class="manual-page active" data-page="1">' +
@@ -208,151 +199,143 @@ var manualPagesEN = [
     '<h1 style="font-size: 28px; margin-bottom: 10px;">RBMK-1000 NUCLEAR STATION</h1>' +
     '<h2 style="color: #888; font-weight: normal; font-size: 18px;">Technical Operations Manual</h2>' +
     '<div style="margin-top: 40px; padding: 20px; border: 2px solid #cc0000; display: inline-block;">' +
-    '<p style="color: #cc0000; font-weight: bold; margin: 0; font-size: 14px;">RESTRICTED DOCUMENT</p>' +
-    '<p style="color: #888; font-size: 12px; margin: 5px 0 0;">NPS-1994-047</p>' +
+    '<p style="color: #cc0000; font-weight: bold; margin: 0; font-size: 14px;">ДОКУМЕНТ ОГРАНИЧЕННОГО ДОСТУПА</p>' +
+    '<p style="color: #888; font-size: 12px; margin: 5px 0 0;">(Restricted Document)</p>' +
+    '<p style="color: #888; font-size: 11px; margin: 3px 0 0;">NPS-1994-047</p>' +
     '</div>' +
     '<div style="margin-top: 40px; color: #888; font-size: 13px;">' +
-    '<p>People\'s Democratic Republic of Krasnostan</p>' +
-    '<p>Ministry of Nuclear Energy</p>' +
-    '<p>January 1994</p>' +
+    '<p>Республика Красностан (Krasnostan Republic)</p>' +
+    '<p>Министерство Энергетики (Ministry of Energy)</p>' +
+    '<p>Январь 1994 (January 1994)</p>' +
     '</div>' +
     '</div></div>',
     
     // Page 2: Index
     '<div class="manual-page" data-page="2">' +
-    '<h1>TABLE OF CONTENTS</h1>' +
+    '<h1>СОДЕРЖАНИЕ (Contents)</h1>' +
     '<ol style="font-size: 14px; line-height: 2.2;">' +
-    '<li>Reactor Specifications</li>' +
-    '<li>Control Rods (Стержни)</li>' +
-    '<li>Cooling System</li>' +
-    '<li>Power Generation</li>' +
-    '<li>Safety Systems</li>' +
-    '<li>Emergencies</li>' +
-    '<li>Troubleshooting</li>' +
+    '<li>Характеристики реактора (Reactor Specs)</li>' +
+    '<li>Стержни управления (Control Rods)</li>' +
+    '<li>Система охлаждения (Cooling System)</li>' +
+    '<li>Энергия (Power Generation)</li>' +
+    '<li>Системы безопасности (Safety Systems)</li>' +
+    '<li>Аварийные ситуации (Emergencies)</li>' +
+    '<li>Быстрое решение проблем (Troubleshooting)</li>' +
     '</ol>' +
-    '<div class="warning-box" style="margin-top: 20px;">' +
-    '<h3>⚠ READ CAREFULLY</h3>' +
-    '<p>This manual contains vital information for safe operation. Consult whenever in doubt.</p>' +
+    '<div class="warning-box" style="margin-top: 15px;">' +
+    '<h3>⚠ ВНИМАНИЕ (Warning)</h3>' +
+    '<p>This manual contains vital info. Consult whenever in doubt.</p>' +
     '</div></div>',
     
     // Page 3: Specifications
     '<div class="manual-page" data-page="3">' +
-    '<h1>SPECIFICATIONS</h1>' +
-    '<h2>RBMK-1000 Reactor</h2>' +
+    '<h1>ХАРАКТЕРИСТИКИ (Specifications)</h1>' +
+    '<h2>Реактор РБМК-1000</h2>' +
     '<table>' +
-    '<tr><th>Parameter</th><th>Russian</th><th>Value</th></tr>' +
-    '<tr><td>Thermal Power</td><td>Тепловая мощность</td><td>3200 MW</td></tr>' +
-    '<tr><td>Electrical Output</td><td>Электрическая мощность</td><td>1000 MW</td></tr>' +
-    '<tr><td>Coolant Type</td><td>Тип теплоносителя</td><td>Light Water</td></tr>' +
-    '<tr><td>Moderator</td><td>Замедлитель</td><td>Graphite</td></tr>' +
-    '<tr><td>Fuel</td><td>Топливо</td><td>UO₂ (2.0%)</td></tr>' +
-    '<tr><td>Op. Pressure</td><td>Рабочее давление</td><td>6.9 MPa</td></tr>' +
-    '<tr><td>Temperature</td><td>Температура</td><td>280-320°C</td></tr>' +
+    '<tr><th>Параметр (Parameter)</th><th>Значение (Value)</th></tr>' +
+    '<tr><td>Тепловая мощность (Thermal Power)</td><td>3200 МВт</td></tr>' +
+    '<tr><td>Электрическая мощность (Electrical)</td><td>1000 МВт</td></tr>' +
+    '<tr><td>Тип теплоносителя (Coolant)</td><td>Лёгкая вода</td></tr>' +
+    '<tr><td>Замедлитель (Moderator)</td><td>Графит</td></tr>' +
+    '<tr><td>Топливо (Fuel)</td><td>UO₂ (2.0%)</td></tr>' +
+    '<tr><td>Рабочее давление (Pressure)</td><td>6.9 МПа</td></tr>' +
+    '<tr><td>Температура (Temperature)</td><td>280-320°C</td></tr>' +
     '</table></div>',
     
     // Page 4: Control Rods
     '<div class="manual-page" data-page="4">' +
-    '<h1>CONTROL RODS</h1>' +
+    '<h1>СТЕРЖНИ (Control Rods)</h1>' +
     '<h2>Стержни регулирования</h2>' +
     '<p>211 rods absorb neutrons and regulate fission.</p>' +
-    '<h3>Operating Positions:</h3>' +
+    '<h3>Положение стержней (Positions):</h3>' +
     '<ul>' +
-    '<li><strong>0-30%:</strong> High power (caution!)</li>' +
-    '<li><strong>30-70%:</strong> Normal operation ✓</li>' +
-    '<li><strong>70-100%:</strong> Low power / shutdown</li>' +
+    '<li><strong>0-30%:</strong> Высокая мощность (High power)</li>' +
+    '<li><strong>30-70%:</strong> Нормальная работа ✓</li>' +
+    '<li><strong>70-100%:</strong> Низкая мощность (Low power)</li>' +
     '</ul>' +
     '<div class="warning-box">' +
-    '<h3>⚠ IMPORTANT</h3>' +
-    '<p>Adjust gradually! Max 5% per step to avoid oscillations.</p>' +
+    '<h3>⚠ ВАЖНО (Important)</h3>' +
+    '<p>Adjust max 5% per step!</p>' +
     '</div>' +
-    '<p><strong>Core Temperature (Температура):</strong></p>' +
+    '<h3>Температура активной зоны:</h3>' +
     '<ul>' +
-    '<li>Normal: &lt; 300°C</li>' +
-    '<li>ВНИМАНИЕ: 300-350°C</li>' +
-    '<li>ОПАСНОСТЬ: &gt; 350°C</li>' +
-    '<li>КРИТИЧЕСКИЙ: &gt; 400°C</li>' +
+    '<li>Норма (Normal): &lt; 300°C</li>' +
+    '<li>Внимание (Warning): 300-350°C</li>' +
+    '<li>Опасность (Danger): &gt; 350°C</li>' +
+    '<li>Критический (Critical): &gt; 400°C</li>' +
     '</ul></div>',
     
-    // Page 5: Cooling
+    // Page 5: Cooling (compact version)
     '<div class="manual-page" data-page="5">' +
-    '<h1>COOLING SYSTEM</h1>' +
-    '<h2>Охлаждение</h2>' +
-    '<h3>Main Pump - Главный насос (ГЦН)</h3>' +
-    '<p>8 circulation pumps. Normal speed: <strong>60-80%</strong></p>' +
-    '<h3>Emergency Cooling - Аварийное охлаждение</h3>' +
-    '<p>Button "Аварийное охлаждение" = Emergency Cooling</p>' +
-    '<p>Activate when temp &gt; 320°C or pressure drops.</p>' +
-    '<h3>Extra Pump - Дополнительный насос</h3>' +
-    '<p>Button "Дополнительный насос" = Extra Pump</p>' +
-    '<p>Use to reinforce cooling in emergencies.</p>' +
-    '<h3>Parameters:</h3>' +
+    '<h1>ОХЛАЖДЕНИЕ (Cooling)</h1>' +
     '<table>' +
-    '<tr><th>Parameter</th><th>Normal</th></tr>' +
-    '<tr><td>Inlet</td><td>170-190°C</td></tr>' +
-    '<tr><td>Outlet</td><td>270-290°C</td></tr>' +
-    '<tr><td>Flow</td><td>8000-9000 m³/h</td></tr>' +
-    '<tr><td>Pressurizer</td><td>50-70%</td></tr>' +
+    '<tr><th>Кнопка (Button)</th><th>Функция (Function)</th></tr>' +
+    '<tr><td><strong>Главный насос</strong><br>(Main Pump)</td><td>8 pumps. Normal: 60-80%</td></tr>' +
+    '<tr><td><strong>Аварийное охлаждение</strong><br>(Emergency Cooling)</td><td>Activate if temp &gt; 320°C</td></tr>' +
+    '<tr><td><strong>Дополнительный насос</strong><br>(Extra Pump)</td><td>Reinforce in emergencies</td></tr>' +
+    '</table>' +
+    '<h3>Параметры (Parameters):</h3>' +
+    '<table>' +
+    '<tr><th>Вход (Inlet)</th><th>Выход (Outlet)</th></tr>' +
+    '<tr><td>170-190°C</td><td>270-290°C</td></tr>' +
+    '<tr><th>Расход (Flow)</th><th>Уровень (Level)</th></tr>' +
+    '<tr><td>8000-9000 м³/ч</td><td>50-70%</td></tr>' +
     '</table></div>',
     
     // Page 6: Power
     '<div class="manual-page" data-page="6">' +
-    '<h1>POWER GENERATION</h1>' +
-    '<h2>Энергия</h2>' +
-    '<p>Two turbo-generators rated at 500 MW each.</p>' +
-    '<h3>Grid Connection - Подключено</h3>' +
+    '<h1>ЭНЕРГИЯ (Power)</h1>' +
+    '<p>Два турбогенератора по 500 МВт each.</p>' +
+    '<h3>Подключено (Grid Connection)</h3>' +
     '<table>' +
-    '<tr><th>Parameter</th><th>Value</th></tr>' +
-    '<tr><td>Voltage (Напряжение)</td><td>15.75 кВ</td></tr>' +
-    '<tr><td>Frequency (Частота)</td><td>50.0 Гц ± 0.2</td></tr>' +
-    '<tr><td>Grid Load (Нагрузка)</td><td>70-90%</td></tr>' +
+    '<tr><th>Напряжение (Voltage)</th><td>15.75 кВ</td></tr>' +
+    '<tr><th>Частота (Frequency)</th><td>50.0 Гц ± 0.2</td></tr>' +
+    '<tr><th>Нагрузка (Load)</th><td>70-90%</td></tr>' +
     '</table>' +
-    '<p><strong>Подключено button:</strong> Connects/disconnects from grid. Disconnect before large adjustments.</p>' +
+    '<p><strong>Кнопка Подключено:</strong> Connects/disconnects from grid.</p>' +
     '<div class="warning-box">' +
-    '<h3>💡 TIP</h3>' +
-    '<p>Keep load between 70-90% for stable operation.</p>' +
+    '<h3>💡 СОВЕТ (Tip)</h3>' +
+    '<p>Keep load 70-90% for stability.</p>' +
     '</div></div>',
     
     // Page 7: Safety
     '<div class="manual-page" data-page="7">' +
-    '<h1>SAFETY SYSTEMS</h1>' +
-    '<h2>Системы безопасности</h2>' +
-    '<h3>АЗ-5 (Аварийная Защита)</h3>' +
+    '<h1>БЕЗОПАСНОСТЬ (Safety)</h1>' +
+    '<h2>АЗ-5 (Аварийная Защита)</h2>' +
     '<p>Red button on panel. Causes:</p>' +
     '<ul>' +
-    '<li>All rods inserted 100% automatically</li>' +
-    '<li>Emergency cooling activated</li>' +
-    '<li>Generators disconnected</li>' +
+    '<li>Стержни 100% automatically</li>' +
+    '<li>Аварийное охлаждение activated</li>' +
+    '<li>Генераторы disconnected</li>' +
     '</ul>' +
     '<div class="warning-box">' +
-    '<h3>⚠ IRREVERSIBLE!</h3>' +
+    '<h3>⚠ НЕОБРАТИМО!</h3>' +
     '<p>АЗ-5 cannot be undone. Use ONLY in real emergencies.</p>' +
     '</div>' +
-    '<h3>Radiation - Радиация</h3>' +
+    '<h3>Радиация (Radiation):</h3>' +
     '<table>' +
-    '<tr><th>Level</th><th>Reading</th></tr>' +
-    '<tr><td>Normal</td><td>&lt; 0.5 мЗв/ч</td></tr>' +
-    '<tr><td>ВНИМАНИЕ (Warning)</td><td>1.0 - 5.0 мЗв/ч</td></tr>' +
-    '<tr><td>ОПАСНОСТЬ (Danger)</td><td>&gt; 5.0 мЗв/ч</td></tr>' +
+    '<tr><th>Уровень</th><th>Показание</th></tr>' +
+    '<tr><td>Норма (Normal)</td><td>&lt; 0.5 мЗв/ч</td></tr>' +
+    '<tr><td>Внимание (Warning)</td><td>1.0 - 5.0 мЗв/ч</td></tr>' +
+    '<tr><td>Опасность (Danger)</td><td>&gt; 5.0 мЗв/ч</td></tr>' +
     '</table></div>',
     
     // Page 8: Emergencies
     '<div class="manual-page" data-page="8">' +
-    '<h1>EMERGENCIES</h1>' +
-    '<h2>Аварийные процедуры</h2>' +
-    '<h3>High Temperature (Высокая температура)</h3>' +
+    '<h1>АВАРИИ (Emergencies)</h1>' +
+    '<h3>Высокая температура (High Temp):</h3>' +
     '<ol>' +
-    '<li>Activate <strong>"Аварийное охлаждение"</strong> (Emergency Cooling)</li>' +
-    '<li>Increase <strong>"Стержни"</strong> to 80%+ (Control Rods)</li>' +
-    '<li>Activate <strong>"Дополнительный насос"</strong> (Extra Pump)</li>' +
+    '<li>Press <strong>"Аварийное охлаждение"</strong> (Emergency Cooling)</li>' +
+    '<li>Increase <strong>"Стержни"</strong> to 80%+ (Rods)</li>' +
+    '<li>Turn on <strong>"Дополнительный насос"</strong> (Extra Pump)</li>' +
     '<li>If &gt; 400°C → press <strong>АЗ-5</strong></li>' +
     '</ol>' +
-    '<h3>High Pressure (Высокое давление)</h3>' +
+    '<h3>Высокое давление (High Pressure):</h3>' +
     '<ol>' +
     '<li>Reduce power with <strong>"Стержни"</strong></li>' +
     '<li>Increase <strong>"Главный насос"</strong> (Main Pump)</li>' +
-    '<li>Monitor pressure</li>' +
     '</ol>' +
-    '<h3>High Radiation (Высокая радиация)</h3>' +
+    '<h3>Высокая радиация (High Radiation):</h3>' +
     '<ol>' +
     '<li>Reduce power</li>' +
     '<li>Investigate source</li>' +
@@ -361,40 +344,37 @@ var manualPagesEN = [
     
     // Page 9: Troubleshooting
     '<div class="manual-page" data-page="9">' +
-    '<h1>TROUBLESHOOTING</h1>' +
-    '<h2>Quick reference</h2>' +
+    '<h1>КОЛЮЦИИ (Solutions)</h1>' +
     '<table>' +
-    '<tr><th>Symptom</th><th>Action</th></tr>' +
-    '<tr><td>Высокая температура</td><td>↑ Главный насос, Аварийное</td></tr>' +
-    '<tr><td>Высокое давление</td><td>↓ Power, ↑ Стержни</td></tr>' +
+    '<tr><th>Симптом</th><th>Действие (Action)</th></tr>' +
+    '<tr><td>Температура высокая</td><td>↑ Главный насос, Аварийное</td></tr>' +
+    '<tr><td>Давление высокое</td><td>↓ Power, ↑ Стержни</td></tr>' +
     '<tr><td>Колебания мощности</td><td>Stabilize Стержни</td></tr>' +
-    '<tr><td>Высокая радиация</td><td>↓ Power, investigate</td></tr>' +
-    '<tr><td>Отклонение частоты</td><td>Adjust load</td></tr>' +
-    '<tr><td>Низкий уровень</td><td>↑ Дополнительный насос</td></tr>' +
+    '<tr><td>Радиация высокая</td><td>↓ Power</td></tr>' +
+    '<tr><td>Частота нестабильна</td><td>Adjust load</td></tr>' +
+    '<tr><td>Уровень низкий</td><td>↑ Дополнительный насос</td></tr>' +
     '</table>' +
     '<div class="warning-box">' +
-    '<h3>⚠ GOLDEN RULE</h3>' +
-    '<p>When in doubt, prioritize SAFETY over production.</p>' +
-    '<p>A shutdown reactor can be restarted.</p>' +
+    '<h3>⚠ ЗОЛОТОЕ ПРАВИЛО</h3>' +
+    '<p>When in doubt, SAFETY first.</p>' +
     '</div></div>',
     
     // Page 10: Contacts
     '<div class="manual-page" data-page="10">' +
-    '<h1>CONTACTS</h1>' +
-    '<h2>Emergency Numbers</h2>' +
+    '<h1>КОНТАКТЫ (Contacts)</h1>' +
     '<table>' +
-    '<tr><th>Position</th><th>Extension</th></tr>' +
+    '<tr><th>Должность (Position)</th><th>Номер</th></tr>' +
     '<tr><td>Директор станции</td><td>1001</td></tr>' +
     '<tr><td>Главный инженер</td><td>1002</td></tr>' +
     '<tr><td>Офицер безопасности</td><td>1003</td></tr>' +
     '<tr><td>Министерство</td><td>9000</td></tr>' +
     '<tr><td>Экстренные службы</td><td>9999</td></tr>' +
     '</table>' +
-    '<div style="margin-top: 30px; text-align: center; color: #888; padding: 15px;">' +
+    '<div style="margin-top: 25px; text-align: center; color: #888;">' +
     '<p style="font-size: 24px;">★</p>' +
     '<p><em>"The atom is a good servant,<br>but a bad master."</em></p>' +
-    '<p style="margin-top: 15px; font-size: 11px;">END OF MANUAL</p>' +
-    '<p style="font-size: 10px;">NPS-1994-047 Rev. 3</p>' +
+    '<p style="margin-top: 10px; font-size: 11px;">КОНЕЦ РУКОВОДСТВА</p>' +
+    '<p style="font-size: 10px;">(End of Manual)</p>' +
     '</div></div>'
 ];
 

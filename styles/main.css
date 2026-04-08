@@ -617,23 +617,24 @@ body {
 
 /* ===== MANUAL CONTENT ===== */
 .manual-content {
-    font-family: 'Times New Roman', serif;
-    line-height: 1.5;
+    font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
+    line-height: 1.4;
     color: #e0e0e0;
     position: relative;
     height: 500px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    background: #1a1a1a;
 }
 
 .manual-page {
     display: none;
-    padding: 15px 20px 20px;
+    padding: 15px 18px 18px;
     height: calc(100% - 55px);
     overflow: hidden;
     animation: fadeIn 0.3s;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .manual-page.active {
@@ -647,89 +648,94 @@ body {
 
 .manual-content h1 {
     color: var(--gold);
-    font-size: 22px;
+    font-size: 18px;
     border-bottom: 2px solid var(--gold);
-    padding-bottom: 8px;
-    margin: 0 0 12px;
+    padding-bottom: 6px;
+    margin: 0 0 10px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
 }
 
 .manual-content h2 {
     color: var(--red-soviet);
-    font-size: 16px;
-    margin: 10px 0 8px;
+    font-size: 14px;
+    margin: 8px 0 6px;
+    font-family: 'Courier New', monospace;
 }
 
 .manual-content h3 {
     color: #cccccc;
-    font-size: 14px;
-    margin: 8px 0 5px;
+    font-size: 12px;
+    margin: 6px 0 4px;
+    font-family: 'Courier New', monospace;
 }
 
 .manual-content p {
-    margin: 5px 0;
-    font-size: 13px;
-    line-height: 1.5;
+    margin: 4px 0;
+    font-size: 12px;
+    line-height: 1.4;
 }
 
 .manual-content ul, .manual-content ol {
-    margin: 6px 0 6px 18px;
-    font-size: 13px;
-    line-height: 1.5;
+    margin: 4px 0 4px 16px;
+    font-size: 12px;
+    line-height: 1.4;
 }
 
 .manual-content li {
-    margin: 3px 0;
+    margin: 2px 0;
 }
 
 .manual-content .warning-box {
-    background: #330000;
+    background: #2a0000;
     border: 2px solid var(--red-bright);
-    padding: 10px;
-    margin: 10px 0;
+    padding: 8px;
+    margin: 8px 0;
 }
 
 .manual-content .warning-box h3 {
     color: var(--red-bright);
-    font-size: 13px;
+    font-size: 12px;
     margin-top: 0;
 }
 
 .manual-content .warning-box p {
-    font-size: 12px;
-    margin: 4px 0;
+    font-size: 11px;
+    margin: 3px 0;
 }
 
 .manual-content table {
     width: 100%;
     border-collapse: collapse;
-    margin: 8px 0;
-    font-size: 12px;
+    margin: 6px 0;
+    font-size: 11px;
 }
 
 .manual-content table th,
 .manual-content table td {
     border: 1px solid var(--gray-light);
-    padding: 5px 6px;
+    padding: 4px 5px;
     text-align: left;
+    font-family: 'Courier New', monospace;
 }
 
 .manual-content table th {
     background: var(--gray-medium);
     color: var(--gold);
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .manual-content table td {
     background: var(--black);
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .manual-content code {
     background: var(--black);
-    padding: 2px 4px;
+    padding: 1px 3px;
     border: 1px solid var(--gray-light);
     font-family: 'Courier New', monospace;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 /* Manual Navigation */
@@ -737,20 +743,21 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 15px;
+    padding: 8px 15px;
     background: var(--gray-dark);
     border-top: 2px solid var(--gold);
     flex-shrink: 0;
     height: 40px;
+    font-family: 'Courier New', monospace;
 }
 
 .manual-nav-btn {
-    padding: 6px 12px;
+    padding: 5px 10px;
     background: var(--gray-medium);
     border: 1px solid var(--gold);
     color: var(--gold);
-    font-family: inherit;
-    font-size: 11px;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -767,7 +774,8 @@ body {
 
 .manual-page-indicator {
     color: var(--gray-text);
-    font-size: 11px;
+    font-size: 10px;
+    font-family: 'Courier New', monospace;
 }
 
 /* Floating Close Button - Only this one, remove default */
@@ -788,6 +796,7 @@ body {
     justify-content: center;
     transition: all 0.2s;
     line-height: 1;
+    font-family: 'Courier New', monospace;
 }
 
 .manual-close-float:hover {
