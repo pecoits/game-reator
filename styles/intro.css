@@ -1,0 +1,218 @@
+/* ===== INTRO SCREENS ===== */
+
+/* Language Selection */
+.language-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a0000 50%, #0a0a0a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    font-family: 'Courier New', monospace;
+}
+
+.language-content {
+    text-align: center;
+    max-width: 600px;
+}
+
+.language-content .soviet-star {
+    font-size: 60px;
+    color: #cc0000;
+    text-shadow: 0 0 30px #ff0000;
+    animation: pulse 2s infinite;
+    margin-bottom: 30px;
+}
+
+.language-content h1 {
+    color: #ffd700;
+    font-size: 32px;
+    margin-bottom: 10px;
+    letter-spacing: 3px;
+}
+
+.language-content p {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 40px;
+}
+
+.language-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.lang-btn {
+    padding: 20px 40px;
+    background: #2a2a2a;
+    border: 3px solid #ffd700;
+    color: #ffd700;
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-width: 200px;
+}
+
+.lang-btn:hover {
+    background: #ffd700;
+    color: #0a0a0a;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.lang-btn .flag {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Intro Screen */
+.intro-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0a0a0a;
+    z-index: 1999;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+}
+
+.intro-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.intro-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 3px solid #cc0000;
+}
+
+.intro-header .soviet-emblem {
+    font-size: 80px;
+    color: #cc0000;
+    text-shadow: 0 0 20px #ff0000;
+}
+
+.intro-header h1 {
+    color: #ffd700;
+    font-size: 28px;
+    margin: 20px 0 10px;
+    letter-spacing: 2px;
+}
+
+.intro-header .subtitle {
+    color: #888;
+    font-size: 14px;
+}
+
+.intro-section {
+    background: #1a1a1a;
+    border: 2px solid #333;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.intro-section h2 {
+    color: #cc0000;
+    font-size: 18px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.intro-section p {
+    color: #b0b0b0;
+    line-height: 1.8;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.intro-section .highlight {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+.intro-section .warning {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.control-item {
+    background: #0a0a0a;
+    border: 1px solid #444;
+    padding: 15px;
+}
+
+.control-item .key {
+    color: #ffd700;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.control-item .desc {
+    color: #888;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.typewriter {
+    overflow: hidden;
+    white-space: normal;
+}
+
+.intro-footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 3px solid #ffd700;
+}
+
+.start-btn {
+    padding: 20px 60px;
+    background: #cc0000;
+    border: 3px solid #ff0000;
+    color: white;
+    font-family: 'Courier New', monospace;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    letter-spacing: 2px;
+}
+
+.start-btn:hover {
+    background: #ff0000;
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+}
+
+.secret-note {
+    margin-top: 20px;
+    padding: 15px;
+    background: #1a0000;
+    border: 1px solid #cc0000;
+    color: #888;
+    font-size: 11px;
+    font-style: italic;
+}
