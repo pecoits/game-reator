@@ -3,12 +3,14 @@
 
 const fs = require('fs');
 const path = require('path');
+const vm = require('vm');
 
-// config.js uses `var REACTOR_CONFIG` — eval it then expose on global so
-// reactor-simulation.js (loaded via require) can find it at construction time.
-eval(fs.readFileSync(path.join(__dirname, '../js/config.js'), 'utf8'));
-// eslint-disable-next-line no-undef
-global.REACTOR_CONFIG = REACTOR_CONFIG;
+// config.js uses `var REACTOR_CONFIG`; load it safely in an isolated context.
+const configCode = fs.readFileSync(path.join(__dirname, '../js/config.js'), 'utf8');
+const configContext = { console };
+vm.createContext(configContext);
+vm.runInContext(configCode, configContext, { filename: 'config.js' });
+global.REACTOR_CONFIG = configContext.REACTOR_CONFIG;
 
 // reactor-simulation.js already has a module.exports guard at the bottom,
 // so require() works directly.

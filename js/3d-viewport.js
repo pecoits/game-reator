@@ -13,6 +13,9 @@ class ReactorViewport {
         this.power = 75;
         this.scramActive = false;
         this.controlRodsPosition = 50;
+        this.needsRedraw = true;
+        this.lastRenderTime = 0;
+        this.targetFrameInterval = 1000 / 20;
 
         // Wait for container to exist
         this.waitForContainer();
@@ -284,12 +287,23 @@ class ReactorViewport {
         ctx.fill();
     }
 
-    animate2D() {
-        this.animationId = requestAnimationFrame(() => this.animate2D());
+    animate2D(time) {
+        this.animationId = requestAnimationFrame((time) => this.animate2D(time));
+        if (!time) return;
+        if (!this.needsRedraw && (time - this.lastRenderTime) < this.targetFrameInterval) return;
         this.drawReactor2D();
+        this.lastRenderTime = time;
+        this.needsRedraw = false;
     }
 
     updateIndicators(state) {
+        if (Math.abs(this.coreTemp - state.coreTemperature) > 0.05 ||
+            Math.abs(this.pressure - state.pressure) > 0.01 ||
+            Math.abs(this.power - state.reactorPower) > 0.05 ||
+            this.scramActive !== state.scramActive) {
+            this.needsRedraw = true;
+        }
+
         this.coreTemp = state.coreTemperature;
         this.pressure = state.pressure;
         this.power = state.reactorPower;
@@ -298,6 +312,7 @@ class ReactorViewport {
 
     updateControlRodsVisual(position) {
         this.controlRodsPosition = position;
+        this.needsRedraw = true;
     }
 
     destroy() {

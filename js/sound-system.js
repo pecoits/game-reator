@@ -90,14 +90,14 @@ class SoundSystem {
             try {
                 this.alarmOscillator.stop();
                 this.alarmOscillator.disconnect();
-            } catch (e) {}
+            } catch (_err) {}
             this.alarmOscillator = null;
         }
 
         if (this.alarmGain) {
             try {
                 this.alarmGain.disconnect();
-            } catch (e) {}
+            } catch (_err) {}
             this.alarmGain = null;
         }
     }

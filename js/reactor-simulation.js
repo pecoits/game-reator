@@ -1,6 +1,8 @@
 // ===== REACTOR SIMULATION ENGINE =====
 class ReactorSimulation {
     constructor() {
+        this.maxAlertHistory      = 200;
+        this.maxEventHistory      = 500;
         // Core parameters from config
         var c = REACTOR_CONFIG.initial;
         this.coreTemperature      = c.coreTemperature;
@@ -39,6 +41,7 @@ class ReactorSimulation {
         // Grace period from config
         this.gracePeriod          = REACTOR_CONFIG.gracePeriod;
         this.eventsEnabled        = false;
+        this.graceTimeoutId       = null;
 
         // Callbacks
         this.onUpdate = null;
@@ -52,14 +55,21 @@ class ReactorSimulation {
         this.addEvent('info', 'Период обкатки: 2 минуты до первых событий.');
 
         // Enable events after grace period
-        setTimeout(() => {
+        this.graceTimeoutId = setTimeout(() => {
             this.eventsEnabled = true;
             this.addEvent('warning', 'Период обкатки завершен. Ожидайте события.');
         }, this.gracePeriod);
+        if (this.graceTimeoutId && typeof this.graceTimeoutId.unref === 'function') {
+            this.graceTimeoutId.unref();
+        }
     }
 
     stop() {
         this.running = false;
+        if (this.graceTimeoutId) {
+            clearTimeout(this.graceTimeoutId);
+            this.graceTimeoutId = null;
+        }
     }
 
     tick(deltaTime) {
@@ -218,6 +228,9 @@ class ReactorSimulation {
                 time: this.time
             };
             this.alerts.push(alert);
+            if (this.alerts.length > this.maxAlertHistory) {
+                this.alerts.splice(0, this.alerts.length - this.maxAlertHistory);
+            }
 
             if (this.onAlert) {
                 this.onAlert(alert);
@@ -233,6 +246,9 @@ class ReactorSimulation {
             timestamp: new Date().toLocaleTimeString('ru-RU')
         };
         this.events.push(event);
+        if (this.events.length > this.maxEventHistory) {
+            this.events.splice(0, this.events.length - this.maxEventHistory);
+        }
 
         if (this.onEvent) {
             this.onEvent(event);
@@ -288,12 +304,12 @@ class ReactorSimulation {
         this.scramActive = true;
         this.controlRodsPosition = 100;
         this.emergencyCoolingActive = true;
+        this.gridConnected = false;
         this.addEvent('danger', 'АЗ-5 АКТИВИРОВАНА! АВАРИЙНАЯ ЗАЩИТА РЕАКТОРА!');
     }
 
     resetSCRAM() {
-        this.scramActive = false;
-        this.addEvent('info', 'Аварийная защита сброшена');
+        this.addEvent('warning', 'Сброс АЗ-5 заблокирован: процедура необратима в текущем сценарии.');
     }
 
     applyExternalPressureShock(deltaMPa) {

@@ -239,7 +239,7 @@ var IntroSystem = (function() {
             '<p>Select your language / Selecione seu idioma</p>' +
             '<div class="language-buttons">' +
             '<button class="lang-btn" data-lang="pt"><span class="flag">🇧🇷</span>Português</button>' +
-            '<button class="lang-btn" data-lang="en"><span class="flag">🇺</span>English</button>' +
+            '<button class="lang-btn" data-lang="en"><span class="flag">🇺🇸</span>English</button>' +
             '</div></div>';
         
         document.body.appendChild(screen);

@@ -1,0 +1,14 @@
+{
+  "name": "game-reator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Browser reactor operations simulator",
+  "scripts": {
+    "test": "node tests/reactor.test.js",
+    "lint": "eslint js tests --max-warnings=0",
+    "lint:fix": "eslint js tests --fix"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0"
+  }
+}

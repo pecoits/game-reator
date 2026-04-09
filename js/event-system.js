@@ -5,6 +5,7 @@ class EventSystem {
         this.scheduledEvents = [];
         this.missionObjectives = [];
         this.currentMission = null;
+        this.startedStartupMission = false;
         
         this.initMissions();
     }
@@ -48,6 +49,10 @@ class EventSystem {
     }
 
     startMission(missionId) {
+        if (this.currentMission && this.currentMission.active) {
+            return false;
+        }
+
         const mission = this.missions.find(m => m.id === missionId);
         if (mission) {
             this.currentMission = {
@@ -159,8 +164,10 @@ class EventSystem {
         this.checkMissionProgress();
         
         // Auto-trigger first mission after startup
-        if (this.simulation.ticks === 10) {
-            this.startMission('startup');
+        if (!this.startedStartupMission && this.simulation.ticks >= 10) {
+            if (this.startMission('startup')) {
+                this.startedStartupMission = true;
+            }
         }
     }
 }

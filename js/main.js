@@ -36,12 +36,6 @@ class GameApp {
             // Start game loop
             this.startGameLoop();
 
-            // Start first mission after delay
-            setTimeout(() => {
-                if (this.eventSystem) {
-                    this.eventSystem.startMission('startup');
-                }
-            }, 5000);
         });
     }
 
@@ -93,7 +87,7 @@ class GameApp {
 
             // Restore saved state if available
             const saved = this.saveSystem.load();
-            if (saved) {
+            if (saved && saved.sim) {
                 const s = saved.sim;
                 this.simulation.coreTemperature        = s.coreTemperature;
                 this.simulation.pressure               = s.pressure;

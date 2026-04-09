@@ -155,11 +155,12 @@ class UIController {
                     showGameConfirm(
                         'АЗ-5 АВАРИЙНАЯ ЗАЩИТА',
                         'Активировать АЗ-5? Реактор будет аварийно остановлен.',
-                        () => { this.simulation.activateSCRAM(); }
+                        () => {
+                            this.simulation.activateSCRAM();
+                            this.elements.btnScram.textContent = 'АЗ-5 АКТИВНА';
+                            this.elements.btnScram.disabled = true;
+                        }
                     );
-                } else {
-                    this.simulation.resetSCRAM();
-                    this.elements.btnScram.textContent = 'АЗ-5';
                 }
             });
         }
@@ -395,6 +396,11 @@ class UIController {
 
         this.updateStatusIndicator(state);
 
+        if (this.elements.btnScram) {
+            this.elements.btnScram.disabled = !!state.scramActive;
+            this.elements.btnScram.textContent = state.scramActive ? 'АЗ-5 АКТИВНА' : 'АЗ-5';
+        }
+
         if (this.elements.alertsBtn) {
             var alertCount = this.simulation.getAlertCount();
             this.elements.alertsBtn.textContent = '⚠ ' + alertCount;
@@ -470,9 +476,22 @@ class UIController {
     addLogEntry(event) {
         var entry = document.createElement('div');
         entry.className = 'log-entry';
-        entry.innerHTML = '<span class="log-time">' + event.timestamp + '</span>' +
-            '<span class="log-type ' + event.type + '">[' + event.type.toUpperCase() + ']</span>' +
-            '<span class="log-message">' + event.message + '</span>';
+
+        var time = document.createElement('span');
+        time.className = 'log-time';
+        time.textContent = event.timestamp;
+
+        var type = document.createElement('span');
+        type.className = 'log-type ' + event.type;
+        type.textContent = '[' + event.type.toUpperCase() + ']';
+
+        var message = document.createElement('span');
+        message.className = 'log-message';
+        message.textContent = event.message;
+
+        entry.appendChild(time);
+        entry.appendChild(type);
+        entry.appendChild(message);
 
         this.elements.logEntries.appendChild(entry);
         this.elements.logEntries.scrollTop = this.elements.logEntries.scrollHeight;
@@ -484,16 +503,32 @@ class UIController {
 
     showAlerts() {
         var alerts = this.simulation.alerts.slice(-20);
+        this.elements.alertEntries.textContent = '';
 
         if (alerts.length === 0) {
-            this.elements.alertEntries.innerHTML = '<p style="text-align: center; color: #888;">Нет активных сигналов</p>';
+            var empty = document.createElement('p');
+            empty.style.textAlign = 'center';
+            empty.style.color = '#888';
+            empty.textContent = 'Нет активных сигналов';
+            this.elements.alertEntries.appendChild(empty);
         } else {
-            this.elements.alertEntries.innerHTML = alerts.map(alert => {
+            alerts.forEach(alert => {
                 var timeStr = this.formatTime(alert.time);
-                return '<div class="alert-item ' + (alert.level === 'critical' ? 'critical' : '') + '">' +
-                    '<h4>' + (alert.level === 'critical' ? '🔴' : alert.level === 'danger' ? '🟠' : '🟡') + ' ' + alert.message + '</h4>' +
-                    '<p class="alert-time">Время: ' + timeStr + '</p></div>';
-            }).join('');
+                var item = document.createElement('div');
+                item.className = 'alert-item' + (alert.level === 'critical' ? ' critical' : '');
+
+                var title = document.createElement('h4');
+                var icon = (alert.level === 'critical' ? '🔴' : alert.level === 'danger' ? '🟠' : '🟡');
+                title.textContent = icon + ' ' + alert.message;
+
+                var time = document.createElement('p');
+                time.className = 'alert-time';
+                time.textContent = 'Время: ' + timeStr;
+
+                item.appendChild(title);
+                item.appendChild(time);
+                this.elements.alertEntries.appendChild(item);
+            });
         }
 
         this.elements.alertModal.style.display = 'flex';
