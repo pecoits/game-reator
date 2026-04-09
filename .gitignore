@@ -7,3 +7,5 @@ node_modules/
 Thumbs.db
 *.bat
 start-server.bat
+.claude/
+.planning/
