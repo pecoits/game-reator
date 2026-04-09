@@ -88,3 +88,49 @@ O manual ainda está inconsistente e precisa de revisão completa:
 - Push requer autenticação via browser
 - Server local: python -m http.server 8080
 - GitHub Pages deploy automático via Actions
+- ## Game-Reator - DIREÇÃO VISUAL DEFINITIVA: Sala de Controle Imersiva
+
+### 🎨 Novo Conceito Visual (Baseado em control-room-concept.html)
+- **Estética:** Painel industrial bege/marrom com textura de metal desgastado
+- **Layout:** 3 colunas em tela ÚNICA (sem abas)
+- **Tema:** Sala de controle soviética real dos anos 90
+
+### 📐 Layout da Tela Única
+
+**Coluna Esquerda - Instrumentos Analógicos (4 medidores com ponteiros):**
+- ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ (0-450°C)
+- ДАВЛЕНИЕ В КОНТУРЕ (0-25 MPa)
+- МОЩНОСТЬ РЕАКТОРА (0-110%)
+- УРОВЕНЬ РАДИАЦИИ (0-20 мЗв/ч)
+- Zonas de cor: verde/normal, amarelo/atenção, vermelho/perigo
+
+**Coluna Central - Displays Digitais 7 Segmentos + Luzes:**
+- 4 displays com números estilo LED (glow verde/amarelo/vermelho)
+- Luzes indicadoras: НОРМА, ВНИМАНИЕ, ОПАСНОСТЬ, АЗ-5
+- Journal de eventos integrado em display menor
+
+**Coluna Direita - Controles Físicos:**
+- Knobs rotativos (substituem sliders): Стержни, Главный насос
+- Alavancas: Аварийное охлаждение, Дополнительный насос
+- Botões industriais: Сброс тревог, Изолировать сеть, АЗ-5
+
+### ✅ Decisões Confirmadas
+1. ✅ Manter CIRÍLICO em todos os indicadores
+2. ✅ Sliders → KNOBS (controles rotativos)
+3. ✅ Tudo em UMA TELA (sem abas/tabs)
+4. ✅ Journal de eventos em display menor integrado
+
+### 🔄 Status Atual
+- Arquivo de conceito: control-room-concept.html (visualização do design)
+- Arquivo React: control-room-concept.canvas.tsx (componente React de referência)
+- Projeto atual: versão com tabs e barras horizontais (será substituído)
+
+### 📋 Próximos Passos de Implementação
+1. Criar novo CSS com paleta industrial bege/marrom
+2. Implementar medidores analógicos SVG com ponteiros
+3. Implementar displays 7 segmentos com glow CSS
+4. Implementar knobs rotativos interativos
+5. Implementar alavancas com animação
+6. Reorganizar layout para grid de 3 colunas
+7. Integrar journal de eventos como display menor
+8. Conectar tudo à simulação existente

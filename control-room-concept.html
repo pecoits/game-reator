@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demonstracao - Sala de Controle Imersiva</title>
+  <style>
+    :root {
+      --bg-0: #a79f90;
+      --bg-1: #b8b09f;
+      --panel: #d4ccb9;
+      --panel-2: #cdc4b0;
+      --line: #8f8675;
+      --text: #27231c;
+      --muted: #5f5648;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .title-bar {
+      border: 1px solid #8f8675;
+      border-radius: 10px;
+      padding: 14px;
+      background: #d8cfbc;
+      margin-bottom: 14px;
+      box-shadow: inset 0 0 0 1px #e6dfcf, 0 8px 20px rgba(55, 44, 26, 0.15);
+    }
+    .title { font-weight: 700; letter-spacing: 1.1px; }
+    .subtitle { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 0.9fr;
+      gap: 14px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .panel.left { background: var(--panel); }
+    .panel.center, .panel.right { background: var(--panel-2); }
+    .panel h3 {
+      margin: 0 0 10px;
+      font-size: 13px;
+      letter-spacing: 1px;
+      opacity: .9;
+    }
+
+    .gauge-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(160px, 1fr));
+      gap: 10px;
+    }
+    .gauge-card {
+      background: #c7beaa;
+      border: 1px solid #8e846f;
+      border-radius: 10px;
+      padding: 8px;
+    }
+    .gauge-label { font-size: 11px; opacity: .88; margin-bottom: 6px; }
+    .gauge-shell { display: flex; justify-content: center; }
+    .gauge-face {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 45% 35%, #f3efe7 0%, #dbd2c1 68%);
+      border: 2px solid #908673;
+      position: relative;
+      overflow: hidden;
+    }
+    .gauge-scale {
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      border: 1px solid #8e846f;
+    }
+    .gauge-zones {
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from -130deg,
+        transparent 0deg 180deg,
+        #d6b85f 180deg 225deg,
+        #b2574c 225deg 260deg,
+        transparent 260deg 360deg
+      );
+      opacity: .85;
+      -webkit-mask: radial-gradient(circle, transparent 58%, #000 59%, #000 70%, transparent 71%);
+      mask: radial-gradient(circle, transparent 58%, #000 59%, #000 70%, transparent 71%);
+      pointer-events: none;
+    }
+    .gauge-segment {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 1px;
+      height: 46px;
+      transform-origin: 50% 100%;
+      background: #564f43;
+      opacity: .9;
+    }
+    .gauge-segment.major {
+      height: 52px;
+      width: 2px;
+      background: #3c362d;
+    }
+    .gauge-needle {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 3px;
+      height: 42px;
+      background: #2f2a22;
+      border-radius: 2px;
+      transform-origin: 50% 100%;
+    }
+    .gauge-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #3a352d;
+    }
+    .gauge-unit {
+      margin-top: 6px;
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: .6px;
+      color: #4f473b;
+      font-weight: 600;
+    }
+
+    .segment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .segment-card {
+      background: #bfb59f;
+      border: 1px solid #867c68;
+      border-radius: 10px;
+      padding: 8px;
+    }
+    .segment-label { font-size: 11px; opacity: .85; margin-bottom: 6px; }
+    .segment-frame {
+      border-radius: 6px;
+      border: 1px solid #756c5d;
+      background: #1d1d1a;
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .segment-digits {
+      font-family: "Courier New", monospace;
+      letter-spacing: 2px;
+      font-weight: 700;
+      font-size: 28px;
+    }
+    .tone-green { color: #64ff8f; text-shadow: 0 0 8px #64ff8f, 0 0 18px #64ff8f; }
+    .tone-yellow { color: #ffe066; text-shadow: 0 0 8px #ffe066, 0 0 18px #ffe066; }
+    .tone-red { color: #ff6b6b; text-shadow: 0 0 8px #ff6b6b, 0 0 18px #ff6b6b; }
+
+    .annunciator-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .lamp {
+      color: #121212;
+      font-weight: 700;
+      text-align: center;
+      padding: 8px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(43,34,21,.4);
+    }
+
+    .control-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .control-label { font-size: 12px; }
+    .lever-base {
+      width: 74px;
+      height: 30px;
+      border-radius: 8px;
+      border: 1px solid #7f7562;
+      background: linear-gradient(180deg, #b5ab96 0%, #a39882 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .lever-stem {
+      width: 4px;
+      height: 16px;
+      background: #2f2a22;
+      border-radius: 2px;
+      transform-origin: bottom center;
+    }
+    .lever-stem.on { transform: rotate(-22deg); }
+    .lever-stem.off { transform: rotate(22deg); }
+    .lever-tip {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #2f2a22;
+      top: 5px;
+      right: 15px;
+      box-shadow: inset 0 0 0 1px #544c3f;
+    }
+    .dimmer {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid #7c735f;
+      background: radial-gradient(circle at 35% 30%, #e0d8c6 0%, #b1a68f 68%);
+      position: relative;
+      box-shadow: inset 0 0 0 1px #ece4d3;
+    }
+    .dimmer-mark {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 2px;
+      height: 14px;
+      background: #332d25;
+      transform-origin: 50% 100%;
+      transform: translate(-50%, -100%) rotate(-20deg);
+      border-radius: 1px;
+    }
+    .button-cluster { margin-top: 10px; display: grid; gap: 8px; }
+    .industrial-btn {
+      border-radius: 999px;
+      border: 2px solid #6f6553;
+      padding: 10px 12px;
+      font-weight: 700;
+      letter-spacing: .4px;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,.15);
+      color: #221d16;
+      background: #cfc6b4;
+      text-align: center;
+    }
+    .safe { background: #bcc9b7; }
+    .warn { background: #d5c7a0; }
+    .scram { background: #c58f8f; border-color: #8f4c4c; }
+
+    .footer {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px dashed #8a806d;
+      padding-top: 10px;
+    }
+
+    @media (max-width: 1200px) {
+      .main-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="title-bar">
+    <div class="title">PAINEL DE CONTROLE - CONCEITO IMERSIVO</div>
+    <div class="subtitle">RBMK-1000 / painel analogico e digital em estilo de usina real</div>
+  </div>
+
+  <div class="main-grid">
+    <section class="panel left">
+      <h3>INSTRUMENTOS ANALOGICOS</h3>
+      <div class="gauge-grid">
+        <article class="gauge-card">
+          <div class="gauge-label">TEMPERATURA DO NUCLEO</div>
+          <div class="gauge-shell">
+            <div class="gauge-face">
+              <div class="gauge-scale"></div>
+              <div class="gauge-zones"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(-130deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(-95deg);"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(-60deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(-25deg);"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(10deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(45deg);"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(80deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(115deg);"></div>
+              <div class="gauge-needle" style="transform: translate(-50%, -100%) rotate(36deg);"></div>
+              <div class="gauge-center"></div>
+            </div>
+          </div>
+          <div class="gauge-unit">0 ... 450 C</div>
+        </article>
+
+        <article class="gauge-card">
+          <div class="gauge-label">PRESSAO DO CIRCUITO</div>
+          <div class="gauge-shell">
+            <div class="gauge-face">
+              <div class="gauge-scale"></div>
+              <div class="gauge-zones"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(-130deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(-95deg);"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(-60deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(-25deg);"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(10deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(45deg);"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(80deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(115deg);"></div>
+              <div class="gauge-needle" style="transform: translate(-50%, -100%) rotate(34deg);"></div>
+              <div class="gauge-center"></div>
+            </div>
+          </div>
+          <div class="gauge-unit">0 ... 25 MPa</div>
+        </article>
+
+        <article class="gauge-card">
+          <div class="gauge-label">POTENCIA DO REATOR</div>
+          <div class="gauge-shell">
+            <div class="gauge-face">
+              <div class="gauge-scale"></div>
+              <div class="gauge-zones"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(-130deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(-95deg);"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(-60deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(-25deg);"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(10deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(45deg);"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(80deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(115deg);"></div>
+              <div class="gauge-needle" style="transform: translate(-50%, -100%) rotate(45deg);"></div>
+              <div class="gauge-center"></div>
+            </div>
+          </div>
+          <div class="gauge-unit">0 ... 110 %</div>
+        </article>
+
+        <article class="gauge-card">
+          <div class="gauge-label">NIVEL DE RADIACAO</div>
+          <div class="gauge-shell">
+            <div class="gauge-face">
+              <div class="gauge-scale"></div>
+              <div class="gauge-zones"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(-130deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(-95deg);"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(-60deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(-25deg);"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(10deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(45deg);"></div>
+              <div class="gauge-segment major" style="transform: translate(-50%, -100%) rotate(80deg);"></div>
+              <div class="gauge-segment" style="transform: translate(-50%, -100%) rotate(115deg);"></div>
+              <div class="gauge-needle" style="transform: translate(-50%, -100%) rotate(-127deg);"></div>
+              <div class="gauge-center"></div>
+            </div>
+          </div>
+          <div class="gauge-unit">0 ... 20 mSv/h</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel center">
+      <h3>DISPLAYS DIGITAIS (7 SEGMENTOS)</h3>
+      <div class="segment-grid">
+        <article class="segment-card">
+          <div class="segment-label">REATOR</div>
+          <div class="segment-frame"><div class="segment-digits tone-green">074.0</div></div>
+        </article>
+        <article class="segment-card">
+          <div class="segment-label">PRESSAO</div>
+          <div class="segment-frame"><div class="segment-digits tone-yellow">15.8</div></div>
+        </article>
+        <article class="segment-card">
+          <div class="segment-label">TEMPERATURA</div>
+          <div class="segment-frame"><div class="segment-digits tone-yellow">287.3</div></div>
+        </article>
+        <article class="segment-card">
+          <div class="segment-label">ALARMES</div>
+          <div class="segment-frame"><div class="segment-digits tone-red">0001</div></div>
+        </article>
+      </div>
+
+      <div class="annunciator-row">
+        <div class="lamp" style="background:#64ff8f;">NORMAL</div>
+        <div class="lamp" style="background:#ffe066;">ATENCAO</div>
+        <div class="lamp" style="background:#ff6b6b;">PERIGO</div>
+        <div class="lamp" style="background:#ff3b3b;">AZ-5</div>
+      </div>
+    </section>
+
+    <section class="panel right">
+      <h3>CONTROLES FISICOS</h3>
+      <div class="control-row">
+        <div class="control-label">ALAVANCA: BOMBA PRINCIPAL</div>
+        <div class="lever-base">
+          <div class="lever-stem on"></div>
+          <div class="lever-tip"></div>
+        </div>
+      </div>
+      <div class="control-row">
+        <div class="control-label">ALAVANCA: BOMBA AUXILIAR</div>
+        <div class="lever-base">
+          <div class="lever-stem off"></div>
+          <div class="lever-tip"></div>
+        </div>
+      </div>
+      <div class="control-row">
+        <div class="control-label">DIMMER: ILUMINACAO DO PAINEL</div>
+        <div class="dimmer"><div class="dimmer-mark"></div></div>
+      </div>
+      <div class="control-row">
+        <div class="control-label">DIMMER: GANHO DO SINAL</div>
+        <div class="dimmer"><div class="dimmer-mark" style="transform: translate(-50%, -100%) rotate(35deg);"></div></div>
+      </div>
+
+      <div class="button-cluster">
+        <div class="industrial-btn safe">RESET DE ALARMES</div>
+        <div class="industrial-btn warn">ISOLAR REDE</div>
+        <div class="industrial-btn scram">AZ-5 / PROTECAO DE EMERGENCIA</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="footer">
+    Referencia visual: painel industrial bege, desgaste leve, luz quente de lampadas e tipografia tecnica.
+  </div>
+</body>
+</html>
