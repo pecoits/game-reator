@@ -51,8 +51,9 @@ class ReactorSimulation {
 
     start() {
         this.running = true;
+        var graceMinutes = Math.round(this.gracePeriod / 60000);
         this.addEvent('info', 'Система запущена. Реактор в стабильном режиме.');
-        this.addEvent('info', 'Период обкатки: 2 минуты до первых событий.');
+        this.addEvent('info', 'Период обкатки: ' + graceMinutes + ' минуты до первых событий.');
 
         // Enable events after grace period
         this.graceTimeoutId = setTimeout(() => {

@@ -23,7 +23,8 @@ var REACTOR_CONFIG = {
         radiation: { warning: 1.0, danger: 5.0, critical: 20.0 },
         power:     { warning: 90,  danger: 100, critical: 110 }
     },
-    gracePeriod: 120000,
+    gracePeriod: 180000,
+    startupMissionDelay: 210000,
     randomEventChance: 0.003,
     physics: {
         powerRodsSmoothFactor: 0.01,

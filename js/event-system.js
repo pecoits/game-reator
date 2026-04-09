@@ -163,8 +163,12 @@ class EventSystem {
         // Check mission progress
         this.checkMissionProgress();
         
-        // Auto-trigger first mission after startup
-        if (!this.startedStartupMission && this.simulation.ticks >= 10) {
+        // Auto-trigger first mission only after onboarding period.
+        var startupDelay = (typeof REACTOR_CONFIG !== 'undefined' && typeof REACTOR_CONFIG.startupMissionDelay === 'number')
+            ? REACTOR_CONFIG.startupMissionDelay
+            : this.simulation.gracePeriod;
+
+        if (!this.startedStartupMission && this.simulation.time >= startupDelay) {
             if (this.startMission('startup')) {
                 this.startedStartupMission = true;
             }
