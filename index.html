@@ -258,6 +258,10 @@
     <!-- Manual Modal -->
     <div id="manual-modal" class="modal" style="display: none;">
         <div class="modal-content modal-manual">
+            <div class="modal-header">
+                <h2>РУКОВОДСТВО</h2>
+                <button class="btn-close" onclick="document.getElementById('manual-modal').style.display='none'">×</button>
+            </div>
             <div class="modal-body">
                 <div id="manual-content" class="manual-content">
                     <!-- Manual pages will be loaded here -->
@@ -275,6 +279,48 @@
             </div>
             <div class="modal-body">
                 <div id="alert-entries" class="alert-entries"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal" style="display: none;">
+        <div class="modal-content modal-alerts">
+            <div class="modal-header">
+                <h2>⚠ ОШИБКА СИСТЕМЫ</h2>
+                <button id="btn-close-error" class="btn-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="error-modal-message" style="padding: 20px; color: #ff6b6b;"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="modal" style="display: none;">
+        <div class="modal-content modal-alerts">
+            <div class="modal-header">
+                <h2 id="confirm-modal-title">ПОДТВЕРЖДЕНИЕ</h2>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-modal-message" style="padding: 15px;"></p>
+                <div style="display: flex; gap: 10px; justify-content: flex-end; padding: 0 15px 15px;">
+                    <button class="btn" id="btn-confirm-no" style="background: #888; color: white;">ОТМЕНА</button>
+                    <button class="btn" id="btn-confirm-yes" style="background: #cc0000; color: white;">ПОДТВЕРДИТЬ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Boot Error Modal -->
+    <div id="boot-error-modal" class="modal" style="display: none;">
+        <div class="modal-content modal-alerts">
+            <div class="modal-header">
+                <h2>⚠ ОШИБКА ЗАГРУЗКИ</h2>
+            </div>
+            <div class="modal-body">
+                <p id="boot-error-message" style="padding: 20px; color: #ff6b6b;"></p>
+                <p style="padding: 0 15px 15px; color: #888; font-size: 12px;">Обновите страницу или очистите кэш браузера.</p>
             </div>
         </div>
     </div>

@@ -22,6 +22,68 @@ var UIControllerNew = (function() {
         this.simulation.onUpdate = function(state) { self.updateUI(state); };
         this.simulation.onAlert = function(alert) { self.handleAlert(alert); };
         this.simulation.onEvent = function(event) { self.addJournalEntry(event); };
+        
+        // Initialize knob/lever positions from simulation state
+        this.syncControlsFromSimulation();
+    };
+
+    UIControllerNew.prototype.syncControlsFromSimulation = function() {
+        // Sync knobs
+        if (this.elements.knobRods) {
+            var rodsKnob = this.elements.knobRods.querySelector('.knob');
+            var rodsValue = this.elements.knobRods.querySelector('.knob-value');
+            if (rodsKnob && rodsValue) {
+                var value = this.simulation.controlRodsPosition || 50;
+                rodsKnob.setAttribute('data-value', value);
+                rodsKnob.style.transform = 'rotate(' + (-130 + (value / 100) * 260) + 'deg)';
+                rodsValue.textContent = Math.round(value) + '%';
+            }
+        }
+        
+        if (this.elements.knobPump) {
+            var pumpKnob = this.elements.knobPump.querySelector('.knob');
+            var pumpValue = this.elements.knobPump.querySelector('.knob-value');
+            if (pumpKnob && pumpValue) {
+                var value = this.simulation.mainPumpSpeed || 65;
+                pumpKnob.setAttribute('data-value', value);
+                pumpKnob.style.transform = 'rotate(' + (-130 + (value / 100) * 260) + 'deg)';
+                pumpValue.textContent = Math.round(value) + '%';
+            }
+        }
+        
+        // Sync levers
+        if (this.elements.leverCool) {
+            var coolStem = this.elements.leverCool.querySelector('.lever-stem');
+            if (coolStem) {
+                if (this.simulation.emergencyCoolingActive) {
+                    coolStem.classList.remove('off');
+                    coolStem.classList.add('on');
+                } else {
+                    coolStem.classList.remove('on');
+                    coolStem.classList.add('off');
+                }
+            }
+        }
+        
+        if (this.elements.leverExtra) {
+            var extraStem = this.elements.leverExtra.querySelector('.lever-stem');
+            if (extraStem) {
+                if (this.simulation.extraPumpActive) {
+                    extraStem.classList.remove('off');
+                    extraStem.classList.add('on');
+                } else {
+                    extraStem.classList.remove('on');
+                    extraStem.classList.add('off');
+                }
+            }
+        }
+        
+        // Sync grid button
+        if (this.elements.btnGrid) {
+            this.elements.btnGrid.textContent = this.simulation.gridConnected ? 'ПОДКЛЮЧЕНО' : 'ОТКЛЮЧЕНО';
+            this.elements.btnGrid.classList.toggle('btn-safe', this.simulation.gridConnected);
+            this.elements.btnGrid.classList.toggle('btn-warn', !this.simulation.gridConnected);
+        }
     };
 
     UIControllerNew.prototype.cacheElements = function() {

@@ -1,3 +1,47 @@
+// ===== SAVE SYSTEM =====
+var SaveSystem = (function() {
+    function SaveSystem() {
+        this.storageKey = 'krasnostan-reactor-save';
+    }
+
+    SaveSystem.prototype.save = function(simState, completedMissions) {
+        try {
+            var data = {
+                sim: simState,
+                missions: completedMissions,
+                timestamp: Date.now()
+            };
+            localStorage.setItem(this.storageKey, JSON.stringify(data));
+            console.log('Game saved');
+        } catch (e) {
+            console.warn('Failed to save game:', e);
+        }
+    };
+
+    SaveSystem.prototype.load = function() {
+        try {
+            var data = localStorage.getItem(this.storageKey);
+            if (data) {
+                return JSON.parse(data);
+            }
+        } catch (e) {
+            console.warn('Failed to load save:', e);
+        }
+        return null;
+    };
+
+    SaveSystem.prototype.clear = function() {
+        try {
+            localStorage.removeItem(this.storageKey);
+            console.log('Save cleared');
+        } catch (e) {
+            console.warn('Failed to clear save:', e);
+        }
+    };
+
+    return SaveSystem;
+})();
+
 // ===== MAIN APPLICATION =====
 class GameApp {
     constructor() {
@@ -100,14 +144,19 @@ class GameApp {
                 this.simulation.gridConnected          = s.gridConnected;
                 this.simulation.scramActive            = s.scramActive;
                 this.simulation.time                   = s.time;
+                
+                // Also restore knob/lever positions to UI if available
+                if (s.knobRods !== undefined) this.simulation.controlRodsPosition = s.knobRods;
+                if (s.knobPump !== undefined) this.simulation.mainPumpSpeed = s.knobPump;
+                if (s.leverCool !== undefined) this.simulation.emergencyCoolingActive = s.leverCool;
+                if (s.leverExtra !== undefined) this.simulation.extraPumpActive = s.leverExtra;
+                if (s.gridConnected !== undefined) this.simulation.gridConnected = s.gridConnected;
+                
                 this.simulation.addEvent('info', 'Состояние восстановлено из архива.');
             }
 
-            console.log('Initializing viewport...');
-            this.viewport = new ReactorViewport('reactor-viewport');
-
             console.log('Initializing UI controller...');
-            this.uiController = new UIController(this.simulation, this.viewport);
+            this.uiController = new UIControllerNew(this.simulation);
 
             console.log('Initializing event system...');
             this.eventSystem = new EventSystem(this.simulation);
@@ -152,7 +201,15 @@ class GameApp {
                             .filter(m => m.completed)
                             .map(m => m.id)
                         : [];
-                    this.saveSystem.save(this.simulation.getState(), completedMissions);
+                    
+                    // Save simulation state plus UI state
+                    const simState = this.simulation.getState();
+                    simState.knobRods = this.simulation.controlRodsPosition;
+                    simState.knobPump = this.simulation.mainPumpSpeed;
+                    simState.leverCool = this.simulation.emergencyCoolingActive;
+                    simState.leverExtra = this.simulation.extraPumpActive;
+                    
+                    this.saveSystem.save(simState, completedMissions);
                 }
                 this.lastTime = currentTime;
             }

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>АТОМНАЯ ЭЛЕКТРОСТАНЦИЯ - Симулятор Реактора</title>
+    <link rel="stylesheet" href="styles/control-room.css">
+    <link rel="stylesheet" href="styles/intro.css">
+</head>
+<body>
+    <div id="loading-screen" class="loading-screen" style="display: none;">
+        <div class="loading-content">
+            <div class="soviet-star">★</div>
+            <h1>АТОМНАЯ ЭЛЕКТРОСТАНЦИЯ</h1>
+            <h2>СИМУЛЯТОР РЕАКТОРА</h2>
+            <p>Народная Республика Социалистов</p>
+            <div class="loading-bar">
+                <div class="loading-progress" id="loading-progress"></div>
+            </div>
+            <p id="loading-text">Загрузка системы...</p>
+        </div>
+    </div>
+
+    <div id="game-container" class="game-container" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="soviet-emblem">★</div>
+                <div class="header-title">
+                    <h1>АТОМНАЯ ЭЛЕКТРОСТАНЦИЯ №4</h1>
+                    <p>Народная Республика Социалистов | 1994</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <button id="btn-manual" class="btn btn-manual">MANUAL</button>
+                <button id="btn-alerts" class="btn btn-alerts">⚠ 0</button>
+                <div class="sound-controls">
+                    <button id="btn-mute" class="btn btn-sound" title="Вкл/Выкл звук">🔊</button>
+                    <input type="range" id="volume-slider" min="0" max="100" value="50" class="volume-slider">
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- 3D Viewport -->
+            <section class="viewport-section">
+                <div class="section-header">
+                    <h2>МОНИТОР РЕАКТОРА</h2>
+                    <span class="status-indicator" id="reactor-status">НОРМА</span>
+                </div>
+                <div id="reactor-viewport" class="reactor-viewport"></div>
+            </section>
+
+            <!-- Control Panel -->
+            <section class="control-panel">
+                <div class="panel-tabs">
+                    <button class="tab-btn active" data-tab="main">ОСНОВНОЙ</button>
+                    <button class="tab-btn" data-tab="cooling">ОХЛАЖДЕНИЕ</button>
+                    <button class="tab-btn" data-tab="power">ЭНЕРГИЯ</button>
+                </div>
+
+                <!-- Main Tab -->
+                <div class="tab-content active" id="tab-main">
+                    <div class="indicators-grid">
+                        <div class="indicator">
+                            <div class="indicator-label">ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ</div>
+                            <div class="indicator-value" id="temp-core">250°C</div>
+                            <div class="indicator-bar">
+                                <div class="indicator-fill" id="temp-bar" style="width: 25%"></div>
+                            </div>
+                        </div>
+                        <div class="indicator">
+                            <div class="indicator-label">ДАВЛЕНИЕ В КОНТУРЕ</div>
+                            <div class="indicator-value" id="pressure">15.5 МПа</div>
+                            <div class="indicator-bar">
+                                <div class="indicator-fill" id="pressure-bar" style="width: 50%"></div>
+                            </div>
+                        </div>
+                        <div class="indicator">
+                            <div class="indicator-label">УРОВЕНЬ РАДИАЦИИ</div>
+                            <div class="indicator-value" id="radiation">0.12 мЗв/ч</div>
+                            <div class="indicator-bar">
+                                <div class="indicator-fill" id="radiation-bar" style="width: 5%"></div>
+                            </div>
+                        </div>
+                        <div class="indicator">
+                            <div class="indicator-label">МОЩНОСТЬ РЕАКТОРА</div>
+                            <div class="indicator-value" id="power-output">75%</div>
+                            <div class="indicator-bar">
+                                <div class="indicator-fill" id="power-bar" style="width: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <label>СТЕРЖНИ РЕГУЛИРОВАНИЯ</label>
+                            <input type="range" id="control-rods" min="0" max="100" value="50">
+                            <div class="control-value" id="rods-value">50%</div>
+                        </div>
+                        <div class="control-group">
+                            <label>СКОРОСТЬ ГЛАВНОГО НАСОСА</label>
+                            <input type="range" id="main-pump" min="0" max="100" value="60">
+                            <div class="control-value" id="pump-value">60%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cooling Tab -->
+                <div class="tab-content" id="tab-cooling">
+                    <div class="indicators-grid">
+                        <div class="indicator">
+                            <div class="indicator-label">ТЕМПЕРАТУРА ВОДЫ (ВХОД)</div>
+                            <div class="indicator-value" id="temp-inlet">180°C</div>
+                        </div>
+                        <div class="indicator">
+                            <div class="indicator-label">ТЕМПЕРАТУРА ВОДЫ (ВЫХОД)</div>
+                            <div class="indicator-value" id="temp-outlet">280°C</div>
+                        </div>
+                        <div class="indicator">
+                            <div class="indicator-label">РАСХОД ТЕПЛОНОСИТЕЛЯ</div>
+                            <div class="indicator-value" id="coolant-flow">8500 м³/ч</div>
+                        </div>
+                        <div class="indicator">
+                            <div class="indicator-label">УРОВЕНЬ В КОМПЕНСАТОРЕ</div>
+                            <div class="indicator-value" id="pressurizer-level">65%</div>
+                        </div>
+                    </div>
+
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <label>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</label>
+                            <button id="btn-emergency-cool" class="btn btn-danger">АКТИВИРОВАТЬ</button>
+                        </div>
+                        <div class="control-group">
+                            <label>ДОПОЛНИТЕЛЬНЫЙ НАСОС</label>
+                            <button id="btn-extra-pump" class="btn btn-warning">ВКЛ/ВЫКЛ</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Power Tab -->
+                <div class="tab-content" id="tab-power">
+                    <div class="indicators-grid">
+                        <div class="indicator">
+                            <div class="indicator-label">ВЫРАБОТКА ЭНЕРГИИ</div>
+                            <div class="indicator-value" id="energy-gen">850 МВт</div>
+                        </div>
+                        <div class="indicator">
+                            <div class="indicator-label">НАПРЯЖЕНИЕ ГЕНЕРАТОРА</div>
+                            <div class="indicator-value" id="voltage">15.75 кВ</div>
+                        </div>
+                        <div class="indicator">
+                            <div class="indicator-label">ЧАСТОТА ТОКА</div>
+                            <div class="indicator-value" id="frequency">50.0 Гц</div>
+                        </div>
+                        <div class="indicator">
+                            <div class="indicator-label">НАГРУЗКА СЕТИ</div>
+                            <div class="indicator-value" id="grid-load">78%</div>
+                        </div>
+                    </div>
+
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <label>ВЫВОД В СЕТЬ</label>
+                            <button id="btn-grid-connect" class="btn btn-success">ПОДКЛЮЧЕНО</button>
+                        </div>
+                        <div class="control-group">
+                            <label>АВАРИЙНАЯ ЗАЩИТА</label>
+                            <button id="btn-scram" class="btn btn-scram">АЗ-5</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Event Log -->
+            <section class="event-log">
+                <div class="section-header">
+                    <h2>ЖУРНАЛ СОБЫТИЙ</h2>
+                    <button id="btn-clear-log" class="btn btn-small">ОЧИСТИТЬ</button>
+                </div>
+                <div id="log-entries" class="log-entries"></div>
+            </section>
+        </main>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-box modal-box--error">
+        <div class="modal-header">
+          <span class="soviet-star">★</span>
+          <h2>СИСТЕМНАЯ ОШИБКА</h2>
+        </div>
+        <p id="error-modal-message" class="modal-message"></p>
+        <button id="btn-close-error" class="btn btn-danger">ЗАКРЫТЬ</button>
+      </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-box modal-box--confirm">
+        <div class="modal-header">
+          <span class="soviet-star">★</span>
+          <h2 id="confirm-modal-title">ПОДТВЕРЖДЕНИЕ</h2>
+        </div>
+        <p id="confirm-modal-message" class="modal-message"></p>
+        <div class="modal-actions">
+          <button id="btn-confirm-yes" class="btn btn-danger">ДА</button>
+          <button id="btn-confirm-no" class="btn">НЕТ</button>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <!-- Manual Modal -->
+    <div id="manual-modal" class="modal" style="display: none;">
+        <div class="modal-content modal-manual">
+            <div class="modal-header">
+                <h2>TECHNICAL MANUAL</h2>
+                <button id="btn-close-manual" class="btn-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="manual-content" class="manual-content">
+                    <!-- Manual content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div id="alert-modal" class="modal" style="display: none;">
+        <div class="modal-content modal-alerts">
+            <div class="modal-header">
+                <h2>⚠ АВАРИЙНЫЕ СИГНАЛЫ</h2>
+                <button id="btn-close-alerts" class="btn-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="alert-entries" class="alert-entries"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Boot Error Modal -->
+    <div id="boot-error-modal" class="modal-overlay" style="display:none; z-index: 9999;">
+      <div class="modal-box modal-box--error">
+        <div class="modal-header">
+          <span class="soviet-star">★</span>
+          <h2>ОШИБКА ИНИЦИАЛИЗАЦИИ</h2>
+        </div>
+        <p id="boot-error-message" class="modal-message"></p>
+        <button class="btn btn-danger" onclick="document.getElementById('boot-error-modal').style.display='none'">ЗАКРЫТЬ</button>
+      </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/save-system.js"></script>
+    <script src="js/reactor-simulation.js"></script>
+    <script src="js/3d-viewport.js"></script>
+    <script src="js/sound-system.js"></script>
+    <script src="js/ui-controller.js"></script>
+    <script src="js/event-system.js"></script>
+    <script src="js/manual-content.js"></script>
+    <script src="js/intro-system.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

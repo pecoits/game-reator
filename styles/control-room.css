@@ -713,3 +713,32 @@ body {
         grid-template-columns: repeat(4, 1fr);
     }
 }
+
+/* Error/Confirm Modal Styles */
+#error-modal .modal-header,
+#confirm-modal .modal-header,
+#boot-error-modal .modal-header {
+    background: #cc0000;
+}
+
+#error-modal .modal-header h2,
+#confirm-modal .modal-header h2,
+#boot-error-modal .modal-header h2 {
+    color: #ffd700;
+}
+
+.modal-content .btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+/* Game Container Fix */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
