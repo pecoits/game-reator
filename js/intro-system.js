@@ -224,7 +224,18 @@ var IntroSystem = (function() {
     }
 
     IntroSystem.prototype.init = function() {
-        this.showLanguageSelection();
+        try {
+            console.log('IntroSystem.init() called');
+            this.showLanguageSelection();
+        } catch (error) {
+            console.error('IntroSystem init error:', error);
+            // Fallback: show game directly
+            this.selectedLanguage = 'pt';
+            window.selectedLanguage = 'pt';
+            if (this.gameApp) {
+                this.gameApp.continueInit();
+            }
+        }
     };
 
     IntroSystem.prototype.showLanguageSelection = function() {
