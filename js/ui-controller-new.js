@@ -247,7 +247,6 @@ var UIControllerNew = (function() {
     };
 
     UIControllerNew.prototype.initKnob = function(container, callback) {
-        var self = this;
         var knob = container.querySelector('.knob');
         var valueDisplay = container.querySelector('.knob-value');
         var isDragging = false;

@@ -27,7 +27,10 @@ module.exports = [
                 EventSystem: 'readonly',
                 SoundSystem: 'readonly',
                 MANUAL_PAGES: 'readonly',
-                showGameConfirm: 'readonly'
+                showGameConfirm: 'readonly',
+                UIControllerNew: 'readonly',
+                manualPagesPT: 'readonly',
+                manualPagesEN: 'readonly'
             }
         },
         rules: {
