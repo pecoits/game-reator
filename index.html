@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>АТОМНАЯ ЭЛЕКТРОСТАНЦИЯ - Симулятор Реактора</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap">
     <link rel="stylesheet" href="styles/control-room.css">
     <link rel="stylesheet" href="styles/intro.css">
 </head>
@@ -64,6 +65,10 @@
                                 </linearGradient>
                             </defs>
                             <circle class="gauge-bg" cx="100" cy="100" r="85"/>
+                            <!-- Danger zone arc (red) -->
+                            <path class="gauge-danger-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 174 88" fill="none" stroke="#ff0040" stroke-width="8" opacity="0.6" stroke-linecap="round"/>
+                            <!-- Warning zone arc (yellow) -->
+                            <path class="gauge-warning-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 155 52" fill="none" stroke="#ffbf00" stroke-width="8" opacity="0.5" stroke-linecap="round"/>
                             <circle class="gauge-zones" cx="100" cy="100" r="85" 
                                     stroke="url(#tempZones)" 
                                     stroke-dasharray="370 180 80 90" 
@@ -95,6 +100,8 @@
                                 </linearGradient>
                             </defs>
                             <circle class="gauge-bg" cx="100" cy="100" r="85"/>
+                            <path class="gauge-danger-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 174 88" fill="none" stroke="#ff0040" stroke-width="8" opacity="0.6" stroke-linecap="round"/>
+                            <path class="gauge-warning-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 155 52" fill="none" stroke="#ffbf00" stroke-width="8" opacity="0.5" stroke-linecap="round"/>
                             <circle class="gauge-zones" cx="100" cy="100" r="85" 
                                     stroke="url(#pressureZones)" 
                                     stroke-dasharray="370 180 80 90" 
@@ -126,6 +133,8 @@
                                 </linearGradient>
                             </defs>
                             <circle class="gauge-bg" cx="100" cy="100" r="85"/>
+                            <path class="gauge-danger-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 174 88" fill="none" stroke="#ff0040" stroke-width="8" opacity="0.6" stroke-linecap="round"/>
+                            <path class="gauge-warning-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 155 52" fill="none" stroke="#ffbf00" stroke-width="8" opacity="0.5" stroke-linecap="round"/>
                             <circle class="gauge-zones" cx="100" cy="100" r="85" 
                                     stroke="url(#powerZones)" 
                                     stroke-dasharray="370 180 80 90" 
@@ -157,6 +166,8 @@
                                 </linearGradient>
                             </defs>
                             <circle class="gauge-bg" cx="100" cy="100" r="85"/>
+                            <path class="gauge-danger-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 174 88" fill="none" stroke="#ff0040" stroke-width="8" opacity="0.6" stroke-linecap="round"/>
+                            <path class="gauge-warning-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 155 52" fill="none" stroke="#ffbf00" stroke-width="8" opacity="0.5" stroke-linecap="round"/>
                             <circle class="gauge-zones" cx="100" cy="100" r="85" 
                                     stroke="url(#radiationZones)" 
                                     stroke-dasharray="370 180 80 90" 

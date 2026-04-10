@@ -311,15 +311,15 @@ body {
 }
 
 .seven-segment {
-    font-family: 'Courier New', 'Consolas', monospace;
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: 3px;
+    font-family: 'Orbitron', 'Courier New', monospace;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 4px;
     position: relative;
     display: inline-block;
 }
 
-/* 7-segment style effect */
+/* 7-segment style effect with horizontal lines */
 .seven-segment::before {
     content: '';
     position: absolute;
@@ -330,27 +330,40 @@ body {
     background: repeating-linear-gradient(
         0deg,
         transparent,
-        transparent 2px,
-        rgba(0,0,0,0.3) 2px,
-        rgba(0,0,0,0.3) 4px
+        transparent 3px,
+        rgba(0,0,0,0.4) 3px,
+        rgba(0,0,0,0.4) 5px
     );
+    pointer-events: none;
+    border-radius: 4px;
+}
+
+/* Digital readout background effect */
+.seven-segment::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.3) 100%);
     pointer-events: none;
     border-radius: 4px;
 }
 
 .tone-green {
     color: #00ff41;
-    text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41, 0 0 20px #00ff41;
+    text-shadow: 0 0 8px #00ff41, 0 0 15px #00ff41, 0 0 30px rgba(0, 255, 65, 0.5);
 }
 
 .tone-yellow {
     color: #ffbf00;
-    text-shadow: 0 0 5px #ffbf00, 0 0 10px #ffbf00, 0 0 20px #ffbf00;
+    text-shadow: 0 0 8px #ffbf00, 0 0 15px #ffbf00, 0 0 30px rgba(255, 191, 0, 0.5);
 }
 
 .tone-red {
     color: #ff0040;
-    text-shadow: 0 0 5px #ff0040, 0 0 10px #ff0040, 0 0 20px #ff0040;
+    text-shadow: 0 0 8px #ff0040, 0 0 15px #ff0040, 0 0 30px rgba(255, 0, 64, 0.5);
 }
 
 /* Annunciator Lamps */
