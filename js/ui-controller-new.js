@@ -51,31 +51,13 @@ var UIControllerNew = (function() {
             }
         }
         
-        // Sync levers
-        if (this.elements.leverCool) {
-            var coolStem = this.elements.leverCool.querySelector('.lever-stem');
-            if (coolStem) {
-                if (this.simulation.emergencyCoolingActive) {
-                    coolStem.classList.remove('off');
-                    coolStem.classList.add('on');
-                } else {
-                    coolStem.classList.remove('on');
-                    coolStem.classList.add('off');
-                }
-            }
+        // Sync toggle switches
+        if (this.elements.toggleCool) {
+            this.updateToggleState(this.elements.toggleCool, this.simulation.emergencyCoolingActive);
         }
         
-        if (this.elements.leverExtra) {
-            var extraStem = this.elements.leverExtra.querySelector('.lever-stem');
-            if (extraStem) {
-                if (this.simulation.extraPumpActive) {
-                    extraStem.classList.remove('off');
-                    extraStem.classList.add('on');
-                } else {
-                    extraStem.classList.remove('on');
-                    extraStem.classList.add('off');
-                }
-            }
+        if (this.elements.toggleExtra) {
+            this.updateToggleState(this.elements.toggleExtra, this.simulation.extraPumpActive);
         }
         
         // Sync grid button
@@ -83,6 +65,26 @@ var UIControllerNew = (function() {
             this.elements.btnGrid.textContent = this.simulation.gridConnected ? 'ПОДКЛЮЧЕНО' : 'ОТКЛЮЧЕНО';
             this.elements.btnGrid.classList.toggle('btn-safe', this.simulation.gridConnected);
             this.elements.btnGrid.classList.toggle('btn-warn', !this.simulation.gridConnected);
+        }
+    };
+
+    UIControllerNew.prototype.updateToggleState = function(toggleEl, isActive) {
+        if (!toggleEl) return;
+        var thumb = toggleEl.querySelector('.toggle-thumb');
+        var track = toggleEl.querySelector('.toggle-track');
+        var status = toggleEl.querySelector('.toggle-status');
+        
+        if (thumb) {
+            thumb.classList.toggle('on', isActive);
+            thumb.classList.toggle('off', !isActive);
+        }
+        if (track) {
+            track.classList.toggle('active', isActive);
+        }
+        if (status) {
+            status.textContent = isActive ? 'ВКЛ' : 'ВЫКЛ';
+            status.classList.toggle('on', isActive);
+            status.classList.toggle('off', !isActive);
         }
     };
 
@@ -115,8 +117,8 @@ var UIControllerNew = (function() {
         // Controls
         this.elements.knobRods = document.getElementById('knob-rods');
         this.elements.knobPump = document.getElementById('knob-pump');
-        this.elements.leverCool = document.getElementById('lever-cool');
-        this.elements.leverExtra = document.getElementById('lever-extra');
+        this.elements.toggleCool = document.getElementById('toggle-cool');
+        this.elements.toggleExtra = document.getElementById('toggle-extra');
         this.elements.btnReset = document.getElementById('btn-reset');
         this.elements.btnGrid = document.getElementById('btn-grid');
         this.elements.btnScram = document.getElementById('btn-scram');
@@ -173,22 +175,18 @@ var UIControllerNew = (function() {
             });
         }
         
-        // Levers
-        if (this.elements.leverCool) {
-            this.elements.leverCool.addEventListener('click', function() {
+        // Toggle Switches
+        if (this.elements.toggleCool) {
+            this.elements.toggleCool.addEventListener('click', function() {
                 self.simulation.toggleEmergencyCooling();
-                var stem = self.elements.leverCool.querySelector('.lever-stem');
-                stem.classList.toggle('on');
-                stem.classList.toggle('off');
+                self.updateToggleState(self.elements.toggleCool, self.simulation.emergencyCoolingActive);
             });
         }
         
-        if (this.elements.leverExtra) {
-            this.elements.leverExtra.addEventListener('click', function() {
+        if (this.elements.toggleExtra) {
+            this.elements.toggleExtra.addEventListener('click', function() {
                 self.simulation.toggleExtraPump();
-                var stem = self.elements.leverExtra.querySelector('.lever-stem');
-                stem.classList.toggle('on');
-                stem.classList.toggle('off');
+                self.updateToggleState(self.elements.toggleExtra, self.simulation.extraPumpActive);
             });
         }
         

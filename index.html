@@ -56,10 +56,19 @@
                     <div class="gauge-card">
                         <div class="gauge-label">ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ</div>
                         <svg class="gauge-svg" viewBox="0 0 200 200">
+                            <defs>
+                                <linearGradient id="tempZones" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#00ff41;stop-opacity:0.3" />
+                                    <stop offset="60%" style="stop-color:#ffbf00;stop-opacity:0.5" />
+                                    <stop offset="80%" style="stop-color:#ff0040;stop-opacity:0.7" />
+                                </linearGradient>
+                            </defs>
                             <circle class="gauge-bg" cx="100" cy="100" r="85"/>
                             <circle class="gauge-zones" cx="100" cy="100" r="85" 
+                                    stroke="url(#tempZones)" 
                                     stroke-dasharray="370 180 80 90" 
-                                    stroke-dashoffset="0"/>
+                                    stroke-dashoffset="0"
+                                    style="transform: rotate(90deg); transform-origin: center;"/>
                             <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-130 100 100)"/>
                             <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(-95 100 100)"/>
                             <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-60 100 100)"/>
@@ -78,10 +87,19 @@
                     <div class="gauge-card">
                         <div class="gauge-label">ДАВЛЕНИЕ В КОНТУРЕ</div>
                         <svg class="gauge-svg" viewBox="0 0 200 200">
+                            <defs>
+                                <linearGradient id="pressureZones" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#00ff41;stop-opacity:0.3" />
+                                    <stop offset="60%" style="stop-color:#ffbf00;stop-opacity:0.5" />
+                                    <stop offset="80%" style="stop-color:#ff0040;stop-opacity:0.7" />
+                                </linearGradient>
+                            </defs>
                             <circle class="gauge-bg" cx="100" cy="100" r="85"/>
                             <circle class="gauge-zones" cx="100" cy="100" r="85" 
+                                    stroke="url(#pressureZones)" 
                                     stroke-dasharray="370 180 80 90" 
-                                    stroke-dashoffset="0"/>
+                                    stroke-dashoffset="0"
+                                    style="transform: rotate(90deg); transform-origin: center;"/>
                             <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-130 100 100)"/>
                             <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(-95 100 100)"/>
                             <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-60 100 100)"/>
@@ -100,10 +118,19 @@
                     <div class="gauge-card">
                         <div class="gauge-label">МОЩНОСТЬ РЕАКТОРА</div>
                         <svg class="gauge-svg" viewBox="0 0 200 200">
+                            <defs>
+                                <linearGradient id="powerZones" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#00ff41;stop-opacity:0.3" />
+                                    <stop offset="60%" style="stop-color:#ffbf00;stop-opacity:0.5" />
+                                    <stop offset="80%" style="stop-color:#ff0040;stop-opacity:0.7" />
+                                </linearGradient>
+                            </defs>
                             <circle class="gauge-bg" cx="100" cy="100" r="85"/>
                             <circle class="gauge-zones" cx="100" cy="100" r="85" 
+                                    stroke="url(#powerZones)" 
                                     stroke-dasharray="370 180 80 90" 
-                                    stroke-dashoffset="0"/>
+                                    stroke-dashoffset="0"
+                                    style="transform: rotate(90deg); transform-origin: center;"/>
                             <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-130 100 100)"/>
                             <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(-95 100 100)"/>
                             <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-60 100 100)"/>
@@ -122,10 +149,19 @@
                     <div class="gauge-card">
                         <div class="gauge-label">УРОВЕНЬ РАДИАЦИИ</div>
                         <svg class="gauge-svg" viewBox="0 0 200 200">
+                            <defs>
+                                <linearGradient id="radiationZones" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#00ff41;stop-opacity:0.3" />
+                                    <stop offset="60%" style="stop-color:#ffbf00;stop-opacity:0.5" />
+                                    <stop offset="80%" style="stop-color:#ff0040;stop-opacity:0.7" />
+                                </linearGradient>
+                            </defs>
                             <circle class="gauge-bg" cx="100" cy="100" r="85"/>
                             <circle class="gauge-zones" cx="100" cy="100" r="85" 
+                                    stroke="url(#radiationZones)" 
                                     stroke-dasharray="370 180 80 90" 
-                                    stroke-dashoffset="0"/>
+                                    stroke-dashoffset="0"
+                                    style="transform: rotate(90deg); transform-origin: center;"/>
                             <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-130 100 100)"/>
                             <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(-95 100 100)"/>
                             <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-60 100 100)"/>
@@ -228,19 +264,25 @@
                     </div>
                 </div>
 
-                <!-- Levers -->
-                <div class="levers-section">
-                    <div class="lever-group">
+                <!-- Toggle Switches -->
+                <div class="toggles-section">
+                    <div class="toggle-group">
                         <label>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</label>
-                        <div class="lever-base" id="lever-cool">
-                            <div class="lever-stem off"></div>
+                        <div class="toggle-switch" id="toggle-cool">
+                            <div class="toggle-track">
+                                <div class="toggle-thumb off"></div>
+                            </div>
+                            <span class="toggle-status off">ВЫКЛ</span>
                         </div>
                     </div>
 
-                    <div class="lever-group">
+                    <div class="toggle-group">
                         <label>ДОПОЛНИТЕЛЬНЫЙ НАСОС</label>
-                        <div class="lever-base" id="lever-extra">
-                            <div class="lever-stem off"></div>
+                        <div class="toggle-switch" id="toggle-extra">
+                            <div class="toggle-track">
+                                <div class="toggle-thumb off"></div>
+                            </div>
+                            <span class="toggle-status off">ВЫКЛ</span>
                         </div>
                     </div>
                 </div>
