@@ -275,6 +275,92 @@ describe('DemandSystem: stage 2 é ponto sem retorno', () => {
     assert(gameOverCalled === true, 'game over dispara mesmo após recuperação em stage 2');
 });
 
+// ---- GameOverSystem tests ----
+// Load GameOverSystem (needs REACTOR_CONFIG in context)
+const gameOverCode = fs.readFileSync(path.join(__dirname, '../js/game-over-system.js'), 'utf8');
+const gameOverContext = { console, module: { exports: {} }, REACTOR_CONFIG: global.REACTOR_CONFIG };
+vm.createContext(gameOverContext);
+vm.runInContext(gameOverCode, gameOverContext, { filename: 'game-over-system.js' });
+const GameOverSystem = gameOverContext.module.exports;
+
+function makeMockSimGO(overrides) {
+    return Object.assign({
+        running: true,
+        coreTemperature: 280,
+        pressure: 15.5,
+        radiationLevel: 0.15,
+        time: 120000,
+        stop: function() { this.running = false; }
+    }, overrides);
+}
+
+function makeMockSaveSystem() {
+    let cleared = false;
+    return {
+        cleared: () => cleared,
+        clear: function() { cleared = true; }
+    };
+}
+
+function makeGOS(simOverrides) {
+    const sim  = makeMockSimGO(simOverrides);
+    const save = makeMockSaveSystem();
+    const gos  = new GameOverSystem(sim, save);
+    // Stub DOM methods to avoid missing DOM
+    gos._showExplosionScreen = function(data) { this._lastExplosion = data; };
+    gos._showDismissalScreen = function(stats) { this._lastDismissal = stats; };
+    return { gos, sim, save };
+}
+
+describe('GameOverSystem: sem explosão abaixo dos limiares', () => {
+    const { gos, sim } = makeGOS();
+    gos.update();
+    assert(gos.triggered === false, 'não dispara abaixo dos limiares críticos');
+    assert(sim.running === true, 'simulação continua rodando');
+});
+
+describe('GameOverSystem: explosão por temperatura >= 400', () => {
+    const { gos, sim, save } = makeGOS({ coreTemperature: 400 });
+    gos.update();
+    assert(gos.triggered === true, 'triggered=true quando temp>=400');
+    assert(sim.running === false, 'simulation.stop() chamado');
+    assert(save.cleared(), 'saveSystem.clear() chamado');
+    assert(gos._lastExplosion !== undefined, '_showExplosionScreen chamado');
+    assert(gos._lastExplosion.cause.ru === 'КРИТИЧЕСКАЯ ТЕМПЕРАТУРА', 'causa correta por temperatura');
+});
+
+describe('GameOverSystem: explosão por pressão >= 22', () => {
+    const { gos } = makeGOS({ pressure: 22 });
+    gos.update();
+    assert(gos.triggered === true, 'triggered=true quando pressure>=22');
+    assert(gos._lastExplosion.cause.ru === 'КРИТИЧЕСКОЕ ДАВЛЕНИЕ', 'causa correta por pressão');
+});
+
+describe('GameOverSystem: explosão por radiação >= 20', () => {
+    const { gos } = makeGOS({ radiationLevel: 20 });
+    gos.update();
+    assert(gos.triggered === true, 'triggered=true quando radiation>=20');
+    assert(gos._lastExplosion.cause.ru === 'КРИТИЧЕСКИЙ УРОВЕНЬ РАДИАЦИИ', 'causa correta por radiação');
+});
+
+describe('GameOverSystem: triggerDismissal define triggered e limpa save', () => {
+    const { gos, save } = makeGOS();
+    gos.triggerDismissal({ time: 120000, quota: 300, energy: 200, blackouts: 2 });
+    assert(gos.triggered === true, 'triggered=true após demissão');
+    assert(save.cleared(), 'saveSystem.clear() chamado na demissão');
+    assert(gos._lastDismissal !== undefined, '_showDismissalScreen chamado');
+});
+
+describe('GameOverSystem: segundo update() após triggered não re-dispara', () => {
+    const { gos, sim } = makeGOS({ coreTemperature: 400 });
+    gos.update(); // primeiro — dispara
+    sim.running = true; // restaura manualmente para verificar que não dispara de novo
+    let explosionCount = 0;
+    gos._showExplosionScreen = () => { explosionCount++; };
+    gos.update(); // segundo — não deve fazer nada
+    assert(explosionCount === 0, 'não re-dispara explosão quando triggered=true');
+});
+
 // ---- summary ----
 console.log(`\n${'='.repeat(40)}`);
 console.log(`Results: ${passed} passed, ${failed} failed`);
