@@ -365,6 +365,66 @@
         </div>
     </div>
 
+    <!-- Telex Modal (telegrama burocrático soviético) -->
+    <div id="telex-modal" class="modal" style="display: none;">
+        <div class="telex-paper">
+            <div class="telex-stamp">СРОЧНО</div>
+            <div class="telex-header-text" id="telex-header">МИНГОСЭНЕРГО СССР</div>
+            <div class="telex-ref" id="telex-ref">Ref: 0000-Б | KJNP-1</div>
+            <hr class="telex-hr">
+            <div class="telex-body" id="telex-body"></div>
+            <div class="telex-quota" id="telex-quota"></div>
+            <hr class="telex-hr">
+            <button class="telex-btn" id="btn-telex-ok">ПРИНЯТО — RECEBIDO</button>
+        </div>
+    </div>
+
+    <!-- Game Over: Explosão -->
+    <div id="gameover-explosion" class="gameover-overlay" style="display: none;">
+        <div class="exp-content">
+            <div class="exp-icon">☢</div>
+            <div class="exp-title-ru">ВЗРЫВ</div>
+            <div class="exp-title-pt">EXPLOSÃO DO REATOR</div>
+            <div class="exp-cause-ru" id="exp-cause-ru"></div>
+            <div class="exp-cause-pt" id="exp-cause-pt"></div>
+            <div class="exp-panel">
+                <div class="exp-panel-row exp-param" id="exp-param"></div>
+                <div class="exp-panel-sep"></div>
+                <div class="exp-panel-row">ТЕМПЕРАТУРА: <span id="exp-temp">—</span></div>
+                <div class="exp-panel-row">ДАВЛЕНИЕ: <span id="exp-pressure">—</span></div>
+                <div class="exp-panel-row">РАДИАЦИЯ: <span id="exp-radiation">—</span></div>
+                <div class="exp-panel-sep"></div>
+                <div class="exp-panel-row">ВРЕМЯ СЛУЖБЫ: <span id="exp-time">—</span></div>
+            </div>
+            <button class="gameover-btn" onclick="window.location.reload()">НОВАЯ ИГРА — NOVA PARTIDA</button>
+        </div>
+    </div>
+
+    <!-- Game Over: Demissão Misteriosa -->
+    <div id="gameover-dismissal" class="gameover-overlay gameover-dismissal-bg" style="display: none;">
+        <div class="dis-document">
+            <div class="dis-stamp">ЗАСЕКРЕЧЕНО</div>
+            <div class="dis-ministry">МИНГОСЭНЕРГО СССР</div>
+            <div class="dis-order">— ПРИКАЗ —</div>
+            <hr class="telex-hr" style="border-color: #8a7a60; margin: 8px 0;">
+            <p class="dis-body">
+                Tovarisch operador,<br><br>
+                Após <strong id="dis-blackouts">0</strong> apagões registrados em Krasnostan,
+                o Partido agradece seus <strong id="dis-time">00:00</strong> de serviço dedicado
+                à Pátria Socialista.<br><br>
+                <span class="dis-redacted">██████████████████████████████████████</span><br>
+                Uma viagem foi organizada.<br>
+                Traga agasalho.
+            </p>
+            <hr class="telex-hr" style="border-color: #8a7a60; margin: 8px 0;">
+            <div class="dis-stats">
+                Cota não cumprida: <strong id="dis-quota">—</strong><br>
+                Déficit final: <strong id="dis-deficit">—</strong>
+            </div>
+            <button class="gameover-btn dis-btn" onclick="window.location.reload()">НОВАЯ ИГРА — NOVA PARTIDA</button>
+        </div>
+    </div>
+
     <!-- Boot Error Modal -->
     <div id="boot-error-modal" class="modal" style="display: none;">
         <div class="modal-content modal-alerts">
@@ -388,6 +448,8 @@
     <script src="js/manual-content.js"></script>
     <script src="js/intro-system.js"></script>
     <script src="js/save-system.js"></script>
+    <script src="js/demand-system.js"></script>
+    <script src="js/game-over-system.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
