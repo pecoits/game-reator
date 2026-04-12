@@ -129,6 +129,127 @@ describe('getState() shape', () => {
     });
 });
 
+// ---- DemandSystem tests ----
+// Load DemandSystem
+const demandCode = fs.readFileSync(path.join(__dirname, '../js/demand-system.js'), 'utf8');
+const demandContext = { console, module: { exports: {} }, Math };
+vm.createContext(demandContext);
+vm.runInContext(demandCode, demandContext, { filename: 'demand-system.js' });
+const DemandSystem = demandContext.module.exports;
+
+function makeMockSim(overrides) {
+    return Object.assign({
+        running: true,
+        eventsEnabled: true,
+        time: 200000,
+        energyGeneration: 800
+    }, overrides);
+}
+
+describe('DemandSystem: estado inicial', () => {
+    const ds = new DemandSystem(makeMockSim());
+    assert(ds.getQuota() === 300, 'cota inicial é 300 MW');
+    assert(ds.warningStage === 0, 'sem avisos no início');
+    assert(ds.firedEventIds.length === 0, 'nenhum evento disparado');
+});
+
+describe('DemandSystem: sem deficiência quando acima da cota', () => {
+    const sim = makeMockSim({ energyGeneration: 800, time: 0 });
+    const ds = new DemandSystem(sim);
+    sim.time = 60000;
+    ds._checkDeficiency();
+    assert(ds.deficiencyStart === null, 'sem deficiência quando energia > cota');
+    assert(ds.warningStage === 0, 'stage permanece 0');
+});
+
+describe('DemandSystem: telegrama 1 após 30s de deficiência', () => {
+    const sim = makeMockSim({ energyGeneration: 200, time: 0 });
+    const ds = new DemandSystem(sim);
+    let telexStage = null;
+    ds.onShowTelex = (stage) => { telexStage = stage; };
+
+    // Simula 29s abaixo da cota — não deve disparar
+    ds.deficiencyStart = 0;
+    sim.time = 29000;
+    ds._checkDeficiency();
+    assert(telexStage === null, 'sem telegrama antes de 30s');
+    assert(ds.warningStage === 0, 'stage 0 com menos de 30s');
+
+    // Simula 31s — deve disparar
+    sim.time = 31000;
+    ds._checkDeficiency();
+    assert(telexStage === 1, 'telegrama 1 disparado após 30s');
+    assert(ds.warningStage === 1, 'stage avança para 1');
+});
+
+describe('DemandSystem: telegrama 2 após 150s', () => {
+    const sim = makeMockSim({ energyGeneration: 200, time: 0 });
+    const ds = new DemandSystem(sim);
+    let lastStage = null;
+    ds.onShowTelex = (stage) => { lastStage = stage; };
+
+    ds.deficiencyStart = 0;
+    sim.time = 31000;
+    ds._checkDeficiency(); // stage → 1
+
+    sim.time = 151000; // 30 + 121 > 150
+    ds._checkDeficiency();
+    assert(lastStage === 2, 'telegrama 2 disparado após 150s');
+    assert(ds.warningStage === 2, 'stage avança para 2');
+});
+
+describe('DemandSystem: game over após 240s', () => {
+    const sim = makeMockSim({ energyGeneration: 200, time: 0 });
+    const ds = new DemandSystem(sim);
+    ds.onShowTelex = () => {};
+    let gameOverStats = null;
+    ds.onGameOver = (stats) => { gameOverStats = stats; };
+
+    ds.deficiencyStart = 0;
+    sim.time = 31000;  ds._checkDeficiency(); // → stage 1
+    sim.time = 151000; ds._checkDeficiency(); // → stage 2
+    sim.time = 241000; ds._checkDeficiency(); // → stage 3 / game over
+    assert(gameOverStats !== null, 'onGameOver chamado após 240s');
+    assert(gameOverStats.quota === 300, 'stats contém cota');
+    assert(gameOverStats.energy === 200, 'stats contém energia');
+    assert(ds.warningStage === 3, 'stage 3 após game over');
+});
+
+describe('DemandSystem: reset ao recuperar energia (antes de stage 2)', () => {
+    const sim = makeMockSim({ energyGeneration: 200, time: 0 });
+    const ds = new DemandSystem(sim);
+    let fired = false;
+    ds.onShowTelex = () => { fired = true; };
+
+    ds.deficiencyStart = 0;
+    sim.time = 31000;
+    ds._checkDeficiency(); // → stage 1
+
+    // Volta acima da cota
+    sim.energyGeneration = 800;
+    ds._checkDeficiency();
+    assert(ds.warningStage === 0, 'stage resetado ao recuperar energia em stage 1');
+    assert(ds.deficiencyStart === null, 'deficiencyStart resetado');
+});
+
+describe('DemandSystem: _tryDemandEvent dispara e aumenta cota', () => {
+    const sim = makeMockSim({ energyGeneration: 800, time: 200000 });
+    const ds = new DemandSystem(sim);
+    ds.lastDemandTime = 0; // sem cooldown
+    let telexCalled = false;
+    ds.onShowTelex = () => { telexCalled = true; };
+
+    // Força disparo — sobrescreve Math.random para retornar 0 (sempre < 0.003)
+    const origRandom = Math.random;
+    Math.random = () => 0;
+    ds._tryDemandEvent();
+    Math.random = origRandom;
+
+    assert(ds.currentQuota > 300, 'cota aumentou após evento de demanda');
+    assert(ds.firedEventIds.length === 1, 'evento registrado como disparado');
+    assert(telexCalled, 'telex chamado com stage 0');
+});
+
 // ---- summary ----
 console.log(`\n${'='.repeat(40)}`);
 console.log(`Results: ${passed} passed, ${failed} failed`);
