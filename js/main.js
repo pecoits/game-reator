@@ -10,6 +10,8 @@ class GameApp {
         this.lastTime = 0;
         this.loadingComplete = false;
         this.saveSystem = new SaveSystem();
+        this.gameOverSystem = null;
+        this.demandSystem   = null;
 
         // Call init
         this.init();
@@ -116,6 +118,14 @@ class GameApp {
 
             console.log('Initializing event system...');
             this.eventSystem = new EventSystem(this.simulation);
+            this.gameOverSystem = new GameOverSystem(this.simulation, this.saveSystem);
+            this.demandSystem   = new DemandSystem(this.simulation);
+            this.demandSystem.onShowTelex = (stage, text, quota, count) => {
+                this.gameOverSystem.showTelex(stage, text, quota, count);
+            };
+            this.demandSystem.onGameOver = (stats) => {
+                this.gameOverSystem.triggerDismissal(stats);
+            };
 
             console.log('Starting simulation...');
             this.simulation.start();
@@ -150,6 +160,8 @@ class GameApp {
             if (delta >= tickRate) {
                 if (this.simulation && this.simulation.running) this.simulation.tick(delta);
                 if (this.eventSystem) this.eventSystem.update(delta);
+                if (this.gameOverSystem) this.gameOverSystem.update();
+                if (this.demandSystem)   this.demandSystem.update(delta);
                 // Auto-save every 10 ticks
                 if (this.simulation.ticks > 0 && this.simulation.ticks % 10 === 0 && this.saveSystem) {
                     const completedMissions = this.eventSystem
