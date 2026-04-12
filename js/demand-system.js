@@ -39,7 +39,7 @@ class DemandSystem {
         if (this.simulation.time - this.lastDemandTime < 180000)   return; // cooldown 3 min
         if (Math.random() > 0.003)                              return; // ~1 a cada 5 min
 
-        var next = this.demandEvents.find(function(e) {
+        const next = this.demandEvents.find(function(e) {
             return !this.firedEventIds.includes(e.id);
         }, this);
         if (!next) return;
@@ -47,7 +47,6 @@ class DemandSystem {
         this.firedEventIds.push(next.id);
         this.currentQuota  += next.delta;
         this.lastDemandTime = this.simulation.time;
-        this.blackoutCount++;
 
         if (this.onShowTelex) {
             this.onShowTelex(0, next.text, this.currentQuota, this.blackoutCount);
@@ -55,10 +54,11 @@ class DemandSystem {
     }
 
     _checkDeficiency() {
-        var energy = this.simulation.energyGeneration;
-        var now    = this.simulation.time;
+        const energy = this.simulation.energyGeneration;
+        const now    = this.simulation.time;
 
         if (energy >= this.currentQuota) {
+            // Stage 2+ is point of no return: visit already organized, recovery doesn't help
             if (this.warningStage < 2) {
                 this.deficiencyStart = null;
                 this.warningStage    = 0;
@@ -70,7 +70,7 @@ class DemandSystem {
             this.deficiencyStart = now;
         }
 
-        var elapsed = now - this.deficiencyStart;
+        const elapsed = now - this.deficiencyStart;
 
         if (this.warningStage === 0 && elapsed >= 30000) {
             this.warningStage = 1;

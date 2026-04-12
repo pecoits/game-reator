@@ -250,6 +250,31 @@ describe('DemandSystem: _tryDemandEvent dispara e aumenta cota', () => {
     assert(telexCalled, 'telex chamado com stage 0');
 });
 
+describe('DemandSystem: stage 2 é ponto sem retorno', () => {
+    const sim = makeMockSim({ energyGeneration: 200, time: 0 });
+    const ds = new DemandSystem(sim);
+    ds.onShowTelex = () => {};
+    let gameOverCalled = false;
+    ds.onGameOver = () => { gameOverCalled = true; };
+
+    // Avança até stage 2
+    ds.deficiencyStart = 0;
+    sim.time = 31000;  ds._checkDeficiency(); // → stage 1
+    sim.time = 151000; ds._checkDeficiency(); // → stage 2
+
+    // Recupera energia
+    sim.energyGeneration = 800;
+    ds._checkDeficiency(); // stage 2 — NÃO reseta
+    assert(ds.warningStage === 2, 'stage 2 não reseta ao recuperar energia');
+    assert(ds.deficiencyStart === 0, 'deficiencyStart mantido em stage 2');
+
+    // Countdown continua — jogo over em 240s (energia volta a ser deficiente)
+    sim.energyGeneration = 200;
+    sim.time = 241000;
+    ds._checkDeficiency();
+    assert(gameOverCalled === true, 'game over dispara mesmo após recuperação em stage 2');
+});
+
 // ---- summary ----
 console.log(`\n${'='.repeat(40)}`);
 console.log(`Results: ${passed} passed, ${failed} failed`);
