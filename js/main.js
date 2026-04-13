@@ -146,6 +146,15 @@ class GameApp {
             this.tutorialSystem = new TutorialSystem(this.simulation);
             this.tutorialSystem.show();
 
+            // Botão de replay do tutorial
+            var btnTutorialReplay = document.getElementById('btn-tutorial-replay');
+            if (btnTutorialReplay) {
+                btnTutorialReplay.addEventListener('click', () => {
+                    localStorage.removeItem('game_reator_tutorial_done');
+                    this.tutorialSystem.show();
+                });
+            }
+
             console.log('All systems initialized successfully');
         } catch (error) {
             console.error('Error initializing systems:', error);
@@ -212,6 +221,9 @@ class GameApp {
         this.shiftComplete = true;
         this.simulation.stop();
         this.saveSystem.clear();
+        if (this.uiController && this.uiController.soundSystem) {
+            this.uiController.soundSystem.playSuccess();
+        }
 
         const timeMs        = this.simulation.time;
         const timeFormatted = this._formatTime(timeMs);
@@ -248,6 +260,16 @@ class GameApp {
         if (entries.length === 0) {
             listEl.innerHTML = '<p class="ranking-empty">Нет данных — Nenhuma partida registrada.</p>';
         } else {
+            // Destacar melhor desempenho (maior energia gerada)
+            let bestIdx = -1;
+            let bestEnergy = -1;
+            entries.forEach(function(e, i) {
+                if (typeof e.energyMWh === 'number' && e.energyMWh > bestEnergy) {
+                    bestEnergy = e.energyMWh;
+                    bestIdx = i;
+                }
+            });
+
             listEl.innerHTML = entries.map(function(e, i) {
                 const outcomeClass = e.outcome === 'explosion' ? 'rank-stamp-explosion' :
                                      e.outcome === 'shift'     ? 'rank-stamp-shift'     : 'rank-stamp-dismissal';
@@ -260,8 +282,9 @@ class GameApp {
                         : (e.blackouts + ' apagões | cota ' + (e.quota || '—') + ' MW');
                 const dateStr = new Date(e.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
                 const energy  = typeof e.energyMWh === 'number' ? e.energyMWh + ' MWh' : '—';
-                return '<div class="rank-entry">' +
-                    '<span class="rank-num">#' + (i + 1) + '</span>' +
+                const isBest  = i === bestIdx && bestEnergy > 0;
+                return '<div class="rank-entry' + (isBest ? ' rank-best' : '') + '">' +
+                    '<span class="rank-num">' + (isBest ? '★' : '#' + (i + 1)) + '</span>' +
                     '<span class="rank-date">' + dateStr + '</span>' +
                     '<span class="rank-svc">' + (e.timeFormatted || '00:00') + '</span>' +
                     '<span class="rank-stamp ' + outcomeClass + '">' + outcomeText + '</span>' +

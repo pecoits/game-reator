@@ -34,6 +34,7 @@ class ReactorSimulation {
         this.pumpDegradation      = 1.0;  // multiplicador de eficiência da bomba (falhas temporárias)
         this.pumpDegradationTimer = 0;    // ticks restantes de degradação
         this.rodSlipTimer         = 0;    // ticks restantes de aviso de deslizamento de barras
+        this.pressureShockTimer   = 0;    // ticks restantes de alerta de choque de pressão
 
         // Simulation state
         this.time                 = 0;
@@ -90,6 +91,9 @@ class ReactorSimulation {
 
         // Contador de aviso de deslizamento de barras
         if (this.rodSlipTimer > 0) this.rodSlipTimer--;
+
+        // Contador de alerta de choque de pressão
+        if (this.pressureShockTimer > 0) this.pressureShockTimer--;
 
         // Recuperação ou escalada de falha da bomba
         if (this.pumpDegradationTimer > 0) {
@@ -436,6 +440,7 @@ class ReactorSimulation {
     applyExternalPressureShock(deltaMPa) {
         var p = REACTOR_CONFIG.physics;
         this.pressure = Math.max(p.pressureMin, Math.min(p.pressureMax, this.pressure + deltaMPa));
+        this.pressureShockTimer = 20;
         this.addEvent('danger', 'Скачок давления: +' + deltaMPa.toFixed(1) + ' МПа');
     }
 
@@ -461,8 +466,9 @@ class ReactorSimulation {
             scramActive: this.scramActive,
             decayHeat: this.decayHeat,
             pumpDegradation: this.pumpDegradation,
-            pumpFaultActive: this.pumpDegradationTimer > 0,
-            rodSlipActive:   this.rodSlipTimer > 0,
+            pumpFaultActive:     this.pumpDegradationTimer > 0,
+            rodSlipActive:       this.rodSlipTimer > 0,
+            pressureFaultActive: this.pressureShockTimer > 0,
             alerts: this.alerts,
             time: this.time,
             gracePeriodActive: !this.eventsEnabled,

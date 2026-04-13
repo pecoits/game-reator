@@ -8,8 +8,9 @@ var UIControllerNew = (function() {
         this.warningSoundCooldown = 3000;
         this.currentManualPage = 1;
         this.totalManualPages = 1;
-        this.prevPumpFault = false;
-        this.prevRodFault  = false;
+        this.prevPumpFault     = false;
+        this.prevRodFault      = false;
+        this.prevPressureFault = false;
         
         this.elements = {};
         
@@ -142,10 +143,12 @@ var UIControllerNew = (function() {
         this.elements.statTime   = document.getElementById('stat-time');
         this.elements.statEnergy = document.getElementById('stat-energy');
         this.elements.statAlerts = document.getElementById('stat-alerts');
+        this.elements.statShift  = document.getElementById('stat-shift');
         
         // Fault LEDs
-        this.elements.ledPump = document.getElementById('led-pump');
-        this.elements.ledRods = document.getElementById('led-rods');
+        this.elements.ledPump     = document.getElementById('led-pump');
+        this.elements.ledRods     = document.getElementById('led-rods');
+        this.elements.ledPressure = document.getElementById('led-pressure');
 
         // Modals
         this.elements.manualModal = document.getElementById('manual-modal');
@@ -379,12 +382,20 @@ var UIControllerNew = (function() {
         if (this.elements.statTime)   this.elements.statTime.textContent   = this.formatTime(state.time);
         if (this.elements.statEnergy) this.elements.statEnergy.textContent = Math.round(state.totalEnergyMWh || 0);
         if (this.elements.statAlerts) this.elements.statAlerts.textContent = state.totalAlerts || 0;
+        if (this.elements.statShift) {
+            var shiftRemaining = Math.max(0, (REACTOR_CONFIG.shiftDuration || 600000) - (state.time || 0));
+            var shiftPct = 1 - shiftRemaining / (REACTOR_CONFIG.shiftDuration || 600000);
+            this.elements.statShift.textContent = this.formatTime(shiftRemaining);
+            this.elements.statShift.className = 'stat-value stat-shift' + (shiftPct > 0.85 ? ' shift-ending' : '');
+        }
 
         // Fault LEDs — acende/apaga e dispara bipe sonoro na nova falha
-        this._updateFaultLed(this.elements.ledPump, state.pumpFaultActive, this.prevPumpFault);
-        this._updateFaultLed(this.elements.ledRods, state.rodSlipActive,   this.prevRodFault);
-        this.prevPumpFault = !!state.pumpFaultActive;
-        this.prevRodFault  = !!state.rodSlipActive;
+        this._updateFaultLed(this.elements.ledPump,     state.pumpFaultActive,     this.prevPumpFault);
+        this._updateFaultLed(this.elements.ledRods,     state.rodSlipActive,       this.prevRodFault);
+        this._updateFaultLed(this.elements.ledPressure, state.pressureFaultActive, this.prevPressureFault);
+        this.prevPumpFault     = !!state.pumpFaultActive;
+        this.prevRodFault      = !!state.rodSlipActive;
+        this.prevPressureFault = !!state.pressureFaultActive;
     };
 
     UIControllerNew.prototype.updateSparkline = function(lineEl, data, min, max) {

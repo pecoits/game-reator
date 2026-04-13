@@ -95,6 +95,15 @@ body {
     border-color: var(--text-muted);
 }
 
+.btn-tutorial-replay {
+    border-color: #8a7a50;
+    color: #ccaa44;
+    min-width: 28px;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
 .btn-alerts {
     border-color: var(--red-soviet);
     color: var(--red-soviet);
@@ -1169,6 +1178,8 @@ body {
 .shift-btn { background: #0d2a09; color: #88cc78; border-color: #4a7a3a; display: block; width: 100%; }
 .shift-btn:hover { background: #1a4a14; }
 .rank-stamp-shift { color: #44cc30; border-color: #44cc30; }
+.rank-best { background: rgba(255, 230, 0, 0.07); border-left: 2px solid #ffe066; }
+.rank-best .rank-num { color: #ffe066; font-size: 14px; }
 
 .gameover-btn { margin-top: 16px; background: #441111; color: #ffcccc; border: 1px solid #661111; padding: 10px 24px; font-family: 'Courier New', monospace; font-size: 13px; letter-spacing: 2px; cursor: pointer; transition: background 0.2s; }
 .gameover-btn:hover { background: #661111; }
@@ -1496,6 +1507,11 @@ body {
     color: var(--text-dark);
     font-family: 'Orbitron', 'Courier New', monospace;
     letter-spacing: 0.5px;
+}
+
+.stat-shift.shift-ending {
+    color: #cc6600;
+    animation: blink 0.8s infinite;
 }
 
 /* ===== MANUAL STYLES ===== */

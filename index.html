@@ -36,6 +36,7 @@
                 </div>
             </div>
             <div class="header-right">
+                <button id="btn-tutorial-replay" class="btn btn-tutorial-replay" title="Повторить обучение">?</button>
                 <button id="btn-manual" class="btn btn-manual">MANUAL</button>
                 <button id="btn-ranking" class="btn btn-ranking">АРХИВ</button>
                 <button id="btn-alerts" class="btn btn-alerts">⚠ 0</button>
@@ -92,7 +93,7 @@
 
                     <!-- Pressure Gauge -->
                     <div class="gauge-card">
-                        <div class="gauge-label">ДАВЛЕНИЕ В КОНТУРЕ</div>
+                        <div class="gauge-label">ДАВЛЕНИЕ В КОНТУРЕ <span class="fault-led" id="led-pressure"></span></div>
                         <svg class="gauge-svg" viewBox="0 0 200 200">
                             <defs>
                                 <linearGradient id="pressureZones" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -254,6 +255,10 @@
                     <div class="stat-item">
                         <div class="stat-label">СИГНАЛЫ</div>
                         <div class="stat-value" id="stat-alerts">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">СМЕНА</div>
+                        <div class="stat-value stat-shift" id="stat-shift">10:00</div>
                     </div>
                 </div>
 
