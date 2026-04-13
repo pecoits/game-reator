@@ -24,14 +24,7 @@ var REACTOR_CONFIG = {
         power:     { warning: 90,  danger: 100, critical: 110 }
     },
     gracePeriod: 180000,
-    meltdown: {
-        graceDuration: 45000,          // ms para reagir após parâmetro crítico
-        recoveryThresholds: {
-            temp:      390,            // °C — abaixo disto cancela o meltdown de temperatura
-            pressure:  21.0,           // MPa — abaixo disto cancela o de pressão
-            radiation: 18.0            // mSv/h — abaixo disto cancela o de radiação
-        }
-    },
+    explosionTemp: 550,                // °C — limite físico irreversível (fusão do combustível)
     startupMissionDelay: 210000,
     randomEventChance: 0.003,
     physics: {
@@ -68,6 +61,10 @@ var REACTOR_CONFIG = {
         frequencyJitter: 0.1,
         baseTemperatureOffset: 200,
         frequencyBase: 50.0,
-        alertRecentWindow: 30000
+        alertRecentWindow: 30000,
+        // Física de fuga acima da temperatura crítica
+        voidFeedbackFactor:   0.03,    // potência extra por °C acima do crítico (coef. de vazio positivo)
+        coolingBoilingPenalty: 0.7,    // fração de penalidade do resfriamento ao ferver (0=sem penalidade, 1=inútil)
+        steamPressureFactor:  3.5      // MPa adicionais por 100°C acima do crítico (pressão de vapor)
     }
 };

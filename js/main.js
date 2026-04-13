@@ -120,18 +120,6 @@ class GameApp {
             console.log('Initializing event system...');
             this.eventSystem = new EventSystem(this.simulation);
             this.gameOverSystem = new GameOverSystem(this.simulation, this.saveSystem, this.rankingSystem);
-            this.gameOverSystem.onMeltdownUpdate = function(info) {
-                var banner = document.getElementById('meltdown-banner');
-                var timerEl = document.getElementById('meltdown-timer');
-                if (!banner || !timerEl) return;
-                if (!info) {
-                    banner.style.display = 'none';
-                    return;
-                }
-                banner.style.display = 'block';
-                timerEl.textContent = info.remaining;
-                timerEl.classList.toggle('urgent', info.remaining <= 10);
-            };
 
             // Ranking button
             var btnRanking = document.getElementById('btn-ranking');

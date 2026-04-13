@@ -6,16 +6,6 @@ class GameOverSystem {
         this.saveSystem    = saveSystem;
         this.rankingSystem = rankingSystem;
         this.triggered     = false;
-
-        // Meltdown countdown state
-        this.meltdown = {
-            active:        false,
-            type:          null,   // 'temp' | 'pressure' | 'radiation'
-            causeTemplate: null,
-            startSimTime:  0,
-            duration:      REACTOR_CONFIG.meltdown.graceDuration
-        };
-        this.onMeltdownUpdate = null; // callback(info) or callback(null) to clear
     }
 
     // Chamado a cada tick pelo game loop
@@ -23,123 +13,67 @@ class GameOverSystem {
         if (this.triggered) return;
         if (!this.simulation || !this.simulation.running) return;
 
-        const cfg      = REACTOR_CONFIG.alarmThresholds;
-        const rec      = REACTOR_CONFIG.meltdown.recoveryThresholds;
-        const temp     = this.simulation.coreTemperature;
-        const pres     = this.simulation.pressure;
-        const rad      = this.simulation.radiationLevel;
-        const simTime  = this.simulation.time;
+        const cfg  = REACTOR_CONFIG.alarmThresholds;
+        const temp = this.simulation.coreTemperature;
+        const pres = this.simulation.pressure;
+        const rad  = this.simulation.radiationLevel;
 
-        // Detect if currently critical
-        let activeCause = null;
-        if (temp >= cfg.temp.critical) {
-            activeCause = {
-                type:  'temp',
-                ru:    'КРИТИЧЕСКАЯ ТЕМПЕРАТУРА',
-                pt:    'Temperatura do núcleo atingiu nível crítico',
+        // A explosão só ocorre ao atingir o limite físico irreversível (fusão do combustível)
+        // ou ao esgotar os limites de pressão/radiação críticos.
+        let cause = null;
+        if (temp >= REACTOR_CONFIG.explosionTemp) {
+            cause = {
+                ru:    'РАСПЛАВЛЕНИЕ АКТИВНОЙ ЗОНЫ',
+                pt:    'Fusão do núcleo — limite físico irreversível atingido',
                 param: 'ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ',
-                get value() { return temp.toFixed(1) + ' °C'; }
+                value: temp.toFixed(1) + ' °C'
             };
         } else if (pres >= cfg.pressure.critical) {
-            activeCause = {
-                type:  'pressure',
+            cause = {
                 ru:    'КРИТИЧЕСКОЕ ДАВЛЕНИЕ',
                 pt:    'Pressão do sistema atingiu nível crítico',
                 param: 'ДАВЛЕНИЕ ПЕРВОГО КОНТУРА',
-                get value() { return pres.toFixed(2) + ' МПа'; }
+                value: pres.toFixed(2) + ' МПа'
             };
         } else if (rad >= cfg.radiation.critical) {
-            activeCause = {
-                type:  'radiation',
+            cause = {
                 ru:    'КРИТИЧЕСКИЙ УРОВЕНЬ РАДИАЦИИ',
                 pt:    'Nível de radiação atingiu patamar crítico',
                 param: 'РАДИАЦИОННЫЙ ФОН',
-                get value() { return rad.toFixed(2) + ' мЗв/ч'; }
+                value: rad.toFixed(2) + ' мЗв/ч'
             };
         }
 
-        if (!this.meltdown.active) {
-            if (!activeCause) return;
-            // Start meltdown countdown
-            this.meltdown.active        = true;
-            this.meltdown.type          = activeCause.type;
-            this.meltdown.causeTemplate = activeCause;
-            this.meltdown.startSimTime  = simTime;
-            this.simulation.addEvent('danger', 'АВАРИЯ: ' + activeCause.ru + ' — АЗ-5!');
-            this._notifyMeltdown(this.meltdown.duration / 1000);
-            return;
-        }
+        if (!cause) return;
 
-        // Meltdown active — check for recovery
-        const elapsed   = simTime - this.meltdown.startSimTime;
-        const remaining = Math.ceil((this.meltdown.duration - elapsed) / 1000);
+        this.triggered = true;
+        this.simulation.stop();
+        this.saveSystem.clear();
 
-        // Check if the original parameter recovered below its threshold
-        const recovered =
-            (this.meltdown.type === 'temp'      && temp < rec.temp)     ||
-            (this.meltdown.type === 'pressure'  && pres < rec.pressure) ||
-            (this.meltdown.type === 'radiation' && rad  < rec.radiation);
+        const timeMs = this.simulation.time;
+        const data = {
+            cause,
+            temp:        temp.toFixed(1),
+            pressure:    pres.toFixed(2),
+            radiation:   rad.toFixed(2),
+            time:        this._formatTime(timeMs),
+            energyMWh:   this.simulation.totalEnergyMWh,
+            totalAlerts: this.simulation.totalAlerts
+        };
 
-        if (recovered) {
-            this.meltdown.active = false;
-            this.meltdown.type   = null;
-            this.simulation.addEvent('info', 'Параметры нормализованы. Угроза снята.');
-            if (this.onMeltdownUpdate) this.onMeltdownUpdate(null);
-            return;
-        }
-
-        // Update countdown display
-        this._notifyMeltdown(remaining);
-
-        // Timer expired → explosion
-        if (elapsed >= this.meltdown.duration) {
-            const tpl = this.meltdown.causeTemplate;
-            this.triggered = true;
-            this.simulation.stop();
-            this.saveSystem.clear();
-            if (this.onMeltdownUpdate) this.onMeltdownUpdate(null);
-
-            // Build cause with current values (not stale ones from meltdown start)
-            const causeValue =
-                tpl.type === 'temp'     ? temp.toFixed(1) + ' °C'   :
-                tpl.type === 'pressure' ? pres.toFixed(2) + ' МПа'  :
-                                          rad.toFixed(2) + ' мЗв/ч';
-            const cause = { ru: tpl.ru, pt: tpl.pt, param: tpl.param, value: causeValue };
-
-            const timeMs = this.simulation.time;
-            const data = {
-                cause,
-                temp:        temp.toFixed(1),
-                pressure:    pres.toFixed(2),
-                radiation:   rad.toFixed(2),
-                time:        this._formatTime(timeMs),
-                energyMWh:   this.simulation.totalEnergyMWh,
-                totalAlerts: this.simulation.totalAlerts
-            };
-
-            if (this.rankingSystem) {
-                this.rankingSystem.record({
-                    date:          Date.now(),
-                    outcome:       'explosion',
-                    timeMs,
-                    timeFormatted: data.time,
-                    energyMWh:     Math.round(this.simulation.totalEnergyMWh),
-                    totalAlerts:   this.simulation.totalAlerts,
-                    cause:         cause.ru
-                });
-            }
-
-            this._showExplosionScreen(data);
-        }
-    }
-
-    _notifyMeltdown(remainingSeconds) {
-        if (this.onMeltdownUpdate) {
-            this.onMeltdownUpdate({
-                type:      this.meltdown.type,
-                remaining: remainingSeconds
+        if (this.rankingSystem) {
+            this.rankingSystem.record({
+                date:          Date.now(),
+                outcome:       'explosion',
+                timeMs,
+                timeFormatted: data.time,
+                energyMWh:     Math.round(this.simulation.totalEnergyMWh),
+                totalAlerts:   this.simulation.totalAlerts,
+                cause:         cause.ru
             });
         }
+
+        this._showExplosionScreen(data);
     }
 
     // Chamado pelo DemandSystem após atingir stage 3

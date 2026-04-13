@@ -114,6 +114,14 @@ class ReactorSimulation {
 
         if (!this.scramActive) {
             this.reactorPower += (targetPower - this.reactorPower) * REACTOR_CONFIG.physics.powerRodsSmoothFactor;
+
+            // Coeficiente de vazio positivo (RBMK): acima da temperatura crítica, o refrigerante
+            // começa a ferver, reduz a moderação e a reação em cadeia se auto-acelera.
+            var critTemp = REACTOR_CONFIG.alarmThresholds.temp.critical;
+            if (this.coreTemperature > critTemp) {
+                this.reactorPower += (this.coreTemperature - critTemp) * REACTOR_CONFIG.physics.voidFeedbackFactor;
+                this.reactorPower = Math.min(150, this.reactorPower);
+            }
         } else {
             this.reactorPower *= REACTOR_CONFIG.physics.scramShutdownRate; // Rapid shutdown
         }
@@ -125,6 +133,15 @@ class ReactorSimulation {
         var emergencyFactor = this.emergencyCoolingActive ? REACTOR_CONFIG.physics.emergencyCoolingFactor : 1.0;
 
         var totalCooling = (pumpEfficiency + extraCooling) * emergencyFactor;
+
+        // Penalidade de ebulição: acima da temperatura crítica, o refrigerante ferve e perde
+        // eficiência de transferência de calor (vapor conduz muito menos que líquido).
+        var critTemp = REACTOR_CONFIG.alarmThresholds.temp.critical;
+        if (this.coreTemperature > critTemp) {
+            var overheat = Math.min(1.0, (this.coreTemperature - critTemp) / (REACTOR_CONFIG.explosionTemp - critTemp));
+            var boilingPenalty = Math.max(0.15, 1.0 - overheat * REACTOR_CONFIG.physics.coolingBoilingPenalty);
+            totalCooling *= boilingPenalty;
+        }
 
         // Coolant flow rate
         this.coolantFlow = REACTOR_CONFIG.physics.coolantFlowBase * totalCooling;
@@ -155,6 +172,14 @@ class ReactorSimulation {
     updatePressure() {
         // Pressure related to temperature
         var tempPressure = REACTOR_CONFIG.physics.tempPressureBase + (this.coreTemperature - 200) * REACTOR_CONFIG.physics.tempPressureFactor;
+
+        // Pressão de vapor: refrigerante fervendo gera pico de pressão no circuito primário
+        var critTemp = REACTOR_CONFIG.alarmThresholds.temp.critical;
+        if (this.coreTemperature > critTemp) {
+            var steamFactor = (this.coreTemperature - critTemp) / 100;
+            tempPressure += steamFactor * REACTOR_CONFIG.physics.steamPressureFactor;
+        }
+
         this.pressure += (tempPressure - this.pressure) * REACTOR_CONFIG.physics.pressureSmoothFactor;
         this.pressure = Math.max(REACTOR_CONFIG.physics.pressureMin, Math.min(REACTOR_CONFIG.physics.pressureMax, this.pressure));
     }
