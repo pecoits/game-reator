@@ -63,8 +63,12 @@ var REACTOR_CONFIG = {
         frequencyBase: 50.0,
         alertRecentWindow: 30000,
         // Física de fuga acima da temperatura crítica
-        voidFeedbackFactor:   0.03,    // potência extra por °C acima do crítico (coef. de vazio positivo)
+        voidFeedbackFactor:    0.02,   // potência extra por °C acima do crítico (coef. de vazio positivo)
         coolingBoilingPenalty: 0.7,    // fração de penalidade do resfriamento ao ferver (0=sem penalidade, 1=inútil)
-        steamPressureFactor:  3.5      // MPa adicionais por 100°C acima do crítico (pressão de vapor)
+        steamPressureFactor:   3.5,    // MPa adicionais por 100°C acima do crítico (pressão de vapor)
+        // Calor residual pós-SCRAM (decay heat)
+        decayHeatInitialFraction: 0.07, // calor inicial = 7% da potência no momento do SCRAM
+        decayHeatDecayRate:       0.96, // decai ~4% por tick (meia-vida ≈ 17 ticks)
+        decayHeatFactor:          2.5   // contribuição de calor por unidade de decayHeat
     }
 };

@@ -30,6 +30,9 @@ class ReactorSimulation {
         // Safety
         this.scramActive          = false;
         this.alarmThresholds      = REACTOR_CONFIG.alarmThresholds;
+        this.decayHeat            = 0;    // calor residual após SCRAM
+        this.pumpDegradation      = 1.0;  // multiplicador de eficiência da bomba (falhas temporárias)
+        this.pumpDegradationTimer = 0;    // ticks restantes de degradação
 
         // Simulation state
         this.time                 = 0;
@@ -84,6 +87,15 @@ class ReactorSimulation {
         this.totalEnergyMWh += this.energyGeneration * (deltaTime / 3600000);
         this._recordHistory();
 
+        // Recuperação de falha da bomba
+        if (this.pumpDegradationTimer > 0) {
+            this.pumpDegradationTimer--;
+            if (this.pumpDegradationTimer === 0) {
+                this.pumpDegradation = 1.0;
+                this.addEvent('info', 'ГЦН восстановлен до нормальной производительности.');
+            }
+        }
+
         // Update simulation physics
         this.updateControlRodsEffect();
         this.updateCoolingSystem();
@@ -124,11 +136,16 @@ class ReactorSimulation {
             }
         } else {
             this.reactorPower *= REACTOR_CONFIG.physics.scramShutdownRate; // Rapid shutdown
+            // Calor residual (decay heat) dissipa independentemente das barras
+            if (this.decayHeat > 0) {
+                this.decayHeat *= REACTOR_CONFIG.physics.decayHeatDecayRate;
+                if (this.decayHeat < 0.05) this.decayHeat = 0;
+            }
         }
     }
 
     updateCoolingSystem() {
-        var pumpEfficiency = this.mainPumpSpeed / 100;
+        var pumpEfficiency = (this.mainPumpSpeed / 100) * this.pumpDegradation;
         var extraCooling = this.extraPumpActive ? REACTOR_CONFIG.physics.extraPumpCoolingBoost : 0;
         var emergencyFactor = this.emergencyCoolingActive ? REACTOR_CONFIG.physics.emergencyCoolingFactor : 1.0;
 
@@ -160,7 +177,9 @@ class ReactorSimulation {
 
     updateTemperature() {
         // Core temperature based on power and cooling
-        var heatGeneration = this.reactorPower * REACTOR_CONFIG.physics.coreHeatFactor;
+        // decayHeat contribui mesmo com SCRAM ativo (calor de decaimento dos produtos de fissão)
+        var heatGeneration = this.reactorPower * REACTOR_CONFIG.physics.coreHeatFactor
+                           + this.decayHeat * REACTOR_CONFIG.physics.decayHeatFactor;
         var heatDissipation = (this.mainPumpSpeed / 100) * REACTOR_CONFIG.physics.coreDissipationFactor;
         var emergencyCooling = this.emergencyCoolingActive ? REACTOR_CONFIG.physics.emergencyCoolingBonus : 0;
 
@@ -300,19 +319,54 @@ class ReactorSimulation {
     }
 
     triggerRandomEvent() {
+        var self = this;
         var events = [
-            { type: 'warning', message: 'Колебания давления в контуре охлаждения' },
-            { type: 'info', message: 'Плановая проверка систем завершена' },
-            { type: 'warning', message: 'Повышение температуры в активной зоне' },
-            { type: 'info', message: 'Смена персонала. Бригада №3 заступила' },
+            // --- Informativos (sem efeito) ---
+            { type: 'info',    message: 'Плановая проверка систем завершена' },
+            { type: 'info',    message: 'Смена персонала. Бригада №3 заступила' },
+            { type: 'info',    message: 'Автоматическая калибровка датчиков' },
+            { type: 'info',    message: 'Получена директива министерства №1994' },
             { type: 'warning', message: 'Отклонение частоты тока в сети' },
-            { type: 'info', message: 'Автоматическая калибровка датчиков' },
-            { type: 'danger', message: 'Сбой в системе охлаждения контура №2' },
-            { type: 'info', message: 'Получена директива министерства №1994' }
+            // --- Eventos com efeito real ---
+            {
+                type: 'danger',
+                message: 'ОТКАЗ ГЦН: производительность насоса снижена до 30%',
+                effect: function() {
+                    self.pumpDegradation = 0.3;
+                    self.pumpDegradationTimer = 25;
+                    self.addEvent('warning', 'ГЦН работает на 30%. Восстановление через ~25 сек.');
+                }
+            },
+            {
+                type: 'warning',
+                message: 'Проскальзывание стержней: потеря позиции -15%',
+                effect: function() {
+                    self.controlRodsPosition = Math.max(0, self.controlRodsPosition - 15);
+                    self.addEvent('warning', 'Стержни сдвинулись. Скорректируйте положение регуляторов.');
+                }
+            },
+            {
+                type: 'danger',
+                message: 'Гидравлический удар в первом контуре',
+                effect: function() {
+                    self.applyExternalPressureShock(2.0);
+                }
+            },
+            {
+                type: 'warning',
+                message: 'Частичная потеря охлаждения контура №2',
+                effect: function() {
+                    // Reduz velocidade efetiva da bomba extra por degradação temporária
+                    self.pumpDegradation = Math.min(self.pumpDegradation, 0.6);
+                    self.pumpDegradationTimer = Math.max(self.pumpDegradationTimer, 15);
+                    self.addEvent('warning', 'Расход охладителя снижен. Контроль температуры обязателен.');
+                }
+            }
         ];
 
         var event = events[Math.floor(Math.random() * events.length)];
         this.addEvent(event.type, event.message);
+        if (event.effect) event.effect();
     }
 
     // Control methods
@@ -346,6 +400,7 @@ class ReactorSimulation {
 
     activateSCRAM() {
         this.scramActive = true;
+        this.decayHeat = this.reactorPower * REACTOR_CONFIG.physics.decayHeatInitialFraction;
         this.controlRodsPosition = 100;
         this.emergencyCoolingActive = true;
         this.gridConnected = false;
@@ -382,6 +437,8 @@ class ReactorSimulation {
             gridLoad: this.gridLoad,
             gridConnected: this.gridConnected,
             scramActive: this.scramActive,
+            decayHeat: this.decayHeat,
+            pumpDegradation: this.pumpDegradation,
             alerts: this.alerts,
             time: this.time,
             gracePeriodActive: !this.eventsEnabled,
