@@ -1212,6 +1212,188 @@ body {
 }
 
 
+/* ===== TUTORIAL PANEL (DOMINGOS FERREIRA) ===== */
+#tutorial-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 320px;
+    background: #1c1710;
+    border-left: 3px solid #8f8675;
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: -8px 0 32px rgba(0,0,0,0.6);
+}
+
+#tutorial-panel.visible {
+    transform: translateX(0);
+}
+
+.tut-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px 8px;
+    border-bottom: 1px solid #4a4030;
+    background: #141008;
+}
+
+.tut-header-label {
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: #cc9900;
+}
+
+.tut-station {
+    font-size: 9px;
+    color: #5f5040;
+    letter-spacing: 1px;
+}
+
+.tut-character {
+    padding: 14px 16px 12px;
+    border-bottom: 2px solid #4a4030;
+    background: #181208;
+}
+
+.tut-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #d4c89a;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+}
+
+.tut-role {
+    font-size: 9px;
+    color: #7a6a50;
+    letter-spacing: 1px;
+}
+
+.tut-body {
+    flex: 1;
+    padding: 20px 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tut-step-title {
+    font-size: 11px;
+    font-weight: bold;
+    color: #cc9900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.tut-step-text {
+    font-size: 13px;
+    color: #c8bc9e;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+.tut-footer {
+    padding: 12px 16px 16px;
+    border-top: 1px solid #4a4030;
+    background: #141008;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tut-dots {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.tut-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #3a3020;
+    border: 1px solid #5a4a30;
+    transition: background 0.2s;
+}
+
+.tut-dot.active {
+    background: #cc9900;
+    border-color: #cc9900;
+}
+
+.tut-counter {
+    font-size: 9px;
+    color: #5a4a30;
+    letter-spacing: 1px;
+    margin-top: -6px;
+}
+
+.tut-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.tut-btn {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 8px 14px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.tut-btn-skip {
+    background: transparent;
+    color: #5a4a30;
+    border-color: #3a3020;
+    flex: 0 0 auto;
+}
+
+.tut-btn-skip:hover {
+    color: #8a7a60;
+    border-color: #5a4a30;
+}
+
+.tut-btn-next {
+    background: #3a2e10;
+    color: #cc9900;
+    border-color: #cc9900;
+    flex: 1;
+}
+
+.tut-btn-next:hover {
+    background: #cc9900;
+    color: #1c1710;
+}
+
+@media (max-width: 768px) {
+    #tutorial-panel {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 55vh;
+        border-left: none;
+        border-top: 3px solid #8f8675;
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    #tutorial-panel.visible {
+        transform: translateY(0);
+    }
+}
+
 /* ===== STATS ROW ===== */
 .stats-row {
     display: flex;

@@ -140,6 +140,10 @@ class GameApp {
             console.log('Starting simulation...');
             this.simulation.start();
 
+            // Tutorial na primeira sessão
+            this.tutorialSystem = new TutorialSystem(this.simulation);
+            this.tutorialSystem.show();
+
             console.log('All systems initialized successfully');
         } catch (error) {
             console.error('Error initializing systems:', error);

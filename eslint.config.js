@@ -35,7 +35,8 @@ module.exports = [
                 manualPagesFR: 'readonly',
                 GameOverSystem: 'readonly',
                 DemandSystem: 'readonly',
-                RankingSystem: 'readonly'
+                RankingSystem: 'readonly',
+                TutorialSystem: 'readonly'
             }
         },
         rules: {
