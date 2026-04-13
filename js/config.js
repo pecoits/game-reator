@@ -24,6 +24,14 @@ var REACTOR_CONFIG = {
         power:     { warning: 90,  danger: 100, critical: 110 }
     },
     gracePeriod: 180000,
+    meltdown: {
+        graceDuration: 45000,          // ms para reagir após parâmetro crítico
+        recoveryThresholds: {
+            temp:      390,            // °C — abaixo disto cancela o meltdown de temperatura
+            pressure:  21.0,           // MPa — abaixo disto cancela o de pressão
+            radiation: 18.0            // mSv/h — abaixo disto cancela o de radiação
+        }
+    },
     startupMissionDelay: 210000,
     randomEventChance: 0.003,
     physics: {

@@ -1211,6 +1211,63 @@ body {
     50%       { box-shadow: inset 0 0 60px 16px rgba(220, 0, 0, 0.20); }
 }
 
+/* ===== MELTDOWN COUNTDOWN BANNER ===== */
+#meltdown-banner {
+    position: fixed;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 300;
+    background: #1a0000;
+    border: 3px solid #cc0000;
+    padding: 10px 24px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(220, 0, 0, 0.6);
+    animation: meltdown-blink 0.5s step-start infinite;
+    min-width: 260px;
+}
+
+.meltdown-label {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    font-weight: bold;
+    color: #ff4444;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+}
+
+.meltdown-timer {
+    font-family: 'Courier New', monospace;
+    font-size: 48px;
+    font-weight: bold;
+    color: #ff0000;
+    line-height: 1;
+    text-shadow: 0 0 12px #ff0000;
+    margin-bottom: 4px;
+}
+
+.meltdown-timer.urgent {
+    color: #ff6666;
+    animation: meltdown-flash 0.25s step-start infinite;
+}
+
+.meltdown-hint {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: #ff8888;
+    letter-spacing: 1px;
+}
+
+@keyframes meltdown-blink {
+    0%, 49% { border-color: #cc0000; box-shadow: 0 0 30px rgba(220, 0, 0, 0.6); }
+    50%, 100% { border-color: #660000; box-shadow: 0 0 10px rgba(220, 0, 0, 0.2); }
+}
+
+@keyframes meltdown-flash {
+    0%, 49%  { opacity: 1; }
+    50%, 100% { opacity: 0.3; }
+}
+
 /* ===== STATS ROW ===== */
 .stats-row {
     display: flex;
