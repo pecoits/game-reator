@@ -8,20 +8,11 @@ var MANUAL_PAGES = {
             title: 'ESTAÇÃO NUCLEAR RBMK-1000',
             sections: [
                 { type: 'cover', content:
-                    '<div style="text-align: center; padding: 40px 20px;">' +
-                    '<div style="font-size: 60px; color: #cc0000; margin-bottom: 20px;">★</div>' +
-                    '<h1 style="font-size: 28px; margin-bottom: 10px;">ESTAÇÃO NUCLEAR RBMK-1000</h1>' +
-                    '<h2 style="color: #888; font-weight: normal; font-size: 18px;">Manual de Operações Técnicas</h2>' +
-                    '<div style="margin-top: 40px; padding: 20px; border: 2px solid #cc0000; display: inline-block;">' +
-                    '<p style="color: #cc0000; font-weight: bold; margin: 0; font-size: 14px;">ДОКУМЕНТ ОГРАНИЧЕННОГО ДОСТУПА</p>' +
-                    '<p style="color: #888; font-size: 12px; margin: 5px 0 0;">(Documento Restrito)</p>' +
-                    '<p style="color: #888; font-size: 11px; margin: 3px 0 0;">UEN-1994-047</p>' +
-                    '</div>' +
-                    '<div style="margin-top: 40px; color: #888; font-size: 13px;">' +
-                    '<p>Республика Красностан (República de Krasnostan)</p>' +
-                    '<p>Министерство Энергетики (Ministério da Energia)</p>' +
-                    '<p>Январь 1994 (Janeiro 1994)</p>' +
-                    '</div></div>'
+                    '<div class="manual-cover-emblem">★</div>' +
+                    '<div class="manual-cover-title">ESTAÇÃO NUCLEAR<br>RBMK-1000</div>' +
+                    '<div class="manual-cover-subtitle">Manual de Operações Técnicas</div>' +
+                    '<div class="manual-cover-classified">ДОКУМЕНТ ОГРАНИЧЕННОГО ДОСТУПА</div>' +
+                    '<div class="manual-cover-version">República de Krasnostan · Ministério da Energia<br>Janeiro 1994 · UEN-1994-047 · {{version}}</div>'
                 }
             ]
         },
@@ -65,20 +56,20 @@ var MANUAL_PAGES = {
         {
             title: 'СТЕРЖНИ (Barras de Controle)',
             sections: [
-                { type: 'text', content: 'Aba: <strong>ОСНОВНОЙ</strong> (Principal). O controle <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> é o slider superior. 211 barras absorvem nêutrons e regulam a potência.' },
-                { type: 'heading', content: 'Posições do controle СТЕРЖНИ РЕГУЛИРОВАНИЯ:' },
+                { type: 'text', content: 'O botão giratório <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> controla 211 barras que absorvem nêutrons e regulam a potência.' },
+                { type: 'heading', content: 'Posições do botão СТЕРЖНИ РЕГУЛИРОВАНИЯ:' },
                 { type: 'list', items: [
                     '<strong>0–30%:</strong> Высокая мощность — Alta potência ⚠',
                     '<strong>30–70%:</strong> Нормальная работа — Operação normal ✓',
                     '<strong>70–100%:</strong> Низкая мощность — Baixa potência'
                 ]},
-                { type: 'warning', content: '<h3>⚠ ВАЖНО (Importante)</h3><p>Ajuste no máximo 5% por vez! Mudanças bruscas causam instabilidade.</p>' },
+                { type: 'warning', content: 'Ajuste no máximo 5% por vez! Mudanças bruscas causam instabilidade.' },
                 { type: 'heading', content: 'Indicador ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ:' },
                 { type: 'list', items: [
                     'Норма (Normal): &lt; 300°C',
                     'Внимание (Atenção): 300–350°C',
                     'Опасность (Perigo): &gt; 350°C',
-                    'Критический (Crítico): &gt; 400°C → use АЗ-5'
+                    'Критический (Crítico): &gt; 400°C → pressione АЗ-5'
                 ]}
             ]
         },
@@ -87,20 +78,19 @@ var MANUAL_PAGES = {
         {
             title: 'ОХЛАЖДЕНИЕ (Resfriamento)',
             sections: [
-                { type: 'text', content: 'Aba: <strong>ОХЛАЖДЕНИЕ</strong> (Resfriamento). Aba <strong>ОСНОВНОЙ</strong> para o slider da bomba.' },
                 { type: 'table', rows: [
-                    ['Controle', 'Localização', 'Função'],
-                    ['<strong>СКОРОСТЬ ГЛАВНОГО НАСОСА</strong>', 'Aba ОСНОВНОЙ — slider', 'Bomba principal. Normal: 60–80%'],
-                    ['<strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong><br>→ botão <strong>АКТИВИРОВАТЬ</strong>', 'Aba ОХЛАЖДЕНИЕ', 'Ativar se temp &gt; 320°C'],
-                    ['<strong>ДОПОЛНИТЕЛЬНЫЙ НАСОС</strong><br>→ botão <strong>ВКЛ/ВЫКЛ</strong>', 'Aba ОХЛАЖДЕНИЕ', 'Reforço de refrigeração']
+                    ['Controle', 'Função'],
+                    ['<strong>ГЛАВНЫЙ НАСОС</strong> (Bomba Principal)', 'Bomba principal. Normal: 60–80%'],
+                    ['<strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong> (Resfr. Emergencial)', 'Ativar se temp &gt; 320°C'],
+                    ['<strong>ДОПОЛНИТЕЛЬНЫЙ НАСОС</strong> (Bomba Extra)', 'Reforço de refrigeração']
                 ]},
-                { type: 'heading', content: 'Indicadores na aba ОХЛАЖДЕНИЕ:' },
+                { type: 'heading', content: 'Indicadores de resfriamento:' },
                 { type: 'table', rows: [
                     ['Indicador', 'Valor normal'],
-                    ['ТЕМПЕРАТУРА ВОДЫ (ВХОД)', '170–190°C'],
-                    ['ТЕМПЕРАТУРА ВОДЫ (ВЫХОД)', '270–290°C'],
-                    ['РАСХОД ТЕПЛОНОСИТЕЛЯ', '8000–9000 м³/ч'],
-                    ['УРОВЕНЬ В КОМПЕНСАТОРЕ', '50–70%']
+                    ['ТЕМПЕРАТУРА ВОДЫ (ВХОД) (Temp. entrada)', '170–190°C'],
+                    ['ТЕМПЕРАТУРА ВОДЫ (ВЫХОД) (Temp. saída)', '270–290°C'],
+                    ['РАСХОД ТЕПЛОНОСИТЕЛЯ (Vazão)', '8000–9000 м³/ч'],
+                    ['УРОВЕНЬ В КОМПЕНСАТОРЕ (Nível compensador)', '50–70%']
                 ]}
             ]
         },
@@ -109,17 +99,15 @@ var MANUAL_PAGES = {
         {
             title: 'ЭНЕРГИЯ (Geração de Energia)',
             sections: [
-                { type: 'text', content: 'Aba: <strong>ЭНЕРГИЯ</strong>. Dois turbogeradores de 500 МВт cada.' },
-                { type: 'heading', content: 'Indicadores na aba ЭНЕРГИЯ:' },
+                { type: 'text', content: 'Dois turbogeradores de 500 МВт cada. Botão <strong>ИЗОЛИРОВАТЬ СЕТЬ</strong> conecta ou desconecta da rede elétrica.' },
                 { type: 'table', rows: [
                     ['Indicador', 'Valor normal'],
-                    ['ВЫРАБОТКА ЭНЕРГИИ', '700–900 МВт'],
-                    ['НАПРЯЖЕНИЕ ГЕНЕРАТОРА', '15.75 кВ'],
-                    ['ЧАСТОТА ТОКА', '50.0 Гц ± 0.2'],
-                    ['НАГРУЗКА СЕТИ', '70–90%']
+                    ['ВЫРАБОТКА ЭНЕРГИИ (Geração)', '700–900 МВт'],
+                    ['НАПРЯЖЕНИЕ ГЕНЕРАТОРА (Tensão)', '15.75 кВ'],
+                    ['ЧАСТОТА ТОКА (Frequência)', '50.0 Гц ± 0.2'],
+                    ['НАГРУЗКА СЕТИ (Carga da rede)', '70–90%']
                 ]},
-                { type: 'text', content: '<strong>ВЫВОД В СЕТЬ</strong> → botão <strong>ПОДКЛЮЧЕНО</strong> (aba ЭНЕРГИЯ): Conecta ou desconecta da rede elétrica.' },
-                { type: 'warning', content: '<h3>💡 СОВЕТ (Dica)</h3><p>Mantenha НАГРУЗКА СЕТИ entre 70–90% para estabilidade da rede.</p>' }
+                { type: 'warning', content: 'Mantenha НАГРУЗКА СЕТИ (Carga) entre 70–90% para estabilidade da rede.' }
             ]
         },
 
@@ -128,14 +116,14 @@ var MANUAL_PAGES = {
             title: 'БЕЗОПАСНОСТЬ (Segurança)',
             sections: [
                 { type: 'heading', content: 'АЗ-5 — Аварийная Защита (Proteção de Emergência)' },
-                { type: 'text', content: 'Aba: <strong>ЭНЕРГИЯ</strong> → seção <strong>АВАРИЙНАЯ ЗАЩИТА</strong> → botão <strong>АЗ-5</strong>. Ao pressionar:' },
+                { type: 'text', content: 'Botão vermelho <strong>АЗ-5 / ЗАЩИТА</strong> no painel. Ao pressionar:' },
                 { type: 'list', items: [
-                    '<strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> inserido 100% automaticamente',
+                    '<strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> inserido a 100% automaticamente',
                     '<strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong> ativado automaticamente',
                     'Geradores desconectados da rede'
                 ]},
-                { type: 'warning', content: '<h3>⚠ НЕОБРАТИМО! (Irreversível!)</h3><p>АЗ-5 não pode ser cancelada durante o processo. Use SOMENTE em emergências reais.</p>' },
-                { type: 'heading', content: 'Indicador УРОВЕНЬ РАДИАЦИИ (aba ОСНОВНОЙ):' },
+                { type: 'warning', content: 'АЗ-5 não pode ser cancelada durante o processo. Use SOMENTE em emergências reais.' },
+                { type: 'heading', content: 'Indicador УРОВЕНЬ РАДИАЦИИ (Radiação):' },
                 { type: 'table', rows: [
                     ['Nível', 'Leitura'],
                     ['Норма (Normal)', '&lt; 0.5 мЗв/ч'],
@@ -149,22 +137,22 @@ var MANUAL_PAGES = {
         {
             title: 'АВАРИИ (Emergências)',
             sections: [
-                { type: 'heading', content: 'Температура alta (ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ &gt; 320°C):' },
+                { type: 'heading', content: 'Temperatura alta (ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ &gt; 320°C):' },
                 { type: 'list', ordered: true, items: [
-                    'Aba <strong>ОХЛАЖДЕНИЕ</strong> → pressione <strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong> → <strong>АКТИВИРОВАТЬ</strong>',
-                    'Aba <strong>ОСНОВНОЙ</strong> → aumente <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> para 80%+',
-                    'Aba <strong>ОХЛАЖДЕНИЕ</strong> → ative <strong>ДОПОЛНИТЕЛЬНЫЙ НАСОС</strong> → <strong>ВКЛ/ВЫКЛ</strong>',
-                    'Se temp &gt; 400°C → aba <strong>ЭНЕРГИЯ</strong> → pressione <strong>АЗ-5</strong>'
+                    'Ative o toggle <strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong> (Resfriamento Emergencial)',
+                    'Gire <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (Barras) para 80%+',
+                    'Ative o toggle <strong>ДОПОЛНИТЕЛЬНЫЙ НАСОС</strong> (Bomba Extra)',
+                    'Se temp &gt; 400°C → pressione <strong>АЗ-5</strong> (Proteção Emergencial)'
                 ]},
                 { type: 'heading', content: 'Pressão alta (ДАВЛЕНИЕ В КОНТУРЕ &gt; 17 МПа):' },
                 { type: 'list', ordered: true, items: [
-                    'Aba <strong>ОСНОВНОЙ</strong> → aumente <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (reduz potência)',
-                    'Aba <strong>ОСНОВНОЙ</strong> → aumente <strong>СКОРОСТЬ ГЛАВНОГО НАСОСА</strong>'
+                    'Aumente <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (Barras) — reduz potência',
+                    'Aumente <strong>ГЛАВНЫЙ НАСОС</strong> (Bomba Principal)'
                 ]},
                 { type: 'heading', content: 'Radiação alta (УРОВЕНЬ РАДИАЦИИ &gt; 1.0 мЗв/ч):' },
                 { type: 'list', ordered: true, items: [
-                    'Aba <strong>ОСНОВНОЙ</strong> → reduza <strong>МОЩНОСТЬ РЕАКТОРА</strong> via <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong>',
-                    'Monitore o indicador <strong>УРОВЕНЬ РАДИАЦИИ</strong>',
+                    'Aumente <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (Barras) para reduzir potência',
+                    'Monitore <strong>УРОВЕНЬ РАДИАЦИИ</strong> (Radiação)',
                     'Se &gt; 5.0 мЗв/ч → pressione <strong>АЗ-5</strong> imediatamente'
                 ]}
             ]
@@ -176,14 +164,14 @@ var MANUAL_PAGES = {
             sections: [
                 { type: 'table', rows: [
                     ['Sintoma', 'Ação'],
-                    ['ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ alta', '↑ СКОРОСТЬ ГЛАВНОГО НАСОСА; ativar АВАРИЙНОЕ ОХЛАЖДЕНИЕ'],
-                    ['ДАВЛЕНИЕ В КОНТУРЕ alto', '↑ СТЕРЖНИ РЕГУЛИРОВАНИЯ; ↑ СКОРОСТЬ ГЛАВНОГО НАСОСА'],
-                    ['МОЩНОСТЬ РЕАКТОРА instável', 'Estabilize СТЕРЖНИ РЕГУЛИРОВАНИЯ (30–70%)'],
-                    ['УРОВЕНЬ РАДИАЦИИ alto', '↑ СТЕРЖНИ РЕГУЛИРОВАНИЯ para reduzir potência'],
-                    ['ЧАСТОТА ТОКА instável', 'Ajuste НАГРУЗКА СЕТИ via ВЫВОД В СЕТЬ'],
-                    ['УРОВЕНЬ В КОМПЕНСАТОРЕ baixo', 'Ative ДОПОЛНИТЕЛЬНЫЙ НАСОС → ВКЛ/ВЫКЛ']
+                    ['ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ (Temp. núcleo) alta', '↑ ГЛАВНЫЙ НАСОС (Bomba); ativar АВАРИЙНОЕ ОХЛАЖДЕНИЕ'],
+                    ['ДАВЛЕНИЕ В КОНТУРЕ (Pressão) alto', '↑ СТЕРЖНИ РЕГУЛИРОВАНИЯ (Barras); ↑ ГЛАВНЫЙ НАСОС'],
+                    ['МОЩНОСТЬ РЕАКТОРА (Potência) instável', 'Estabilize СТЕРЖНИ РЕГУЛИРОВАНИЯ (30–70%)'],
+                    ['УРОВЕНЬ РАДИАЦИИ (Radiação) alto', '↑ СТЕРЖНИ РЕГУЛИРОВАНИЯ para reduzir potência'],
+                    ['ЧАСТОТА ТОКА (Frequência) instável', 'Verifique carga da rede — botão ИЗОЛИРОВАТЬ СЕТЬ'],
+                    ['УРОВЕНЬ В КОМПЕНСАТОРЕ (Nível) baixo', 'Ative ДОПОЛНИТЕЛЬНЫЙ НАСОС (Bomba Extra)']
                 ]},
-                { type: 'warning', content: '<h3>⚠ ЗОЛОТОЕ ПРАВИЛО (Regra de Ouro)</h3><p>Na dúvida, SEGURANÇA primeiro. Reduza potência antes de investigar.</p>' }
+                { type: 'warning', content: 'Na dúvida, segurança primeiro. Reduza potência antes de investigar.' }
             ]
         },
 
@@ -200,13 +188,8 @@ var MANUAL_PAGES = {
                     ['Экстренные службы (Emergência)', '9999']
                 ]},
                 { type: 'footer', content:
-                    '<div style="margin-top: 25px; text-align: center; color: #888;">' +
-                    '<p style="font-size: 24px;">★</p>' +
-                    '<p><em>"Атом — хороший слуга,<br>но плохой хозяин."</em></p>' +
-                    '<p style="color: #aaa; font-size: 12px; margin-top: 5px;">("O átomo é um bom servo, mas um mau senhor.")</p>' +
-                    '<p style="margin-top: 10px; font-size: 11px;">КОНЕЦ РУКОВОДСТВА</p>' +
-                    '<p style="font-size: 10px;">(Fim do Manual)</p>' +
-                    '</div>'
+                    '★<br><em>"Атом — хороший слуга, но плохой хозяин."</em><br>' +
+                    '("O átomo é um bom servo, mas um mau senhor.")<br>КОНЕЦ РУКОВОДСТВА'
                 }
             ]
         }
@@ -218,20 +201,11 @@ var MANUAL_PAGES = {
             title: 'RBMK-1000 NUCLEAR STATION',
             sections: [
                 { type: 'cover', content:
-                    '<div style="text-align: center; padding: 40px 20px;">' +
-                    '<div style="font-size: 60px; color: #cc0000; margin-bottom: 20px;">★</div>' +
-                    '<h1 style="font-size: 28px; margin-bottom: 10px;">RBMK-1000 NUCLEAR STATION</h1>' +
-                    '<h2 style="color: #888; font-weight: normal; font-size: 18px;">Technical Operations Manual</h2>' +
-                    '<div style="margin-top: 40px; padding: 20px; border: 2px solid #cc0000; display: inline-block;">' +
-                    '<p style="color: #cc0000; font-weight: bold; margin: 0; font-size: 14px;">ДОКУМЕНТ ОГРАНИЧЕННОГО ДОСТУПА</p>' +
-                    '<p style="color: #888; font-size: 12px; margin: 5px 0 0;">(Restricted Document)</p>' +
-                    '<p style="color: #888; font-size: 11px; margin: 3px 0 0;">NPS-1994-047</p>' +
-                    '</div>' +
-                    '<div style="margin-top: 40px; color: #888; font-size: 13px;">' +
-                    '<p>Республика Красностан (Krasnostan Republic)</p>' +
-                    '<p>Министерство Энергетики (Ministry of Energy)</p>' +
-                    '<p>Январь 1994 (January 1994)</p>' +
-                    '</div></div>'
+                    '<div class="manual-cover-emblem">★</div>' +
+                    '<div class="manual-cover-title">RBMK-1000<br>NUCLEAR STATION</div>' +
+                    '<div class="manual-cover-subtitle">Technical Operations Manual</div>' +
+                    '<div class="manual-cover-classified">ДОКУМЕНТ ОГРАНИЧЕННОГО ДОСТУПА</div>' +
+                    '<div class="manual-cover-version">Krasnostan Republic · Ministry of Energy<br>January 1994 · NPS-1994-047 · {{version}}</div>'
                 }
             ]
         },
@@ -275,20 +249,20 @@ var MANUAL_PAGES = {
         {
             title: 'СТЕРЖНИ (Control Rods)',
             sections: [
-                { type: 'text', content: 'Tab: <strong>ОСНОВНОЙ</strong> (Main). The <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> slider is the top control. 211 rods absorb neutrons and regulate reactor power.' },
+                { type: 'text', content: 'The <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> dial controls 211 rods that absorb neutrons and regulate reactor power.' },
                 { type: 'heading', content: 'СТЕРЖНИ РЕГУЛИРОВАНИЯ positions:' },
                 { type: 'list', items: [
                     '<strong>0–30%:</strong> Высокая мощность — High power ⚠',
                     '<strong>30–70%:</strong> Нормальная работа — Normal operation ✓',
                     '<strong>70–100%:</strong> Низкая мощность — Low power'
                 ]},
-                { type: 'warning', content: '<h3>⚠ ВАЖНО (Important)</h3><p>Adjust max 5% per step! Sudden changes cause instability.</p>' },
+                { type: 'warning', content: 'Adjust max 5% per step! Sudden changes cause instability.' },
                 { type: 'heading', content: 'Indicator ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ:' },
                 { type: 'list', items: [
                     'Норма (Normal): &lt; 300°C',
                     'Внимание (Warning): 300–350°C',
                     'Опасность (Danger): &gt; 350°C',
-                    'Критический (Critical): &gt; 400°C → use АЗ-5'
+                    'Критический (Critical): &gt; 400°C → press АЗ-5'
                 ]}
             ]
         },
@@ -297,20 +271,19 @@ var MANUAL_PAGES = {
         {
             title: 'ОХЛАЖДЕНИЕ (Cooling)',
             sections: [
-                { type: 'text', content: 'Tab: <strong>ОХЛАЖДЕНИЕ</strong> (Cooling). Use tab <strong>ОСНОВНОЙ</strong> for the pump slider.' },
                 { type: 'table', rows: [
-                    ['Control', 'Location', 'Function'],
-                    ['<strong>СКОРОСТЬ ГЛАВНОГО НАСОСА</strong>', 'Tab ОСНОВНОЙ — slider', 'Main pump. Normal: 60–80%'],
-                    ['<strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong><br>→ button <strong>АКТИВИРОВАТЬ</strong>', 'Tab ОХЛАЖДЕНИЕ', 'Activate if temp &gt; 320°C'],
-                    ['<strong>ДОПОЛНИТЕЛЬНЫЙ НАСОС</strong><br>→ button <strong>ВКЛ/ВЫКЛ</strong>', 'Tab ОХЛАЖДЕНИЕ', 'Extra cooling boost']
+                    ['Control', 'Function'],
+                    ['<strong>ГЛАВНЫЙ НАСОС</strong> (Main Pump)', 'Main pump. Normal: 60–80%'],
+                    ['<strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong> (Emergency Cooling)', 'Activate if temp &gt; 320°C'],
+                    ['<strong>ДОПОЛНИТЕЛЬНЫЙ НАСОС</strong> (Extra Pump)', 'Extra cooling boost']
                 ]},
-                { type: 'heading', content: 'Indicators in tab ОХЛАЖДЕНИЕ:' },
+                { type: 'heading', content: 'Cooling indicators:' },
                 { type: 'table', rows: [
                     ['Indicator', 'Normal value'],
-                    ['ТЕМПЕРАТУРА ВОДЫ (ВХОД)', '170–190°C'],
-                    ['ТЕМПЕРАТУРА ВОДЫ (ВЫХОД)', '270–290°C'],
-                    ['РАСХОД ТЕПЛОНОСИТЕЛЯ', '8000–9000 м³/ч'],
-                    ['УРОВЕНЬ В КОМПЕНСАТОРЕ', '50–70%']
+                    ['ТЕМПЕРАТУРА ВОДЫ (ВХОД) (Inlet temp.)', '170–190°C'],
+                    ['ТЕМПЕРАТУРА ВОДЫ (ВЫХОД) (Outlet temp.)', '270–290°C'],
+                    ['РАСХОД ТЕПЛОНОСИТЕЛЯ (Flow rate)', '8000–9000 м³/ч'],
+                    ['УРОВЕНЬ В КОМПЕНСАТОРЕ (Tank level)', '50–70%']
                 ]}
             ]
         },
@@ -319,17 +292,15 @@ var MANUAL_PAGES = {
         {
             title: 'ЭНЕРГИЯ (Power)',
             sections: [
-                { type: 'text', content: 'Tab: <strong>ЭНЕРГИЯ</strong>. Two turbogenerators of 500 МВт each.' },
-                { type: 'heading', content: 'Indicators in tab ЭНЕРГИЯ:' },
+                { type: 'text', content: 'Two turbogenerators with 500 МВт each one. Button <strong>ИЗОЛИРОВАТЬ СЕТЬ</strong> is connecting or disconnecting from the power grid.' },
                 { type: 'table', rows: [
                     ['Indicator', 'Normal value'],
-                    ['ВЫРАБОТКА ЭНЕРГИИ', '700–900 МВт'],
-                    ['НАПРЯЖЕНИЕ ГЕНЕРАТОРА', '15.75 кВ'],
-                    ['ЧАСТОТА ТОКА', '50.0 Гц ± 0.2'],
-                    ['НАГРУЗКА СЕТИ', '70–90%']
+                    ['ВЫРАБОТКА ЭНЕРГИИ (Output)', '700–900 МВт'],
+                    ['НАПРЯЖЕНИЕ ГЕНЕРАТОРА (Voltage)', '15.75 кВ'],
+                    ['ЧАСТОТА ТОКА (Frequency)', '50.0 Гц ± 0.2'],
+                    ['НАГРУЗКА СЕТИ (Grid load)', '70–90%']
                 ]},
-                { type: 'text', content: '<strong>ВЫВОД В СЕТЬ</strong> → button <strong>ПОДКЛЮЧЕНО</strong> (tab ЭНЕРГИЯ): Connects or disconnects from the power grid.' },
-                { type: 'warning', content: '<h3>💡 СОВЕТ (Tip)</h3><p>Keep НАГРУЗКА СЕТИ between 70–90% for grid stability.</p>' }
+                { type: 'warning', content: 'Is keep НАГРУЗКА СЕТИ (Grid load) between 70–90% for stability of grid.' }
             ]
         },
 
@@ -338,14 +309,14 @@ var MANUAL_PAGES = {
             title: 'БЕЗОПАСНОСТЬ (Safety)',
             sections: [
                 { type: 'heading', content: 'АЗ-5 — Аварийная Защита (Emergency Protection)' },
-                { type: 'text', content: 'Tab: <strong>ЭНЕРГИЯ</strong> → section <strong>АВАРИЙНАЯ ЗАЩИТА</strong> → button <strong>АЗ-5</strong>. When pressed:' },
+                { type: 'text', content: 'The red button АЗ-5 / ЗАЩИТА is located on panel. When is pressed:' },
                 { type: 'list', items: [
-                    '<strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> inserted to 100% automatically',
-                    '<strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong> activated automatically',
-                    'Generators disconnected from grid'
+                    '<strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (Control Rods) is inserted to 100% automatically',
+                    '<strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong> (Emergency Cooling) is activated automatically',
+                    'Generators are disconnected from the grid'
                 ]},
-                { type: 'warning', content: '<h3>⚠ НЕОБРАТИМО! (Irreversible!)</h3><p>АЗ-5 cannot be undone mid-process. Use ONLY in real emergencies.</p>' },
-                { type: 'heading', content: 'Indicator УРОВЕНЬ РАДИАЦИИ (tab ОСНОВНОЙ):' },
+                { type: 'warning', content: 'АЗ-5 cannot be make undone in mid-process. Use it ONLY in real the emergencies.' },
+                { type: 'heading', content: 'Indicator УРОВЕНЬ РАДИАЦИИ (Radiation level):' },
                 { type: 'table', rows: [
                     ['Level', 'Reading'],
                     ['Норма (Normal)', '&lt; 0.5 мЗв/ч'],
@@ -361,20 +332,20 @@ var MANUAL_PAGES = {
             sections: [
                 { type: 'heading', content: 'High temperature (ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ &gt; 320°C):' },
                 { type: 'list', ordered: true, items: [
-                    'Tab <strong>ОХЛАЖДЕНИЕ</strong> → press <strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong> → <strong>АКТИВИРОВАТЬ</strong>',
-                    'Tab <strong>ОСНОВНОЙ</strong> → raise <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> to 80%+',
-                    'Tab <strong>ОХЛАЖДЕНИЕ</strong> → activate <strong>ДОПОЛНИТЕЛЬНЫЙ НАСОС</strong> → <strong>ВКЛ/ВЫКЛ</strong>',
-                    'If temp &gt; 400°C → tab <strong>ЭНЕРГИЯ</strong> → press <strong>АЗ-5</strong>'
+                    'Toggle <strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong> (Emergency Cooling) to on position',
+                    'Turn <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (Control Rods) to 80%+',
+                    'Toggle <strong>ДОПОЛНИТЕЛЬНЫЙ НАСОС</strong> (Extra Pump) to on position',
+                    'If temp &gt; 400°C → is press <strong>АЗ-5</strong> (Emergency Scram)'
                 ]},
                 { type: 'heading', content: 'High pressure (ДАВЛЕНИЕ В КОНТУРЕ &gt; 17 МПа):' },
                 { type: 'list', ordered: true, items: [
-                    'Tab <strong>ОСНОВНОЙ</strong> → raise <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (reduces power)',
-                    'Tab <strong>ОСНОВНОЙ</strong> → increase <strong>СКОРОСТЬ ГЛАВНОГО НАСОСА</strong>'
+                    'Raise <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (Control Rods) — is reduces power',
+                    'Increase <strong>ГЛАВНЫЙ НАСОС</strong> (Main Pump)'
                 ]},
                 { type: 'heading', content: 'High radiation (УРОВЕНЬ РАДИАЦИИ &gt; 1.0 мЗв/ч):' },
                 { type: 'list', ordered: true, items: [
-                    'Tab <strong>ОСНОВНОЙ</strong> → reduce <strong>МОЩНОСТЬ РЕАКТОРА</strong> via <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong>',
-                    'Monitor indicator <strong>УРОВЕНЬ РАДИАЦИИ</strong>',
+                    'Raise <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (Control Rods) for reduce power',
+                    'Monitor <strong>УРОВЕНЬ РАДИАЦИИ</strong> (Radiation level)',
                     'If &gt; 5.0 мЗв/ч → press <strong>АЗ-5</strong> immediately'
                 ]}
             ]
@@ -386,14 +357,14 @@ var MANUAL_PAGES = {
             sections: [
                 { type: 'table', rows: [
                     ['Symptom', 'Action'],
-                    ['ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ high', '↑ СКОРОСТЬ ГЛАВНОГО НАСОСА; activate АВАРИЙНОЕ ОХЛАЖДЕНИЕ'],
-                    ['ДАВЛЕНИЕ В КОНТУРЕ high', '↑ СТЕРЖНИ РЕГУЛИРОВАНИЯ; ↑ СКОРОСТЬ ГЛАВНОГО НАСОСА'],
-                    ['МОЩНОСТЬ РЕАКТОРА unstable', 'Stabilize СТЕРЖНИ РЕГУЛИРОВАНИЯ (30–70%)'],
-                    ['УРОВЕНЬ РАДИАЦИИ high', '↑ СТЕРЖНИ РЕГУЛИРОВАНИЯ to reduce power'],
-                    ['ЧАСТОТА ТОКА unstable', 'Adjust НАГРУЗКА СЕТИ via ВЫВОД В СЕТЬ'],
-                    ['УРОВЕНЬ В КОМПЕНСАТОРЕ low', 'Activate ДОПОЛНИТЕЛЬНЫЙ НАСОС → ВКЛ/ВЫКЛ']
+                    ['ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ (Core temp) high', '↑ ГЛАВНЫЙ НАСОС (Main Pump); toggle АВАРИЙНОЕ ОХЛАЖДЕНИЕ'],
+                    ['ДАВЛЕНИЕ В КОНТУРЕ (Pressure) high', '↑ СТЕРЖНИ РЕГУЛИРОВАНИЯ (Rods); ↑ ГЛАВНЫЙ НАСОС'],
+                    ['МОЩНОСТЬ РЕАКТОРА (Power) unstable', 'Stabilize СТЕРЖНИ РЕГУЛИРОВАНИЯ (30–70%)'],
+                    ['УРОВЕНЬ РАДИАЦИИ (Radiation) high', '↑ СТЕРЖНИ РЕГУЛИРОВАНИЯ for reduce power'],
+                    ['ЧАСТОТА ТОКА (Frequency) unstable', 'Check grid load — button ИЗОЛИРОВАТЬ СЕТЬ'],
+                    ['УРОВЕНЬ В КОМПЕНСАТОРЕ (Tank level) low', 'Toggle ДОПОЛНИТЕЛЬНЫЙ НАСОС (Extra Pump) on']
                 ]},
-                { type: 'warning', content: '<h3>⚠ ЗОЛОТОЕ ПРАВИЛО (Golden Rule)</h3><p>When in doubt, SAFETY first. Reduce power before investigating.</p>' }
+                { type: 'warning', content: 'When in case of doubt, the SAFETY is must comes first. Reduce power before to investigate.' }
             ]
         },
 
@@ -410,12 +381,391 @@ var MANUAL_PAGES = {
                     ['Экстренные службы (Emergency)', '9999']
                 ]},
                 { type: 'footer', content:
-                    '<div style="margin-top: 25px; text-align: center; color: #888;">' +
-                    '<p style="font-size: 24px;">★</p>' +
-                    '<p><em>"The atom is a good servant,<br>but a bad master."</em></p>' +
-                    '<p style="margin-top: 10px; font-size: 11px;">КОНЕЦ РУКОВОДСТВА</p>' +
-                    '<p style="font-size: 10px;">(End of Manual)</p>' +
-                    '</div>'
+                    '★<br><em>"The atom is a good servant, but a bad master."</em><br>КОНЕЦ РУКОВОДСТВА (End of Manual)'
+                }
+            ]
+        }
+    ],
+
+    es: [
+        // Página 1: Portada
+        {
+            title: 'ESTACIÓN NUCLEAR RBMK-1000',
+            sections: [
+                { type: 'cover', content:
+                    '<div class="manual-cover-emblem">★</div>' +
+                    '<div class="manual-cover-title">ESTACIÓN NUCLEAR<br>RBMK-1000</div>' +
+                    '<div class="manual-cover-subtitle">Manual de Operaciones Técnicas</div>' +
+                    '<div class="manual-cover-classified">ДОКУМЕНТ ОГРАНИЧЕННОГО ДОСТУПА</div>' +
+                    '<div class="manual-cover-version">República de Krasnostan · Ministerio de Energía<br>Enero 1994 · UEN-1994-047 · {{version}}</div>'
+                }
+            ]
+        },
+
+        // Página 2: Índice
+        {
+            title: 'СОДЕРЖАНИЕ (Índice)',
+            sections: [
+                { type: 'list', ordered: true, items: [
+                    'Especificaciones del reactor',
+                    'Barras de control',
+                    'Sistema de enfriamiento',
+                    'Generación de energía',
+                    'Sistemas de seguridad',
+                    'Emergencias',
+                    'Solución rápida de problemas'
+                ]},
+                { type: 'warning', content: 'Este manual contiene información vital. Consúltelo siempre que tenga dudas.' }
+            ]
+        },
+
+        // Página 3: Especificaciones
+        {
+            title: 'ХАРАКТЕРИСТИКИ (Especificaciones)',
+            sections: [
+                { type: 'heading', content: 'Реактор РБМК-1000' },
+                { type: 'table', rows: [
+                    ['Parámetro', 'Valor'],
+                    ['Тепловая мощность (Potencia térmica)', '3200 МВт'],
+                    ['Электрическая мощность (Potencia eléctrica)', '1000 МВт'],
+                    ['Тип теплоносителя (Refrigerante)', 'Лёгкая вода (Agua ligera)'],
+                    ['Замедлитель (Moderador)', 'Графит (Grafito)'],
+                    ['Топливо (Combustible)', 'UO₂ (2.0%)'],
+                    ['Рабочее давление (Presión)', '6.9 МПа'],
+                    ['Температура (Temperatura)', '280–320°C']
+                ]}
+            ]
+        },
+
+        // Página 4: Barras de control
+        {
+            title: 'СТЕРЖНИ (Barras de Control)',
+            sections: [
+                { type: 'text', content: 'El dial <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> controla 211 barras que absorben neutrones y regulan la potencia.' },
+                { type: 'heading', content: 'Posiciones del dial СТЕРЖНИ РЕГУЛИРОВАНИЯ:' },
+                { type: 'list', items: [
+                    '<strong>0–30%:</strong> Высокая мощность — Alta potencia ⚠',
+                    '<strong>30–70%:</strong> Нормальная работа — Operación normal ✓',
+                    '<strong>70–100%:</strong> Низкая мощность — Baja potencia'
+                ]},
+                { type: 'warning', content: '¡Ajuste máximo 5% a la misma vez! Los cambios bruscos son causando inestabilidade.' },
+                { type: 'heading', content: 'Indicador ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ (Temp. núcleo):' },
+                { type: 'list', items: [
+                    'Норма (Normal): &lt; 300°C',
+                    'Внимание (Advertencia): 300–350°C',
+                    'Опасность (Peligro): &gt; 350°C',
+                    'Критический (Crítico): &gt; 400°C → presione АЗ-5'
+                ]}
+            ]
+        },
+
+        // Página 5: Enfriamiento
+        {
+            title: 'ОХЛАЖДЕНИЕ (Enfriamiento)',
+            sections: [
+                { type: 'table', rows: [
+                    ['Control', 'Función'],
+                    ['<strong>ГЛАВНЫЙ НАСОС</strong> (Bomba Principal)', 'Bomba principal. Normal: 60–80%'],
+                    ['<strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong> (Enfriamiento Emergencia)', 'Activar si temp &gt; 320°C'],
+                    ['<strong>ДОПОЛНИТЕЛЬНЫЙ НАСОС</strong> (Bomba Adicional)', 'Refuerzo de enfriamiento']
+                ]},
+                { type: 'heading', content: 'Indicadores de enfriamiento:' },
+                { type: 'table', rows: [
+                    ['Indicador', 'Valor normal'],
+                    ['ТЕМПЕРАТУРА ВОДЫ (ВХОД) (Temp. entrada)', '170–190°C'],
+                    ['ТЕМПЕРАТУРА ВОДЫ (ВЫХОД) (Temp. salida)', '270–290°C'],
+                    ['РАСХОД ТЕПЛОНОСИТЕЛЯ (Caudal)', '8000–9000 м³/ч'],
+                    ['УРОВЕНЬ В КОМПЕНСАТОРЕ (Nivel compensador)', '50–70%']
+                ]}
+            ]
+        },
+
+        // Página 6: Energía
+        {
+            title: 'ЭНЕРГИЯ (Generación de Energía)',
+            sections: [
+                { type: 'text', content: 'Dos turbogeneradores de 500 МВт cada uno. El botón <strong>ИЗОЛИРОВАТЬ СЕТЬ</strong> conectan o desconectan de la red eléctrico.' },
+                { type: 'table', rows: [
+                    ['Indicador', 'Valor normal'],
+                    ['ВЫРАБОТКА ЭНЕРГИИ (Generación)', '700–900 МВт'],
+                    ['НАПРЯЖЕНИЕ ГЕНЕРАТОРА (Tensión)', '15.75 кВ'],
+                    ['ЧАСТОТА ТОКА (Frecuencia)', '50.0 Гц ± 0.2'],
+                    ['НАГРУЗКА СЕТИ (Carga de red)', '70–90%']
+                ]},
+                { type: 'warning', content: 'Mantener НАГРУЗКА СЕТИ (Carga) entre 70–90% para la estabilidade de la red.' }
+            ]
+        },
+
+        // Página 7: Seguridad
+        {
+            title: 'БЕЗОПАСНОСТЬ (Seguridad)',
+            sections: [
+                { type: 'heading', content: 'АЗ-5 — Аварийная Защита (Protección de Emergencia)' },
+                { type: 'text', content: 'Botón rojo <strong>АЗ-5 / ЗАЩИТА</strong> en el panel. Al presionar:' },
+                { type: 'list', items: [
+                    '<strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (Barras de Control) insertadas al 100% automáticamente',
+                    '<strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong> (Enfriamiento de Emergencia) activado automáticamente',
+                    'Generadores desconectados de la red'
+                ]},
+                { type: 'warning', content: 'АЗ-5 no puede ser cancelar durante el proceso. Use SOLAMENTE en emergencias reales.' },
+                { type: 'heading', content: 'Indicador УРОВЕНЬ РАДИАЦИИ (Nivel de radiación):' },
+                { type: 'table', rows: [
+                    ['Nivel', 'Lectura'],
+                    ['Норма (Normal)', '&lt; 0.5 мЗв/ч'],
+                    ['Внимание (Advertencia)', '1.0–5.0 мЗв/ч'],
+                    ['Опасность (Peligro)', '&gt; 5.0 мЗв/ч → reduzca potencia']
+                ]}
+            ]
+        },
+
+        // Página 8: Emergencias
+        {
+            title: 'АВАРИИ (Emergencias)',
+            sections: [
+                { type: 'heading', content: 'Temperatura alta (ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ &gt; 320°C):' },
+                { type: 'list', ordered: true, items: [
+                    'Active el toggle <strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong> (Enfriamiento de Emergencia)',
+                    'Gire <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (Barras) al 80%+',
+                    'Active el toggle <strong>ДОПОЛНИТЕЛЬНЫЙ НАСОС</strong> (Bomba Adicional)',
+                    'Si temp &gt; 400°C → presione <strong>АЗ-5</strong>'
+                ]},
+                { type: 'heading', content: 'Presión alta (ДАВЛЕНИЕ В КОНТУРЕ &gt; 17 МПа):' },
+                { type: 'list', ordered: true, items: [
+                    'Aumente <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (Barras) — reduce potencia',
+                    'Aumente <strong>ГЛАВНЫЙ НАСОС</strong> (Bomba Principal)'
+                ]},
+                { type: 'heading', content: 'Radiación alta (УРОВЕНЬ РАДИАЦИИ &gt; 1.0 мЗв/ч):' },
+                { type: 'list', ordered: true, items: [
+                    'Aumente <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (Barras) para reducir potencia',
+                    'Monitoree <strong>УРОВЕНЬ РАДИАЦИИ</strong> (Nivel de radiación)',
+                    'Si &gt; 5.0 мЗв/ч → presione <strong>АЗ-5</strong> inmediatamente'
+                ]}
+            ]
+        },
+
+        // Página 9: Soluciones
+        {
+            title: 'РЕШЕНИЯ (Soluciones Rápidas)',
+            sections: [
+                { type: 'table', rows: [
+                    ['Síntoma', 'Acción'],
+                    ['ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ (Temp. núcleo) alta', '↑ ГЛАВНЫЙ НАСОС (Bomba); activar АВАРИЙНОЕ ОХЛАЖДЕНИЕ'],
+                    ['ДАВЛЕНИЕ В КОНТУРЕ (Presión) alto', '↑ СТЕРЖНИ РЕГУЛИРОВАНИЯ (Barras); ↑ ГЛАВНЫЙ НАСОС'],
+                    ['МОЩНОСТЬ РЕАКТОРА (Potencia) inestable', 'Estabilice СТЕРЖНИ РЕГУЛИРОВАНИЯ (30–70%)'],
+                    ['УРОВЕНЬ РАДИАЦИИ (Radiación) alto', '↑ СТЕРЖНИ РЕГУЛИРОВАНИЯ para reducir potencia'],
+                    ['ЧАСТОТА ТОКА (Frecuencia) inestable', 'Verifique carga — botón ИЗОЛИРОВАТЬ СЕТЬ'],
+                    ['УРОВЕНЬ В КОМПЕНСАТОРЕ (Nivel) bajo', 'Active toggle ДОПОЛНИТЕЛЬНЫЙ НАСОС (Bomba Adicional)']
+                ]},
+                { type: 'warning', content: 'En caso de duda, la seguridade primero. Reducir la potencia antes de investigar.' }
+            ]
+        },
+
+        // Página 10: Contactos
+        {
+            title: 'КОНТАКТЫ (Contactos)',
+            sections: [
+                { type: 'table', rows: [
+                    ['Должность (Cargo)', 'Номер (Ext.)'],
+                    ['Директор станции (Director)', '1001'],
+                    ['Главный инженер (Ing. Jefe)', '1002'],
+                    ['Офицер безопасности (Seguridad)', '1003'],
+                    ['Министерство (Ministerio)', '9000'],
+                    ['Экстренные службы (Emergencias)', '9999']
+                ]},
+                { type: 'footer', content:
+                    '★<br><em>"El átomo es un buen sirviente, pero un mal amo."</em><br>КОНЕЦ РУКОВОДСТВА (Fin del Manual)'
+                }
+            ]
+        }
+    ],
+
+    fr: [
+        // Page 1: Couverture
+        {
+            title: 'CENTRALE NUCLÉAIRE RBMK-1000',
+            sections: [
+                { type: 'cover', content:
+                    '<div class="manual-cover-emblem">★</div>' +
+                    '<div class="manual-cover-title">CENTRALE NUCLÉAIRE<br>RBMK-1000</div>' +
+                    '<div class="manual-cover-subtitle">Manuel des Opérations Techniques</div>' +
+                    '<div class="manual-cover-classified">ДОКУМЕНТ ОГРАНИЧЕННОГО ДОСТУПА</div>' +
+                    '<div class="manual-cover-version">République de Krasnostan · Ministère de l\'Énergie<br>Janvier 1994 · UEN-1994-047 · {{version}}</div>'
+                }
+            ]
+        },
+
+        // Page 2: Sommaire
+        {
+            title: 'СОДЕРЖАНИЕ (Sommaire)',
+            sections: [
+                { type: 'list', ordered: true, items: [
+                    'Spécifications du réacteur',
+                    'Barres de contrôle',
+                    'Système de refroidissement',
+                    'Production d\'énergie',
+                    'Systèmes de sécurité',
+                    'Urgences',
+                    'Dépannage rapide'
+                ]},
+                { type: 'warning', content: 'Ce manuel contient des informations vitales. Consultez-le en cas de doute.' }
+            ]
+        },
+
+        // Page 3: Spécifications
+        {
+            title: 'ХАРАКТЕРИСТИКИ (Spécifications)',
+            sections: [
+                { type: 'heading', content: 'Реактор РБМК-1000' },
+                { type: 'table', rows: [
+                    ['Paramètre', 'Valeur'],
+                    ['Тепловая мощность (Puissance thermique)', '3200 МВт'],
+                    ['Электрическая мощность (Puissance électrique)', '1000 МВт'],
+                    ['Тип теплоносителя (Caloporteur)', 'Лёгкая вода (Eau légère)'],
+                    ['Замедлитель (Modérateur)', 'Графит (Graphite)'],
+                    ['Топливо (Combustible)', 'UO₂ (2.0%)'],
+                    ['Рабочее давление (Pression)', '6.9 МПа'],
+                    ['Температура (Température)', '280–320°C']
+                ]}
+            ]
+        },
+
+        // Page 4: Barres de contrôle
+        {
+            title: 'СТЕРЖНИ (Barres de Contrôle)',
+            sections: [
+                { type: 'text', content: 'Le dial <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> contrôle 211 barres qui absorbent les neutrons et régulent la puissance.' },
+                { type: 'heading', content: 'Positions du dial СТЕРЖНИ РЕГУЛИРОВАНИЯ :' },
+                { type: 'list', items: [
+                    '<strong>0–30 % :</strong> Высокая мощность — Haute puissance ⚠',
+                    '<strong>30–70 % :</strong> Нормальная работа — Fonctionnement normal ✓',
+                    '<strong>70–100 % :</strong> Низкая мощность — Faible puissance'
+                ]},
+                { type: 'warning', content: 'Ajustez le maximum 5 % à chaque fois ! Les changements brusques causeront de l\'instabilitées.' },
+                { type: 'heading', content: 'Indicateur ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ (Temp. cœur) :' },
+                { type: 'list', items: [
+                    'Норма (Normal) : &lt; 300°C',
+                    'Внимание (Attention) : 300–350°C',
+                    'Опасность (Danger) : &gt; 350°C',
+                    'Критический (Critique) : &gt; 400°C → appuyez sur АЗ-5'
+                ]}
+            ]
+        },
+
+        // Page 5: Refroidissement
+        {
+            title: 'ОХЛАЖДЕНИЕ (Refroidissement)',
+            sections: [
+                { type: 'table', rows: [
+                    ['Commande', 'Fonction'],
+                    ['<strong>ГЛАВНЫЙ НАСОС</strong> (Pompe principale)', 'Pompe principale. Normal : 60–80 %'],
+                    ['<strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong> (Refroid. d\'urgence)', 'Activer si temp &gt; 320°C'],
+                    ['<strong>ДОПОЛНИТЕЛЬНЫЙ НАСОС</strong> (Pompe supplémentaire)', 'Renfort de refroidissement']
+                ]},
+                { type: 'heading', content: 'Indicateurs de refroidissement :' },
+                { type: 'table', rows: [
+                    ['Indicateur', 'Valeur normale'],
+                    ['ТЕМПЕРАТУРА ВОДЫ (ВХОД) (Temp. entrée)', '170–190°C'],
+                    ['ТЕМПЕРАТУРА ВОДЫ (ВЫХОД) (Temp. sortie)', '270–290°C'],
+                    ['РАСХОД ТЕПЛОНОСИТЕЛЯ (Débit)', '8000–9000 м³/ч'],
+                    ['УРОВЕНЬ В КОМПЕНСАТОРЕ (Niveau compensateur)', '50–70 %']
+                ]}
+            ]
+        },
+
+        // Page 6: Énergie
+        {
+            title: 'ЭНЕРГИЯ (Production d\'Énergie)',
+            sections: [
+                { type: 'text', content: 'Deux turbogénérateurs de 500 МВт chacuns. Bouton <strong>ИЗОЛИРОВАТЬ СЕТЬ</strong> connecte ou déconnecte de le réseau électrique.' },
+                { type: 'table', rows: [
+                    ['Indicateur', 'Valeur normale'],
+                    ['ВЫРАБОТКА ЭНЕРГИИ (Production)', '700–900 МВт'],
+                    ['НАПРЯЖЕНИЕ ГЕНЕРАТОРА (Tension)', '15.75 кВ'],
+                    ['ЧАСТОТА ТОКА (Fréquence)', '50.0 Гц ± 0.2'],
+                    ['НАГРУЗКА СЕТИ (Charge réseau)', '70–90 %']
+                ]},
+                { type: 'warning', content: 'Maintenez НАГРУЗКА СЕТИ (Charge) entre 70–90 % pour la stabilitée de le réseau.' }
+            ]
+        },
+
+        // Page 7: Sécurité
+        {
+            title: 'БЕЗОПАСНОСТЬ (Sécurité)',
+            sections: [
+                { type: 'heading', content: 'АЗ-5 — Аварийная Защита (Protection d\'Urgence)' },
+                { type: 'text', content: 'Bouton rouge <strong>АЗ-5 / ЗАЩИТА</strong> sur le panneau. Lorsqu\'il est pressé :' },
+                { type: 'list', items: [
+                    '<strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (Barres de contrôle) insérées à 100 % automatiquement',
+                    '<strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong> (Refroidissement d\'urgence) activé automatiquement',
+                    'Générateurs déconnectés du réseau'
+                ]},
+                { type: 'warning', content: 'АЗ-5 ne peut pas être annulé en cours de processus. Utilisez-le UNIQUEMENT en vraie les urgences.' },
+                { type: 'heading', content: 'Indicateur УРОВЕНЬ РАДИАЦИИ (Niveau de radiation) :' },
+                { type: 'table', rows: [
+                    ['Niveau', 'Lecture'],
+                    ['Норма (Normal)', '&lt; 0.5 мЗв/ч'],
+                    ['Внимание (Attention)', '1.0–5.0 мЗв/ч'],
+                    ['Опасность (Danger)', '&gt; 5.0 мЗв/ч → réduisez la puissance']
+                ]}
+            ]
+        },
+
+        // Page 8: Urgences
+        {
+            title: 'АВАРИИ (Urgences)',
+            sections: [
+                { type: 'heading', content: 'Température élevée (ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ &gt; 320°C) :' },
+                { type: 'list', ordered: true, items: [
+                    'Activez le toggle <strong>АВАРИЙНОЕ ОХЛАЖДЕНИЕ</strong> (Refroidissement d\'urgence)',
+                    'Tournez <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (Barres) à 80 %+',
+                    'Activez le toggle <strong>ДОПОЛНИТЕЛЬНЫЙ НАСОС</strong> (Pompe supplémentaire)',
+                    'Si temp &gt; 400°C → appuyez sur <strong>АЗ-5</strong>'
+                ]},
+                { type: 'heading', content: 'Pression élevée (ДАВЛЕНИЕ В КОНТУРЕ &gt; 17 МПа) :' },
+                { type: 'list', ordered: true, items: [
+                    'Augmentez <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (Barres) — réduit la puissance',
+                    'Augmentez <strong>ГЛАВНЫЙ НАСОС</strong> (Pompe principale)'
+                ]},
+                { type: 'heading', content: 'Radiation élevée (УРОВЕНЬ РАДИАЦИИ &gt; 1.0 мЗв/ч) :' },
+                { type: 'list', ordered: true, items: [
+                    'Augmentez <strong>СТЕРЖНИ РЕГУЛИРОВАНИЯ</strong> (Barres) pour réduire la puissance',
+                    'Surveillez <strong>УРОВЕНЬ РАДИАЦИИ</strong> (Niveau de radiation)',
+                    'Si &gt; 5.0 мЗв/ч → appuyez sur <strong>АЗ-5</strong> immédiatement'
+                ]}
+            ]
+        },
+
+        // Page 9: Dépannage
+        {
+            title: 'РЕШЕНИЯ (Dépannage Rapide)',
+            sections: [
+                { type: 'table', rows: [
+                    ['Symptôme', 'Action'],
+                    ['ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ (Temp. cœur) élevée', '↑ ГЛАВНЫЙ НАСОС (Pompe) ; activer АВАРИЙНОЕ ОХЛАЖДЕНИЕ'],
+                    ['ДАВЛЕНИЕ В КОНТУРЕ (Pression) élevée', '↑ СТЕРЖНИ РЕГУЛИРОВАНИЯ (Barres) ; ↑ ГЛАВНЫЙ НАСОС'],
+                    ['МОЩНОСТЬ РЕАКТОРА (Puissance) instable', 'Stabilisez СТЕРЖНИ РЕГУЛИРОВАНИЯ (30–70 %)'],
+                    ['УРОВЕНЬ РАДИАЦИИ (Radiation) élevé', '↑ СТЕРЖНИ РЕГУЛИРОВАНИЯ pour réduire la puissance'],
+                    ['ЧАСТОТА ТОКА (Fréquence) instable', 'Vérifiez charge réseau — bouton ИЗОЛИРОВАТЬ СЕТЬ'],
+                    ['УРОВЕНЬ В КОМПЕНСАТОРЕ (Niveau) bas', 'Activez toggle ДОПОЛНИТЕЛЬНЫЙ НАСОС (Pompe suppl.)']
+                ]},
+                { type: 'warning', content: 'En cas de doute, le sécurité est d\'abord. Réduire la puissance avant d\'investiguer.' }
+            ]
+        },
+
+        // Page 10: Contacts
+        {
+            title: 'КОНТАКТЫ (Contacts)',
+            sections: [
+                { type: 'table', rows: [
+                    ['Должность (Poste)', 'Номер (Ext.)'],
+                    ['Директор станции (Directeur)', '1001'],
+                    ['Главный инженер (Ing. en chef)', '1002'],
+                    ['Офицер безопасности (Sécurité)', '1003'],
+                    ['Министерство (Ministère)', '9000'],
+                    ['Экстренные службы (Urgences)', '9999']
+                ]},
+                { type: 'footer', content:
+                    '★<br><em>"L\'atome est un bon serviteur, mais un mauvais maître."</em><br>КОНЕЦ РУКОВОДСТВА (Fin du Manuel)'
                 }
             ]
         }
@@ -425,11 +775,17 @@ var MANUAL_PAGES = {
 // ===== MANUAL PAGE RENDERER =====
 // Converts structured MANUAL_PAGES into HTML strings consumed by UIControllerNew.openManual()
 (function() {
+    var revMajor = Math.floor(Math.random() * 5) + 2;
+    var revMinor = Math.floor(Math.random() * 10);
+    var revPatch = Math.floor(Math.random() * 9) + 1;
+    var randomVersion = 'Rev.' + revMajor + '.' + revMinor + '.' + revPatch;
+
     function renderSection(s) {
         switch (s.type) {
             case 'cover':
+                return (s.content || '').replace('{{version}}', randomVersion);
             case 'footer':
-                return s.content || '';
+                return '<div class="manual-footer">' + (s.content || '') + '</div>';
             case 'heading':
                 return '<h3 class="manual-heading">' + (s.content || '') + '</h3>';
             case 'text':
@@ -454,8 +810,10 @@ var MANUAL_PAGES = {
     }
 
     function renderPage(page, index) {
+        var isCover = index === 0;
+        var titleHtml = isCover ? '' : '<h2 class="manual-page-title">' + (page.title || '') + '</h2>';
         return '<div class="manual-page" data-page="' + (index + 1) + '">' +
-            '<h2 class="manual-page-title">' + (page.title || '') + '</h2>' +
+            titleHtml +
             (page.sections || []).map(renderSection).join('') +
             '</div>';
     }
@@ -463,6 +821,8 @@ var MANUAL_PAGES = {
     if (typeof window !== 'undefined') {
         window.manualPagesPT = (MANUAL_PAGES.pt || []).map(renderPage);
         window.manualPagesEN = (MANUAL_PAGES.en || []).map(renderPage);
+        window.manualPagesES = (MANUAL_PAGES.es || []).map(renderPage);
+        window.manualPagesFR = (MANUAL_PAGES.fr || []).map(renderPage);
     }
 })();
 

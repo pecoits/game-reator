@@ -31,6 +31,8 @@ module.exports = [
                 UIControllerNew: 'readonly',
                 manualPagesPT: 'readonly',
                 manualPagesEN: 'readonly',
+                manualPagesES: 'readonly',
+                manualPagesFR: 'readonly',
                 GameOverSystem: 'readonly',
                 DemandSystem: 'readonly',
                 RankingSystem: 'readonly'

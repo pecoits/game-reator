@@ -469,22 +469,23 @@ var UIControllerNew = (function() {
 
     UIControllerNew.prototype.openManual = function() {
         var lang = window.selectedLanguage || 'en';
-        var pages = lang === 'pt' ? manualPagesPT : manualPagesEN;
+        var pages = lang === 'pt' ? manualPagesPT :
+                    lang === 'es' ? manualPagesES :
+                    lang === 'fr' ? manualPagesFR : manualPagesEN;
         
         if (!pages || pages.length === 0) return;
         
-        var html = '<button class="manual-close-float" id="manual-close-float">×</button>';
-        html += '<div class="manual-content" id="manual-pages-container">';
-        
+        var html = '<div id="manual-pages-container">';
+
         pages.forEach(function(page) {
             html += page;
         });
-        
+
+        html += '</div>';
         html += '<div class="manual-nav">';
         html += '<button class="manual-nav-btn" id="manual-prev-btn" disabled>← НАЗАД</button>';
-        html += '<span class="manual-page-indicator" id="manual-page-indicator">1 / ' + pages.length + '</span>';
+        html += '<span id="manual-page-indicator">1 / ' + pages.length + '</span>';
         html += '<button class="manual-nav-btn" id="manual-next-btn">ДАЛЕЕ →</button>';
-        html += '</div>';
         html += '</div>';
         
         this.elements.manualContent.innerHTML = html;
@@ -493,6 +494,7 @@ var UIControllerNew = (function() {
         this.currentManualPage = 1;
         this.totalManualPages = pages.length;
         this.setupManualNavigation();
+        this.goToManualPage(1);
     };
 
     UIControllerNew.prototype.setupManualNavigation = function() {
