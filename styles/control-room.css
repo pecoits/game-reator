@@ -1225,6 +1225,31 @@ body {
 }
 
 
+/* ===== FAULT LEDs (indicadores de falha nos controles) ===== */
+.fault-led {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #1a1010;
+    border: 1px solid #3a2a2a;
+    vertical-align: middle;
+    margin-left: 5px;
+    transition: background 0.15s, box-shadow 0.15s;
+}
+
+.fault-led.active {
+    background: #ff2020;
+    border-color: #ff4040;
+    box-shadow: 0 0 5px #ff2020, 0 0 10px rgba(255,32,32,0.4);
+    animation: fault-led-blink 0.55s step-start infinite;
+}
+
+@keyframes fault-led-blink {
+    0%,  49% { opacity: 1; }
+    50%, 100% { opacity: 0.15; }
+}
+
 /* ===== TUTORIAL PANEL (DOMINGOS FERREIRA) ===== */
 #tutorial-panel {
     position: fixed;

@@ -8,6 +8,8 @@ var UIControllerNew = (function() {
         this.warningSoundCooldown = 3000;
         this.currentManualPage = 1;
         this.totalManualPages = 1;
+        this.prevPumpFault = false;
+        this.prevRodFault  = false;
         
         this.elements = {};
         
@@ -141,6 +143,10 @@ var UIControllerNew = (function() {
         this.elements.statEnergy = document.getElementById('stat-energy');
         this.elements.statAlerts = document.getElementById('stat-alerts');
         
+        // Fault LEDs
+        this.elements.ledPump = document.getElementById('led-pump');
+        this.elements.ledRods = document.getElementById('led-rods');
+
         // Modals
         this.elements.manualModal = document.getElementById('manual-modal');
         this.elements.alertModal = document.getElementById('alert-modal');
@@ -373,6 +379,12 @@ var UIControllerNew = (function() {
         if (this.elements.statTime)   this.elements.statTime.textContent   = this.formatTime(state.time);
         if (this.elements.statEnergy) this.elements.statEnergy.textContent = Math.round(state.totalEnergyMWh || 0);
         if (this.elements.statAlerts) this.elements.statAlerts.textContent = state.totalAlerts || 0;
+
+        // Fault LEDs — acende/apaga e dispara bipe sonoro na nova falha
+        this._updateFaultLed(this.elements.ledPump, state.pumpFaultActive, this.prevPumpFault);
+        this._updateFaultLed(this.elements.ledRods, state.rodSlipActive,   this.prevRodFault);
+        this.prevPumpFault = !!state.pumpFaultActive;
+        this.prevRodFault  = !!state.rodSlipActive;
     };
 
     UIControllerNew.prototype.updateSparkline = function(lineEl, data, min, max) {
@@ -576,6 +588,15 @@ var UIControllerNew = (function() {
         return hours.toString().padStart(2, '0') + ':' + 
                (minutes % 60).toString().padStart(2, '0') + ':' + 
                (seconds % 60).toString().padStart(2, '0');
+    };
+
+    UIControllerNew.prototype._updateFaultLed = function(ledEl, isActive, wasPrev) {
+        if (!ledEl) return;
+        ledEl.classList.toggle('active', !!isActive);
+        // Bipe apenas no momento em que a falha começa (borda de subida)
+        if (isActive && !wasPrev) {
+            this.soundSystem.playFaultBeep();
+        }
     };
 
     return UIControllerNew;

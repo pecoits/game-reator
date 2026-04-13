@@ -33,6 +33,7 @@ class ReactorSimulation {
         this.decayHeat            = 0;    // calor residual após SCRAM
         this.pumpDegradation      = 1.0;  // multiplicador de eficiência da bomba (falhas temporárias)
         this.pumpDegradationTimer = 0;    // ticks restantes de degradação
+        this.rodSlipTimer         = 0;    // ticks restantes de aviso de deslizamento de barras
 
         // Simulation state
         this.time                 = 0;
@@ -86,6 +87,9 @@ class ReactorSimulation {
         this.ticks++;
         this.totalEnergyMWh += this.energyGeneration * (deltaTime / 3600000);
         this._recordHistory();
+
+        // Contador de aviso de deslizamento de barras
+        if (this.rodSlipTimer > 0) this.rodSlipTimer--;
 
         // Recuperação ou escalada de falha da bomba
         if (this.pumpDegradationTimer > 0) {
@@ -350,6 +354,7 @@ class ReactorSimulation {
                 message: 'Проскальзывание стержней: потеря позиции -15%',
                 effect: function() {
                     self.controlRodsPosition = Math.max(0, self.controlRodsPosition - 15);
+                    self.rodSlipTimer = 40;
                     self.addEvent('warning', 'Стержни сдвинулись. Скорректируйте положение регуляторов.');
                 }
             },
@@ -456,6 +461,8 @@ class ReactorSimulation {
             scramActive: this.scramActive,
             decayHeat: this.decayHeat,
             pumpDegradation: this.pumpDegradation,
+            pumpFaultActive: this.pumpDegradationTimer > 0,
+            rodSlipActive:   this.rodSlipTimer > 0,
             alerts: this.alerts,
             time: this.time,
             gracePeriodActive: !this.eventsEnabled,

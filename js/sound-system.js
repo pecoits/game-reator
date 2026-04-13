@@ -220,6 +220,30 @@ class SoundSystem {
         oscillator2.stop(now + 0.45);
     }
 
+    playFaultBeep() {
+        if (!this.initialized || this.muted) return;
+
+        var ctx = this.audioContext;
+        var now = ctx.currentTime;
+
+        // Dois bipes curtos descendentes — som de falha de equipamento
+        [[520, 0], [360, 0.22]].forEach(function(pair) {
+            var freq  = pair[0];
+            var delay = pair[1];
+            var osc  = ctx.createOscillator();
+            var gain = ctx.createGain();
+            osc.type = 'square';
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0, now + delay);
+            gain.gain.linearRampToValueAtTime(0.18, now + delay + 0.01);
+            gain.gain.linearRampToValueAtTime(0, now + delay + 0.12);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + delay);
+            osc.stop(now + delay + 0.14);
+        });
+    }
+
     getState() {
         return {
             volume: this.volume,
