@@ -25,6 +25,7 @@ var REACTOR_CONFIG = {
     },
     gracePeriod: 180000,
     explosionTemp: 550,                // °C — limite físico irreversível (fusão do combustível)
+    shiftDuration: 600000,             // ms — duração de um turno completo (10 min tempo real)
     startupMissionDelay: 210000,
     randomEventChance: 0.003,
     physics: {

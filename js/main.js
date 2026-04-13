@@ -9,10 +9,12 @@ class GameApp {
         this.gameLoop = null;
         this.lastTime = 0;
         this.loadingComplete = false;
-        this.saveSystem     = new SaveSystem();
-        this.rankingSystem  = new RankingSystem();
-        this.gameOverSystem = null;
-        this.demandSystem   = null;
+        this.saveSystem      = new SaveSystem();
+        this.rankingSystem   = new RankingSystem();
+        this.gameOverSystem  = null;
+        this.demandSystem    = null;
+        this.tutorialSystem  = null;
+        this.shiftComplete   = false;
 
         // Call init
         this.init();
@@ -176,6 +178,12 @@ class GameApp {
                 if (this.eventSystem) this.eventSystem.update(delta);
                 if (this.gameOverSystem) this.gameOverSystem.update();
                 if (this.demandSystem)   this.demandSystem.update(delta);
+
+                // Verificação de turno completo
+                if (!this.shiftComplete && this.gameOverSystem && !this.gameOverSystem.triggered &&
+                    this.simulation && this.simulation.time >= REACTOR_CONFIG.shiftDuration) {
+                    this._triggerShiftComplete();
+                }
                 // Auto-save every 10 ticks
                 if (this.simulation.ticks > 0 && this.simulation.ticks % 10 === 0 && this.saveSystem) {
                     const completedMissions = this.eventSystem
@@ -200,6 +208,38 @@ class GameApp {
         requestAnimationFrame(loop);
     }
 
+    _triggerShiftComplete() {
+        this.shiftComplete = true;
+        this.simulation.stop();
+        this.saveSystem.clear();
+
+        const timeMs        = this.simulation.time;
+        const timeFormatted = this._formatTime(timeMs);
+        const energyMWh     = Math.round(this.simulation.totalEnergyMWh);
+        const totalAlerts   = this.simulation.totalAlerts;
+
+        if (this.rankingSystem) {
+            this.rankingSystem.record({
+                date: Date.now(), outcome: 'shift',
+                timeMs, timeFormatted, energyMWh, totalAlerts,
+                cause: 'Turno concluído'
+            });
+        }
+
+        const screen = document.getElementById('gameover-shift');
+        if (!screen) return;
+        const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+        set('shift-time',      timeFormatted);
+        set('shift-energy',    energyMWh + ' MWh');
+        set('shift-incidents', totalAlerts);
+        screen.style.display = 'flex';
+    }
+
+    _formatTime(ms) {
+        const s = Math.floor((ms || 0) / 1000);
+        return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+    }
+
     showRanking() {
         const entries = this.rankingSystem.load();
         const listEl  = document.getElementById('ranking-list');
@@ -209,11 +249,15 @@ class GameApp {
             listEl.innerHTML = '<p class="ranking-empty">Нет данных — Nenhuma partida registrada.</p>';
         } else {
             listEl.innerHTML = entries.map(function(e, i) {
-                const outcomeClass = e.outcome === 'explosion' ? 'rank-stamp-explosion' : 'rank-stamp-dismissal';
-                const outcomeText  = e.outcome === 'explosion'  ? 'ВЗРЫВ' : 'УВОЛЕН';
+                const outcomeClass = e.outcome === 'explosion' ? 'rank-stamp-explosion' :
+                                     e.outcome === 'shift'     ? 'rank-stamp-shift'     : 'rank-stamp-dismissal';
+                const outcomeText  = e.outcome === 'explosion' ? 'ВЗРЫВ' :
+                                     e.outcome === 'shift'     ? 'СМЕНА' : 'УВОЛЕН';
                 const detail = e.outcome === 'explosion'
                     ? (e.cause || '—')
-                    : (e.blackouts + ' apagões | cota ' + (e.quota || '—') + ' MW');
+                    : e.outcome === 'shift'
+                        ? (e.energyMWh + ' MWh | ' + e.totalAlerts + ' inc.')
+                        : (e.blackouts + ' apagões | cota ' + (e.quota || '—') + ' MW');
                 const dateStr = new Date(e.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
                 const energy  = typeof e.energyMWh === 'number' ? e.energyMWh + ' MWh' : '—';
                 return '<div class="rank-entry">' +

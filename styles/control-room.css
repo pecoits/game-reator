@@ -1157,6 +1157,19 @@ body {
 .dis-redacted { background: #2a1a0a; color: #2a1a0a; user-select: none; }
 .dis-stats { font-size: 10.5px; color: #6a5a4a; margin: 8px 0; }
 
+/* Turno completo */
+.gameover-shift-bg { background: radial-gradient(ellipse at center, #071a04 0%, #020d01 100%); }
+.shift-document { background: #0d1f09; border: 2px solid #4a7a3a; padding: 28px 32px; max-width: 380px; width: 90%; font-family: 'Courier New', monospace; font-size: 12px; color: #a8d898; box-shadow: 0 0 40px rgba(68,180,48,0.2); position: relative; line-height: 1.7; }
+.shift-stamp { position: absolute; top: 12px; right: 14px; color: #44cc30; border: 2.5px solid #44cc30; padding: 2px 8px; font-size: 10px; letter-spacing: 3px; transform: rotate(-7deg); opacity: 0.9; font-weight: bold; }
+.shift-ministry { font-weight: bold; font-size: 13px; text-align: center; letter-spacing: 1.5px; color: #88cc78; margin-bottom: 2px; }
+.shift-order { text-align: center; font-size: 11px; color: #5a8a4a; letter-spacing: 2px; margin-bottom: 6px; }
+.shift-body { color: #8ab87a; font-size: 11.5px; margin: 10px 0; }
+.shift-stats { font-size: 11px; color: #5a8a4a; margin: 8px 0; }
+.shift-stats strong { color: #88cc78; }
+.shift-btn { background: #0d2a09; color: #88cc78; border-color: #4a7a3a; display: block; width: 100%; }
+.shift-btn:hover { background: #1a4a14; }
+.rank-stamp-shift { color: #44cc30; border-color: #44cc30; }
+
 .gameover-btn { margin-top: 16px; background: #441111; color: #ffcccc; border: 1px solid #661111; padding: 10px 24px; font-family: 'Courier New', monospace; font-size: 13px; letter-spacing: 2px; cursor: pointer; transition: background 0.2s; }
 .gameover-btn:hover { background: #661111; }
 .dis-btn { background: #5a4a3a; color: #f0e8d0; border-color: #8a7a60; display: block; width: 100%; }
@@ -1297,6 +1310,40 @@ body {
     color: #c8bc9e;
     line-height: 1.7;
     white-space: pre-wrap;
+}
+
+.tut-action {
+    margin-top: 14px;
+    border: 1px solid #4a4030;
+    padding: 10px 12px;
+    background: #111008;
+}
+
+.tut-action-instruction {
+    font-size: 11px;
+    color: #cc9900;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+
+.tut-action-status {
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.tut-action-status.waiting { color: #5a4a30; }
+.tut-action-status.done    { color: #44cc30; font-weight: bold; }
+
+.tut-btn-next.disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.tut-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .tut-footer {

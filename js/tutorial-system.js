@@ -1,6 +1,7 @@
 // ===== TUTORIAL SYSTEM — DOMINGOS FERREIRA =====
 // Painel lateral com tutorial narrativo do faxineiro angolano.
 // Mostrado apenas na primeira sessão (flag localStorage).
+// Passos 2 e 3 são interativos: o jogador precisa agir antes de avançar.
 
 var TUTORIAL_STEPS = {
     pt: [
@@ -10,15 +11,21 @@ var TUTORIAL_STEPS = {
         },
         {
             title: 'Temperatura do núcleo',
-            text:  'Esse indicador é o mais importante — ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ. Acima de 300°C, você precisa agir. Acima de 400°C, você precisa agir AGORA. Não espere os alarmes gritarem para você perceber. Quando os alarmes gritam, já demorou.'
+            text:  'Esse indicador é o mais importante — ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ. Acima de 300°C, você precisa agir. Acima de 400°C, você precisa agir AGORA. Não espere os alarmes gritarem. Quando eles gritam, já demorou.'
         },
         {
             title: 'Barras de controle',
-            text:  'As barras — СТЕРЖНИ РЕГУЛИРОВАНИЯ — são os freios do reator. Mais inseridas significa menos potência, menos calor. Se a temperatura subir, insira mais. Simples assim. O operador anterior esqueceu disso. Trabalha em Moscou agora... numa fábrica de caixas.'
+            text:  'As barras — СТЕРЖНИ РЕГУЛИРОВАНИЯ — são os freios do reator. Mais inseridas significa menos potência, menos calor. O operador anterior esqueceu disso. Trabalha em Moscou agora... numa fábrica de caixas.',
+            actionInstruction: 'Gire o dial СТЕРЖНИ para 70% ou mais.',
+            actionWait: 'aguardando ação...',
+            actionDone: '✓ CORRETO'
         },
         {
             title: 'Bomba de circulação',
-            text:  'A bomba — ГЦН — circula o refrigerante pelo núcleo. Sem ela, a temperatura sobe mesmo com as barras inseridas. Nunca deixe abaixo de 40% com o reator operando. Aprendi isso sozinho. Do jeito difícil.'
+            text:  'A bomba — ГЦН — circula o refrigerante pelo núcleo. Sem ela, a temperatura sobe mesmo com as barras inseridas. Nunca deixe abaixo de 40% com o reator operando. Aprendi isso sozinho. Do jeito difícil.',
+            actionInstruction: 'Ajuste a bomba ГЦН para 75% ou mais.',
+            actionWait: 'aguardando ação...',
+            actionDone: '✓ CORRETO'
         },
         {
             title: 'Resfriamento de emergência',
@@ -49,11 +56,17 @@ var TUTORIAL_STEPS = {
         },
         {
             title: 'Control rods',
-            text:  'The rods — СТЕРЖНИ РЕГУЛИРОВАНИЯ — are the brakes of the reactor. More inserted means less power, less heat. If temperature rise, insert more. Simple like that. The previous operator forgot this. He work in Moscow now... in a box factory.'
+            text:  'The rods — СТЕРЖНИ РЕГУЛИРОВАНИЯ — are the brakes of the reactor. More inserted means less power, less heat. The previous operator forgot this. He work in Moscow now... in a box factory.',
+            actionInstruction: 'Turn the СТЕРЖНИ dial to 70% or more.',
+            actionWait: 'waiting for action...',
+            actionDone: '✓ CORRECT'
         },
         {
             title: 'Circulation pump',
-            text:  'The pump — ГЦН — circulates the coolant through the core. Without it, temperature rises even with rods inserted. Never let it go below 40% when reactor is operating. I learn this myself. The hard way.'
+            text:  'The pump — ГЦН — circulates the coolant through the core. Without it, temperature rises even with rods inserted. Never let it go below 40% when reactor is operating. I learn this myself. The hard way.',
+            actionInstruction: 'Set the ГЦН pump to 75% or more.',
+            actionWait: 'waiting for action...',
+            actionDone: '✓ CORRECT'
         },
         {
             title: 'Emergency cooling',
@@ -84,11 +97,17 @@ var TUTORIAL_STEPS = {
         },
         {
             title: 'Barras de control',
-            text:  'Las barras — СТЕРЖНИ РЕГУЛИРОВАНИЯ — son los frenos del reactor. Más insertadas significa menos potencia, menos calor. Si la temperatura sube, inserta más. Simple así. El operador anterior olvidó esto. Trabaja en Moscú ahora... en una fábrica de cajas.'
+            text:  'Las barras — СТЕРЖНИ РЕГУЛИРОВАНИЯ — son los frenos del reactor. Más insertadas significa menos potencia, menos calor. El operador anterior olvidó esto. Trabaja en Moscú ahora... en una fábrica de cajas.',
+            actionInstruction: 'Gira el dial СТЕРЖНИ hasta el 70% o más.',
+            actionWait: 'esperando acción...',
+            actionDone: '✓ CORRECTO'
         },
         {
             title: 'Bomba de circulación',
-            text:  'La bomba — ГЦН — circula el refrigerante por el núcleo. Sin ella, la temperatura sube aunque las barras estén insertadas. Nunca dejes bajar de 40% con el reactor operando. Aprendí esto solo. De la manera difícil.'
+            text:  'La bomba — ГЦН — circula el refrigerante por el núcleo. Sin ella, la temperatura sube aunque las barras estén insertadas. Nunca dejes bajar de 40% con el reactor operando. Aprendí esto solo. De la manera difícil.',
+            actionInstruction: 'Ajusta la bomba ГЦН al 75% o más.',
+            actionWait: 'esperando acción...',
+            actionDone: '✓ CORRECTO'
         },
         {
             title: 'Enfriamiento de emergencia',
@@ -119,11 +138,17 @@ var TUTORIAL_STEPS = {
         },
         {
             title: 'Barres de contrôle',
-            text:  'Les barres — СТЕРЖНИ РЕГУЛИРОВАНИЯ — sont les freins du réacteur. Plus insérées signifie moins de puissance, moins de chaleur. Si la température monte, insère plus. Simple comme ça. L\'opérateur précédent a oublié ça. Il travaille à Moscou maintenant... dans une usine de boîtes.'
+            text:  'Les barres — СТЕРЖНИ РЕГУЛИРОВАНИЯ — sont les freins du réacteur. Plus insérées signifie moins de puissance, moins de chaleur. L\'opérateur précédent a oublié ça. Il travaille à Moscou maintenant... dans une usine de boîtes.',
+            actionInstruction: 'Tourne le cadran СТЕРЖНИ à 70% ou plus.',
+            actionWait: 'en attente d\'action...',
+            actionDone: '✓ CORRECT'
         },
         {
             title: 'Pompe de circulation',
-            text:  'La pompe — ГЦН — fait circuler le réfrigérant dans le cœur. Sans elle, la température monte même avec les barres insérées. Ne laisse jamais descendre en-dessous de 40% quand le réacteur fonctionne. J\'ai appris ça tout seul. De la manière difficile.'
+            text:  'La pompe — ГЦН — fait circuler le réfrigérant dans le cœur. Sans elle, la température monte même avec les barres insérées. Ne laisse jamais descendre en-dessous de 40% quand le réacteur fonctionne. J\'ai appris ça tout seul. De la manière difficile.',
+            actionInstruction: 'Règle la pompe ГЦН à 75% ou plus.',
+            actionWait: 'en attente d\'action...',
+            actionDone: '✓ CORRECT'
         },
         {
             title: 'Refroidissement d\'urgence',
@@ -144,22 +169,28 @@ var TUTORIAL_STEPS = {
     ]
 };
 
-// ---- Labels por idioma ----
+// Condições dos passos interativos (por índice de passo, igual para todos os idiomas)
+var TUTORIAL_ACTION_CHECKS = {
+    2: function(sim) { return sim.controlRodsPosition >= 70; },
+    3: function(sim) { return sim.mainPumpSpeed >= 75; }
+};
+
 var TUTORIAL_LABELS = {
-    pt: { header: 'INSTRUÇÕES',   skip: 'PULAR',    next: 'PRÓXIMO', close: 'ENTENDIDO', of: 'de' },
-    en: { header: 'BRIEFING',     skip: 'SKIP',     next: 'NEXT',    close: 'GOT IT',    of: 'of' },
-    es: { header: 'INSTRUCCIONES',skip: 'SALTAR',   next: 'SIGUIENTE',close: 'ENTENDIDO',of: 'de' },
-    fr: { header: 'INSTRUCTIONS', skip: 'PASSER',   next: 'SUIVANT', close: 'COMPRIS',   of: 'sur' }
+    pt: { header: 'INSTRUÇÕES',    skip: 'PULAR',    next: 'PRÓXIMO', close: 'ENTENDIDO', of: 'de' },
+    en: { header: 'BRIEFING',      skip: 'SKIP',     next: 'NEXT',    close: 'GOT IT',    of: 'of' },
+    es: { header: 'INSTRUCCIONES', skip: 'SALTAR',   next: 'SIGUIENTE',close: 'ENTENDIDO',of: 'de' },
+    fr: { header: 'INSTRUCTIONS',  skip: 'PASSER',   next: 'SUIVANT', close: 'COMPRIS',   of: 'sur' }
 };
 
 class TutorialSystem {
     constructor(simulation) {
-        this.simulation  = simulation;
-        this.lang        = window.selectedLanguage || 'en';
-        this.steps       = TUTORIAL_STEPS[this.lang] || TUTORIAL_STEPS['en'];
-        this.labels      = TUTORIAL_LABELS[this.lang] || TUTORIAL_LABELS['en'];
-        this.currentStep = 0;
-        this.panel       = null;
+        this.simulation     = simulation;
+        this.lang           = window.selectedLanguage || 'en';
+        this.steps          = TUTORIAL_STEPS[this.lang]  || TUTORIAL_STEPS['en'];
+        this.labels         = TUTORIAL_LABELS[this.lang] || TUTORIAL_LABELS['en'];
+        this.currentStep    = 0;
+        this.panel          = null;
+        this._actionInterval = null;
     }
 
     shouldShow() {
@@ -168,9 +199,7 @@ class TutorialSystem {
 
     show() {
         if (!this.shouldShow()) return;
-        this.simulation.running = false;
         this._buildPanel();
-        // Slight delay so the game renders first
         setTimeout(() => {
             if (this.panel) this.panel.classList.add('visible');
         }, 600);
@@ -191,10 +220,16 @@ class TutorialSystem {
             '<div class="tut-body">' +
                 '<div class="tut-step-title" id="tut-step-title"></div>' +
                 '<div class="tut-step-text"  id="tut-step-text"></div>' +
+                '<div class="tut-action"     id="tut-action" style="display:none">' +
+                    '<div class="tut-action-instruction" id="tut-action-instruction"></div>' +
+                    '<div class="tut-action-status"      id="tut-action-status"></div>' +
+                '</div>' +
             '</div>' +
             '<div class="tut-footer">' +
-                '<div class="tut-dots" id="tut-dots"></div>' +
-                '<div class="tut-counter" id="tut-counter"></div>' +
+                '<div class="tut-progress">' +
+                    '<div class="tut-dots"    id="tut-dots"></div>' +
+                    '<div class="tut-counter" id="tut-counter"></div>' +
+                '</div>' +
                 '<div class="tut-actions">' +
                     '<button class="tut-btn tut-btn-skip" id="tut-skip">' + this.labels.skip + '</button>' +
                     '<button class="tut-btn tut-btn-next" id="tut-next"></button>' +
@@ -211,23 +246,70 @@ class TutorialSystem {
     }
 
     _renderStep() {
-        const step    = this.steps[this.currentStep];
-        const total   = this.steps.length;
-        const isLast  = this.currentStep === total - 1;
+        const step   = this.steps[this.currentStep];
+        const total  = this.steps.length;
+        const isLast = this.currentStep === total - 1;
+        const check  = TUTORIAL_ACTION_CHECKS[this.currentStep];
 
         document.getElementById('tut-step-title').textContent = step.title;
         document.getElementById('tut-step-text').textContent  = step.text;
         document.getElementById('tut-counter').textContent    =
             (this.currentStep + 1) + ' ' + this.labels.of + ' ' + total;
-        document.getElementById('tut-next').textContent =
-            isLast ? this.labels.close : this.labels.next + ' →';
 
-        // Progress dots
+        // Dots
         let dots = '';
         for (let i = 0; i < total; i++) {
             dots += '<span class="tut-dot' + (i === this.currentStep ? ' active' : '') + '"></span>';
         }
         document.getElementById('tut-dots').innerHTML = dots;
+
+        // Passo interativo
+        const actionEl = document.getElementById('tut-action');
+        const nextBtn  = document.getElementById('tut-next');
+
+        this._stopActionCheck();
+
+        if (check && step.actionInstruction) {
+            actionEl.style.display = 'block';
+            document.getElementById('tut-action-instruction').textContent = step.actionInstruction;
+            document.getElementById('tut-action-status').textContent      = step.actionWait || '...';
+            document.getElementById('tut-action-status').className        = 'tut-action-status waiting';
+            nextBtn.textContent  = isLast ? this.labels.close : this.labels.next + ' →';
+            nextBtn.disabled     = true;
+            nextBtn.classList.add('disabled');
+            this._startActionCheck(check, step.actionDone || '✓');
+        } else {
+            actionEl.style.display = 'none';
+            nextBtn.textContent    = isLast ? this.labels.close : this.labels.next + ' →';
+            nextBtn.disabled       = false;
+            nextBtn.classList.remove('disabled');
+        }
+    }
+
+    _startActionCheck(checkFn, doneLabel) {
+        const sim = this.simulation;
+        this._actionInterval = setInterval(() => {
+            if (!checkFn(sim)) return;
+            // Condição satisfeita
+            this._stopActionCheck();
+            const statusEl = document.getElementById('tut-action-status');
+            const nextBtn  = document.getElementById('tut-next');
+            if (statusEl) {
+                statusEl.textContent = doneLabel;
+                statusEl.className   = 'tut-action-status done';
+            }
+            if (nextBtn) {
+                nextBtn.disabled = false;
+                nextBtn.classList.remove('disabled');
+            }
+        }, 300);
+    }
+
+    _stopActionCheck() {
+        if (this._actionInterval) {
+            clearInterval(this._actionInterval);
+            this._actionInterval = null;
+        }
     }
 
     _next() {
@@ -240,6 +322,7 @@ class TutorialSystem {
     }
 
     _complete() {
+        this._stopActionCheck();
         localStorage.setItem('game_reator_tutorial_done', '1');
         if (this.panel) {
             this.panel.classList.remove('visible');
@@ -250,7 +333,6 @@ class TutorialSystem {
                 this.panel = null;
             }, 400);
         }
-        this.simulation.running = true;
     }
 }
 

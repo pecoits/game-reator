@@ -87,12 +87,19 @@ class ReactorSimulation {
         this.totalEnergyMWh += this.energyGeneration * (deltaTime / 3600000);
         this._recordHistory();
 
-        // Recuperação de falha da bomba
+        // Recuperação ou escalada de falha da bomba
         if (this.pumpDegradationTimer > 0) {
             this.pumpDegradationTimer--;
             if (this.pumpDegradationTimer === 0) {
-                this.pumpDegradation = 1.0;
-                this.addEvent('info', 'ГЦН восстановлен до нормальной производительности.');
+                if (this.pumpDegradation < 1.0 && Math.random() < 0.25) {
+                    // 25% de chance: falha escalada para parada total
+                    this.pumpDegradation = 0.02;
+                    this.pumpDegradationTimer = 35;
+                    this.addEvent('danger', 'КРИТИЧЕСКИЙ ОТКАЗ ГЦН: насос остановлен! Ручное вмешательство требуется.');
+                } else {
+                    this.pumpDegradation = 1.0;
+                    this.addEvent('info', 'ГЦН восстановлен до нормальной производительности.');
+                }
             }
         }
 
@@ -320,16 +327,17 @@ class ReactorSimulation {
 
     triggerRandomEvent() {
         var self = this;
+        // Peso maior = mais frequente. Informativos têm peso 10; impactantes têm peso 2-3.
         var events = [
-            // --- Informativos (sem efeito) ---
-            { type: 'info',    message: 'Плановая проверка систем завершена' },
-            { type: 'info',    message: 'Смена персонала. Бригада №3 заступила' },
-            { type: 'info',    message: 'Автоматическая калибровка датчиков' },
-            { type: 'info',    message: 'Получена директива министерства №1994' },
-            { type: 'warning', message: 'Отклонение частоты тока в сети' },
-            // --- Eventos com efeito real ---
+            // --- Informativos (peso 10 cada) ---
+            { weight: 10, type: 'info',    message: 'Плановая проверка систем завершена' },
+            { weight: 10, type: 'info',    message: 'Смена персонала. Бригада №3 заступила' },
+            { weight: 10, type: 'info',    message: 'Автоматическая калибровка датчиков' },
+            { weight: 10, type: 'info',    message: 'Получена директива министерства №1994' },
+            { weight: 10, type: 'warning', message: 'Отклонение частоты тока в сети' },
+            // --- Eventos com efeito real (peso 2-3) ---
             {
-                type: 'danger',
+                weight: 2, type: 'danger',
                 message: 'ОТКАЗ ГЦН: производительность насоса снижена до 30%',
                 effect: function() {
                     self.pumpDegradation = 0.3;
@@ -338,7 +346,7 @@ class ReactorSimulation {
                 }
             },
             {
-                type: 'warning',
+                weight: 3, type: 'warning',
                 message: 'Проскальзывание стержней: потеря позиции -15%',
                 effect: function() {
                     self.controlRodsPosition = Math.max(0, self.controlRodsPosition - 15);
@@ -346,17 +354,16 @@ class ReactorSimulation {
                 }
             },
             {
-                type: 'danger',
+                weight: 2, type: 'danger',
                 message: 'Гидравлический удар в первом контуре',
                 effect: function() {
                     self.applyExternalPressureShock(2.0);
                 }
             },
             {
-                type: 'warning',
+                weight: 3, type: 'warning',
                 message: 'Частичная потеря охлаждения контура №2',
                 effect: function() {
-                    // Reduz velocidade efetiva da bomba extra por degradação temporária
                     self.pumpDegradation = Math.min(self.pumpDegradation, 0.6);
                     self.pumpDegradationTimer = Math.max(self.pumpDegradationTimer, 15);
                     self.addEvent('warning', 'Расход охладителя снижен. Контроль температуры обязателен.');
@@ -364,9 +371,19 @@ class ReactorSimulation {
             }
         ];
 
-        var event = events[Math.floor(Math.random() * events.length)];
-        this.addEvent(event.type, event.message);
-        if (event.effect) event.effect();
+        // Seleção por peso acumulado
+        var total = 0;
+        for (var i = 0; i < events.length; i++) total += events[i].weight;
+        var rand = Math.random() * total;
+        var cumulative = 0;
+        var chosen = events[events.length - 1];
+        for (var j = 0; j < events.length; j++) {
+            cumulative += events[j].weight;
+            if (rand < cumulative) { chosen = events[j]; break; }
+        }
+
+        this.addEvent(chosen.type, chosen.message);
+        if (chosen.effect) chosen.effect();
     }
 
     // Control methods
