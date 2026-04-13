@@ -87,6 +87,7 @@
                             <circle class="gauge-center" cx="100" cy="100" r="8"/>
                         </svg>
                         <div class="gauge-value" id="val-temp">0°C</div>
+                        <svg class="sparkline" id="spark-temp" viewBox="0 0 60 20" preserveAspectRatio="none"><polyline id="spark-temp-line" points="" fill="none" stroke="#64ff8f" stroke-width="1.5"/></svg>
                     </div>
 
                     <!-- Pressure Gauge -->
@@ -120,6 +121,7 @@
                             <circle class="gauge-center" cx="100" cy="100" r="8"/>
                         </svg>
                         <div class="gauge-value" id="val-pressure">0 МПа</div>
+                        <svg class="sparkline" id="spark-pressure" viewBox="0 0 60 20" preserveAspectRatio="none"><polyline id="spark-pressure-line" points="" fill="none" stroke="#64ff8f" stroke-width="1.5"/></svg>
                     </div>
 
                     <!-- Power Gauge -->
@@ -153,6 +155,7 @@
                             <circle class="gauge-center" cx="100" cy="100" r="8"/>
                         </svg>
                         <div class="gauge-value" id="val-power">0%</div>
+                        <svg class="sparkline" id="spark-power" viewBox="0 0 60 20" preserveAspectRatio="none"><polyline id="spark-power-line" points="" fill="none" stroke="#64ff8f" stroke-width="1.5"/></svg>
                     </div>
 
                     <!-- Radiation Gauge -->
@@ -186,6 +189,7 @@
                             <circle class="gauge-center" cx="100" cy="100" r="8"/>
                         </svg>
                         <div class="gauge-value" id="val-radiation">0 мЗв/ч</div>
+                        <svg class="sparkline" id="spark-radiation" viewBox="0 0 60 20" preserveAspectRatio="none"><polyline id="spark-radiation-line" points="" fill="none" stroke="#64ff8f" stroke-width="1.5"/></svg>
                     </div>
                 </div>
             </section>
@@ -234,6 +238,22 @@
                     </div>
                     <div class="lamp lamp-dim" id="lamp-scram">
                         <span>АЗ-5</span>
+                    </div>
+                </div>
+
+                <!-- Performance Stats Row -->
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-label">ВРЕМЯ</div>
+                        <div class="stat-value" id="stat-time">00:00:00</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">МВт·ч</div>
+                        <div class="stat-value" id="stat-energy">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">СИГНАЛЫ</div>
+                        <div class="stat-value" id="stat-alerts">0</div>
                     </div>
                 </div>
 
@@ -468,6 +488,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Emergency Visual Overlay -->
+    <div id="emergency-overlay"></div>
 
     <script src="js/ranking-system.js"></script>
     <script src="js/config.js"></script>

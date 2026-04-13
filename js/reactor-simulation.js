@@ -37,6 +37,7 @@ class ReactorSimulation {
         this.totalEnergyMWh       = 0;
         this.totalAlerts          = 0;
         this.alerts               = [];
+        this.history              = { temp: [], pressure: [], power: [], radiation: [] };
         this.events               = [];
         this.running              = false;
 
@@ -81,6 +82,7 @@ class ReactorSimulation {
         this.time += deltaTime;
         this.ticks++;
         this.totalEnergyMWh += this.energyGeneration * (deltaTime / 3600000);
+        this._recordHistory();
 
         // Update simulation physics
         this.updateControlRodsEffect();
@@ -182,6 +184,18 @@ class ReactorSimulation {
             this.gridLoad = (this.energyGeneration / REACTOR_CONFIG.physics.maxEnergyMW) * 100;
         } else {
             this.gridLoad = 0;
+        }
+    }
+
+    _recordHistory() {
+        var maxLen = 60;
+        var h = this.history;
+        h.temp.push(this.coreTemperature);
+        h.pressure.push(this.pressure);
+        h.power.push(this.reactorPower);
+        h.radiation.push(this.radiationLevel);
+        if (h.temp.length > maxLen) {
+            h.temp.shift(); h.pressure.shift(); h.power.shift(); h.radiation.shift();
         }
     }
 

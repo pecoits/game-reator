@@ -128,6 +128,18 @@ var UIControllerNew = (function() {
         this.elements.btnMute = document.getElementById('btn-mute');
         this.elements.volumeSlider = document.getElementById('volume-slider');
         this.elements.btnManual = document.getElementById('btn-manual');
+
+        // Sparklines
+        this.elements.sparkTemp     = document.getElementById('spark-temp-line');
+        this.elements.sparkPressure = document.getElementById('spark-pressure-line');
+        this.elements.sparkPower    = document.getElementById('spark-power-line');
+        this.elements.sparkRad      = document.getElementById('spark-radiation-line');
+
+        // Emergency overlay & stats
+        this.elements.emergencyOverlay = document.getElementById('emergency-overlay');
+        this.elements.statTime   = document.getElementById('stat-time');
+        this.elements.statEnergy = document.getElementById('stat-energy');
+        this.elements.statAlerts = document.getElementById('stat-alerts');
         
         // Modals
         this.elements.manualModal = document.getElementById('manual-modal');
@@ -143,6 +155,7 @@ var UIControllerNew = (function() {
         // Initialize sound system on first interaction
         var initSound = function() {
             self.soundSystem.init();
+            self.soundSystem.startAmbient();
             document.removeEventListener('click', initSound);
         };
         document.addEventListener('click', initSound);
@@ -338,6 +351,43 @@ var UIControllerNew = (function() {
                 this.hasCriticalAlarm = false;
             }
         }
+
+        // Sparklines
+        var history = this.simulation.history;
+        if (history) {
+            this.updateSparkline(this.elements.sparkTemp,     history.temp,     20,  450);
+            this.updateSparkline(this.elements.sparkPressure, history.pressure, 10,  22);
+            this.updateSparkline(this.elements.sparkPower,    history.power,    0,   110);
+            this.updateSparkline(this.elements.sparkRad,      history.radiation, 0,  20);
+        }
+
+        // Emergency visual overlay
+        var overlay = this.elements.emergencyOverlay;
+        if (overlay) {
+            var isCrit = state.coreTemperature > 350 || state.pressure > 19 || state.radiationLevel > 5 || state.scramActive;
+            var isWarn = !isCrit && (state.coreTemperature > 300 || state.pressure > 17 || state.radiationLevel > 1);
+            overlay.className = isCrit ? 'emergency-critical' : (isWarn ? 'emergency-warning' : '');
+        }
+
+        // Stats row
+        if (this.elements.statTime)   this.elements.statTime.textContent   = this.formatTime(state.time);
+        if (this.elements.statEnergy) this.elements.statEnergy.textContent = Math.round(state.totalEnergyMWh || 0);
+        if (this.elements.statAlerts) this.elements.statAlerts.textContent = state.totalAlerts || 0;
+    };
+
+    UIControllerNew.prototype.updateSparkline = function(lineEl, data, min, max) {
+        if (!lineEl || !data || data.length < 2) return;
+        var w = 60, h = 20;
+        var range = (max - min) || 1;
+        var pts = data.map(function(v, i) {
+            var x = (i / (data.length - 1)) * w;
+            var y = h - Math.max(0, Math.min(h, ((v - min) / range) * h));
+            return x.toFixed(1) + ',' + y.toFixed(1);
+        }).join(' ');
+        lineEl.setAttribute('points', pts);
+        var last = data[data.length - 1];
+        var ratio = (last - min) / range;
+        lineEl.setAttribute('stroke', ratio < 0.65 ? '#64ff8f' : ratio < 0.82 ? '#ffe066' : '#ff6b6b');
     };
 
     UIControllerNew.prototype.updateGauge = function(type, value, min, max, unit) {

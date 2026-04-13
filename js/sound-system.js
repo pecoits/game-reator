@@ -8,6 +8,11 @@ class SoundSystem {
         this.alarmGain = null;
         this.alarmActive = false;
         this.initialized = false;
+        this.ambientOsc1 = null;
+        this.ambientOsc2 = null;
+        this.ambientGain1 = null;
+        this.ambientGain2 = null;
+        this.ambientActive = false;
     }
 
     init() {
@@ -27,11 +32,8 @@ class SoundSystem {
         if (this.alarmGain) {
             this.alarmGain.gain.value = this.volume * 0.3;
         }
-        if (this.volume === 0) {
-            this.muted = true;
-        } else {
-            this.muted = false;
-        }
+        this.muted = this.volume === 0;
+        this._updateAmbientVolume();
     }
 
     toggleMute() {
@@ -39,7 +41,50 @@ class SoundSystem {
         if (this.muted) {
             this.stopAlarm();
         }
+        this._updateAmbientVolume();
         return this.muted;
+    }
+
+    startAmbient() {
+        if (!this.initialized || this.ambientActive) return;
+        var ctx = this.audioContext;
+
+        this.ambientOsc1 = ctx.createOscillator();
+        this.ambientGain1 = ctx.createGain();
+        this.ambientOsc1.type = 'sine';
+        this.ambientOsc1.frequency.value = 55;
+        this.ambientGain1.gain.value = this.muted ? 0 : this.volume * 0.04;
+        this.ambientOsc1.connect(this.ambientGain1);
+        this.ambientGain1.connect(ctx.destination);
+        this.ambientOsc1.start();
+
+        this.ambientOsc2 = ctx.createOscillator();
+        this.ambientGain2 = ctx.createGain();
+        this.ambientOsc2.type = 'sine';
+        this.ambientOsc2.frequency.value = 110;
+        this.ambientGain2.gain.value = this.muted ? 0 : this.volume * 0.015;
+        this.ambientOsc2.connect(this.ambientGain2);
+        this.ambientGain2.connect(ctx.destination);
+        this.ambientOsc2.start();
+
+        this.ambientActive = true;
+    }
+
+    stopAmbient() {
+        if (!this.ambientActive) return;
+        this.ambientActive = false;
+        var oscs = [this.ambientOsc1, this.ambientOsc2];
+        var gains = [this.ambientGain1, this.ambientGain2];
+        oscs.forEach(function(osc) { if (osc) { try { osc.stop(); osc.disconnect(); } catch (_e) {} } });
+        gains.forEach(function(g) { if (g) { try { g.disconnect(); } catch (_e) {} } });
+        this.ambientOsc1 = this.ambientOsc2 = this.ambientGain1 = this.ambientGain2 = null;
+    }
+
+    _updateAmbientVolume() {
+        if (!this.ambientActive) return;
+        var v = this.muted ? 0 : this.volume;
+        if (this.ambientGain1) this.ambientGain1.gain.value = v * 0.04;
+        if (this.ambientGain2) this.ambientGain2.gain.value = v * 0.015;
     }
 
     playAlarm() {

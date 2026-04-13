@@ -422,6 +422,50 @@ var MANUAL_PAGES = {
     ]
 };
 
+// ===== MANUAL PAGE RENDERER =====
+// Converts structured MANUAL_PAGES into HTML strings consumed by UIControllerNew.openManual()
+(function() {
+    function renderSection(s) {
+        switch (s.type) {
+            case 'cover':
+            case 'footer':
+                return s.content || '';
+            case 'heading':
+                return '<h3 class="manual-heading">' + (s.content || '') + '</h3>';
+            case 'text':
+                return '<p class="manual-text">' + (s.content || '') + '</p>';
+            case 'warning':
+                return '<div class="manual-warning">' + (s.content || '') + '</div>';
+            case 'list': {
+                var tag = s.ordered ? 'ol' : 'ul';
+                var items = (s.items || []).map(function(i) { return '<li>' + i + '</li>'; }).join('');
+                return '<' + tag + ' class="manual-list">' + items + '</' + tag + '>';
+            }
+            case 'table': {
+                var rows = (s.rows || []).map(function(row, ri) {
+                    var ct = ri === 0 ? 'th' : 'td';
+                    return '<tr>' + row.map(function(cell) { return '<' + ct + '>' + cell + '</' + ct + '>'; }).join('') + '</tr>';
+                }).join('');
+                return '<table class="manual-table">' + rows + '</table>';
+            }
+            default:
+                return '';
+        }
+    }
+
+    function renderPage(page, index) {
+        return '<div class="manual-page" data-page="' + (index + 1) + '">' +
+            '<h2 class="manual-page-title">' + (page.title || '') + '</h2>' +
+            (page.sections || []).map(renderSection).join('') +
+            '</div>';
+    }
+
+    if (typeof window !== 'undefined') {
+        window.manualPagesPT = (MANUAL_PAGES.pt || []).map(renderPage);
+        window.manualPagesEN = (MANUAL_PAGES.en || []).map(renderPage);
+    }
+})();
+
 // Export
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = MANUAL_PAGES;

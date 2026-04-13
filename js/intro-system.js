@@ -162,6 +162,168 @@ var introTexts = {
         },
         start: "BEGIN OPERATION",
         goodLuck: "☭ Good luck, Comrade Operator! Krasnostan counts on you! ☭"
+    },
+    es: {
+        title: "REPÚBLICA DEMOCRÁTICA POPULAR DE KRASNOSTAN",
+        subtitle: "Ministerio de Energía Nuclear | Departamento de Personal",
+        classified: "DOCUMENTO CLASIFICADO - NIVEL SECRETO",
+        story: {
+            title: "TU MISIÓN",
+            text: '<p>Camarada, ¡bienvenido a la <span class="highlight">República Democrática Popular de Krasnostan</span>!</p>' +
+                '<p>Tras el reciente colapso de la Unión Soviética en 1991, nuestro glorioso país enfrentó una situación <span class="warning">CRÍTICA</span>: ' +
+                'todos nuestros ingenieros nucleares calificados huyeron al Occidente en busca de mejores salarios (¡los traidores!).</p>' +
+                '<p>La <span class="highlight">Central Nuclear de Krasnostan-4</span>, nuestra mayor fuente de energía, lleva ' +
+                '3 meses funcionando en modo automático. El último operador dejó una nota diciendo ' +
+                '<em>"Buena suerte, la van a necesitar"</em> y tomó el primer vuelo a Frankfurt.</p>' +
+                '<p>El Presidente Volkov, en su infinita sabiduría (y desesperación), autorizó contratar a ' +
+                '<span class="warning">cualquier persona con conocimientos básicos de física nuclear</span>. ' +
+                '¡Aquí es donde USTED entra!</p>' +
+                '<p>Su misión: <span class="highlight">operar el reactor nuclear RBMK-1000</span> y evitar ' +
+                'que Krasnostan se quede sin energía (o algo peor... mucho peor).</p>'
+        },
+        objective: {
+            title: "OBJETIVO DEL JUEGO",
+            text: '<p>Usted es el nuevo <span class="highlight">Operador Jefe</span> de la Central Nuclear de Krasnostan-4. ' +
+                'Su trabajo es mantener el reactor funcionando de manera segura y eficiente.</p>' +
+                '<p>El juego simula la operación de un reactor nuclear real con:</p>' +
+                '<ul style="color: #b0b0b0; margin-left: 20px;">' +
+                '<li>Control de temperatura y presión</li>' +
+                '<li>Sistema de refrigeración</li>' +
+                '<li>Generación de energía eléctrica</li>' +
+                '<li>Eventos aleatorios (accidentes, inspecciones, directivas del gobierno)</li>' +
+                '<li>Misiones desafiantes</li></ul>' +
+                '<p class="warning">⚠ RECUERDE: Un reactor apagado puede reiniciarse. Un reactor fundido... no.</p>'
+        },
+        controls: {
+            title: "CONTROLES PRINCIPALES",
+            text: '<p>La interfaz del reactor está <span class="highlight">completamente en ruso</span> (¡como en la vida real!). Aquí está su guía de supervivencia:</p>',
+            items: [
+                { key: "Стержни (Barras de Control)", desc: "Controlan la potencia del reactor. MENOS barras insertadas = MÁS potencia. Mantenga entre 40-70% para operación normal." },
+                { key: "Главный насос (Bomba Principal)", desc: "Controla el sistema de refrigeración. Aumente si la temperatura sube. Mantenga por encima del 50%." },
+                { key: "Аварийное охлаждение (Refrigeración de Emergencia)", desc: "¡ACTIVAR en caso de sobrecalentamiento! Use cuando la temperatura supere los 320°C." },
+                { key: "Дополнительный насос (Bomba Extra)", desc: "Enciende/apaga una bomba adicional de refrigeración. Útil en emergencias." },
+                { key: "Подключено (Conexión a la Red)", desc: "Conecta/desconecta la planta de la red eléctrica. Desconecte antes de hacer ajustes grandes." },
+                { key: "АЗ-5 (Botón de Emergencia)", desc: "¡PARADA TOTAL DEL REACTOR! Irreversible. Use SOLO en emergencias reales. ¡Está advertido!" }
+            ]
+        },
+        indicators: {
+            title: "INDICADORES IMPORTANTES",
+            text: "<p>Monitoree constantemente estos valores:</p>",
+            items: [
+                { key: "Температура (Temperatura)", desc: "Normal: &lt; 300°C | Peligro: &gt; 350°C | Crítico: &gt; 400°C" },
+                { key: "Давление (Presión)", desc: "Normal: &lt; 17 MPa | Peligro: &gt; 19 MPa | Crítico: &gt; 22 MPa" },
+                { key: "Радиация (Radiación)", desc: "Normal: &lt; 1.0 mSv/h | Peligro: &gt; 5.0 mSv/h | Crítico: &gt; 20 mSv/h" },
+                { key: "Мощность (Potencia)", desc: "Normal: 70-90% | Peligro: &gt; 100%" }
+            ]
+        },
+        manual: {
+            title: "MANUAL TÉCNICO",
+            text: '<p>Durante el juego, puede acceder al <span class="highlight">Manual Técnico</span> haciendo clic en el botón ' +
+                '<strong>"MANUAL"</strong> en la parte superior de la pantalla.</p>' +
+                '<p>El manual contiene:</p>' +
+                '<ul style="color: #b0b0b0; margin-left: 20px;">' +
+                '<li>Especificaciones técnicas del reactor RBMK-1000</li>' +
+                '<li>Procedimientos de operación normal</li>' +
+                '<li>Procedimientos de emergencia</li>' +
+                '<li>Guía de solución de problemas</li>' +
+                '<li>Tablas de referencia rápida</li></ul>' +
+                '<p class="highlight">💡 CONSEJO: ¡Consulte el manual siempre que tenga dudas!</p>'
+        },
+        tips: {
+            title: "CONSEJOS DE SU PREDECESOR",
+            text: '<p><em>(Encontrado garabateado en una servilleta en el panel de control)</em></p>' +
+                '<p>"¡Oye, nuevo operador! Aquí van unos consejos de alguien que sobrevivió 6 meses en este trabajo:</p>' +
+                '<ul style="color: #b0b0b0; margin-left: 20px;">' +
+                '<li><span class="highlight">NUNCA</span> deje que la temperatura supere los 350°C</li>' +
+                '<li>Si suena la alarma, no entre en pánico (pero preocúpese)</li>' +
+                '<li>El botón АЗ-5 es como el botón rojo de las películas - solo presiónelo si quiere explotar todo (broma... o no)</li>' +
+                '<li>El Ministerio llamará pidiendo MÁS energía. Diga no. O mejor, mienta y diga que no puede.</li>' +
+                '<li>Si todo sale mal, finja que es una "prueba de seguridad programada"</li>' +
+                '<li>Buena suerte, camarada. La va a necesitar. ☭"</li></ul>'
+        },
+        start: "INICIAR OPERACIÓN",
+        goodLuck: "☭ ¡Buena suerte, Camarada Operador! ¡Krasnostan cuenta contigo! ☭"
+    },
+    fr: {
+        title: "RÉPUBLIQUE POPULAIRE DÉMOCRATIQUE DE KRASNOSTAN",
+        subtitle: "Ministère de l'Énergie Nucléaire | Département du Personnel",
+        classified: "DOCUMENT CLASSIFIÉ - NIVEAU SECRET",
+        story: {
+            title: "VOTRE MISSION",
+            text: '<p>Camarade, bienvenue dans la <span class="highlight">République Populaire Démocratique de Krasnostan</span> !</p>' +
+                '<p>Suite à l\'effondrement récent de l\'Union soviétique en 1991, notre glorieux pays a fait face à une situation <span class="warning">CRITIQUE</span> : ' +
+                'tous nos ingénieurs nucléaires qualifiés ont fui vers l\'Occident en quête de meilleurs salaires (les traîtres !).</p>' +
+                '<p>La <span class="highlight">Centrale Nucléaire de Krasnostan-4</span>, notre principale source d\'énergie, ' +
+                'fonctionne en pilote automatique depuis 3 mois. Le dernier opérateur a laissé un message : ' +
+                '<em>"Bonne chance, vous en aurez besoin"</em> et a pris le premier vol pour Francfort.</p>' +
+                '<p>Le Président Volkov, dans son infinie sagesse (et désespoir), a autorisé le recrutement de ' +
+                '<span class="warning">toute personne ayant des connaissances de base en physique nucléaire</span>. ' +
+                'C\'est là que VOUS entrez en scène !</p>' +
+                '<p>Votre mission : <span class="highlight">exploiter le réacteur nucléaire RBMK-1000</span> et empêcher ' +
+                'Krasnostan de manquer d\'énergie (ou pire... bien pire).</p>'
+        },
+        objective: {
+            title: "OBJECTIF DU JEU",
+            text: '<p>Vous êtes le nouvel <span class="highlight">Opérateur en Chef</span> de la Centrale Nucléaire de Krasnostan-4. ' +
+                'Votre travail est de maintenir le réacteur en fonctionnement sûr et efficace.</p>' +
+                '<p>Le jeu simule l\'exploitation d\'un vrai réacteur nucléaire avec :</p>' +
+                '<ul style="color: #b0b0b0; margin-left: 20px;">' +
+                '<li>Contrôle de la température et de la pression</li>' +
+                '<li>Gestion du système de refroidissement</li>' +
+                '<li>Production d\'énergie électrique</li>' +
+                '<li>Événements aléatoires (accidents, inspections, directives gouvernementales)</li>' +
+                '<li>Missions difficiles</li></ul>' +
+                '<p class="warning">⚠ RAPPEL : Un réacteur arrêté peut redémarrer. Un réacteur fondu... non.</p>'
+        },
+        controls: {
+            title: "COMMANDES PRINCIPALES",
+            text: '<p>L\'interface du réacteur est <span class="highlight">entièrement en russe</span> (comme dans la vraie vie !). Voici votre guide de survie :</p>',
+            items: [
+                { key: "Стержни (Barres de Contrôle)", desc: "Contrôlent la puissance du réacteur. MOINS de barres insérées = PLUS de puissance. Maintenez entre 40-70% pour un fonctionnement normal." },
+                { key: "Главный насос (Pompe Principale)", desc: "Contrôle le système de refroidissement. Augmentez si la température monte. Maintenez au-dessus de 50%." },
+                { key: "Аварийное охлаждение (Refroidissement d'Urgence)", desc: "ACTIVEZ en cas de surchauffe ! Utilisez quand la température dépasse 320°C." },
+                { key: "Дополнительный насос (Pompe Supplémentaire)", desc: "Active/désactive une pompe de refroidissement supplémentaire. Utile en cas d'urgence." },
+                { key: "Подключено (Connexion au Réseau)", desc: "Connecte/déconnecte la centrale du réseau électrique. Déconnectez avant tout grand ajustement." },
+                { key: "АЗ-5 (Bouton d'Urgence)", desc: "ARRÊT TOTAL DU RÉACTEUR ! Irréversible. Utilisez UNIQUEMENT en cas de vraie urgence. Vous êtes prévenu !" }
+            ]
+        },
+        indicators: {
+            title: "INDICATEURS IMPORTANTS",
+            text: "<p>Surveillez constamment ces valeurs :</p>",
+            items: [
+                { key: "Температура (Température)", desc: "Normal : &lt; 300°C | Danger : &gt; 350°C | Critique : &gt; 400°C" },
+                { key: "Давление (Pression)", desc: "Normal : &lt; 17 MPa | Danger : &gt; 19 MPa | Critique : &gt; 22 MPa" },
+                { key: "Радиация (Radiation)", desc: "Normal : &lt; 1,0 mSv/h | Danger : &gt; 5,0 mSv/h | Critique : &gt; 20 mSv/h" },
+                { key: "Мощность (Puissance)", desc: "Normal : 70-90% | Danger : &gt; 100%" }
+            ]
+        },
+        manual: {
+            title: "MANUEL TECHNIQUE",
+            text: '<p>Pendant le jeu, vous pouvez accéder au <span class="highlight">Manuel Technique</span> en cliquant sur le bouton ' +
+                '<strong>"MANUAL"</strong> en haut de l\'écran.</p>' +
+                '<p>Le manuel contient :</p>' +
+                '<ul style="color: #b0b0b0; margin-left: 20px;">' +
+                '<li>Spécifications techniques du réacteur RBMK-1000</li>' +
+                '<li>Procédures d\'exploitation normale</li>' +
+                '<li>Procédures d\'urgence</li>' +
+                '<li>Guide de dépannage</li>' +
+                '<li>Tableaux de référence rapide</li></ul>' +
+                '<p class="highlight">💡 CONSEIL : Consultez le manuel en cas de doute !</p>'
+        },
+        tips: {
+            title: "CONSEILS DE VOTRE PRÉDÉCESSEUR",
+            text: '<p><em>(Trouvé griffonné sur une serviette au panneau de contrôle)</em></p>' +
+                '<p>"Hé, nouvel opérateur ! Voici quelques conseils de quelqu\'un qui a survécu 6 mois dans ce travail :</p>' +
+                '<ul style="color: #b0b0b0; margin-left: 20px;">' +
+                '<li><span class="highlight">NE JAMAIS</span> laisser la température dépasser 350°C</li>' +
+                '<li>Si l\'alarme sonne, ne paniquez pas (mais inquiétez-vous quand même)</li>' +
+                '<li>Le bouton АЗ-5 est comme le bouton rouge des films - appuyez dessus seulement si vous voulez tout faire exploser (blague... ou pas)</li>' +
+                '<li>Le Ministère appellera pour demander PLUS d\'énergie. Dites non. Ou mieux, mentez et dites que vous ne pouvez pas.</li>' +
+                '<li>Si tout va mal, faites semblant que c\'est un "test de sécurité programmé"</li>' +
+                '<li>Bonne chance, camarade. Vous en aurez besoin. ☭"</li></ul>'
+        },
+        start: "COMMENCER L'OPÉRATION",
+        goodLuck: "☭ Bonne chance, Camarade Opérateur ! Krasnostan compte sur vous ! ☭"
     }
 };
 
@@ -202,8 +364,10 @@ var IntroSystem = (function() {
                 '<h1>АТОМНАЯ ЭЛЕКТРОСТАНЦИЯ</h1>' +
                 '<p>Select your language / Selecione seu idioma</p>' +
                 '<div class="language-buttons">' +
-                '<button class="lang-btn" data-lang="pt"><span class="flag">🇧</span>Português</button>' +
-                '<button class="lang-btn" data-lang="en"><span class="flag">🇺</span>English</button>' +
+                '<button class="lang-btn" data-lang="pt">Português</button>' +
+                '<button class="lang-btn" data-lang="en">English</button>' +
+                '<button class="lang-btn" data-lang="es">Español</button>' +
+                '<button class="lang-btn" data-lang="fr">Français</button>' +
                 '</div></div>';
 
             document.body.appendChild(screen);
