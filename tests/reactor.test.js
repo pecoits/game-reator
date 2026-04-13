@@ -320,14 +320,21 @@ describe('GameOverSystem: sem explosão abaixo dos limiares', () => {
     assert(sim.running === true, 'simulação continua rodando');
 });
 
-describe('GameOverSystem: explosão por temperatura >= 400', () => {
-    const { gos, sim, save } = makeGOS({ coreTemperature: 400 });
+describe('GameOverSystem: explosão por temperatura >= 550 (fusão do núcleo)', () => {
+    const { gos, sim, save } = makeGOS({ coreTemperature: 550 });
     gos.update();
-    assert(gos.triggered === true, 'triggered=true quando temp>=400');
+    assert(gos.triggered === true, 'triggered=true quando temp>=550');
     assert(sim.running === false, 'simulation.stop() chamado');
     assert(save.cleared(), 'saveSystem.clear() chamado');
     assert(gos._lastExplosion !== undefined, '_showExplosionScreen chamado');
-    assert(gos._lastExplosion.cause.ru === 'КРИТИЧЕСКАЯ ТЕМПЕРАТУРА', 'causa correta por temperatura');
+    assert(gos._lastExplosion.cause.ru === 'РАСПЛАВЛЕНИЕ АКТИВНОЙ ЗОНЫ', 'causa correta por temperatura');
+});
+
+describe('GameOverSystem: sem explosão a 400°C (zona de reação — ativar AZ-5)', () => {
+    const { gos, sim } = makeGOS({ coreTemperature: 400 });
+    gos.update();
+    assert(gos.triggered === false, 'não explode a 400°C — física ainda pode ser revertida');
+    assert(sim.running === true, 'simulação continua rodando');
 });
 
 describe('GameOverSystem: explosão por pressão >= 22', () => {
@@ -353,7 +360,7 @@ describe('GameOverSystem: triggerDismissal define triggered e limpa save', () =>
 });
 
 describe('GameOverSystem: segundo update() após triggered não re-dispara', () => {
-    const { gos, sim } = makeGOS({ coreTemperature: 400 });
+    const { gos, sim } = makeGOS({ coreTemperature: 550 });
     gos.update(); // primeiro — dispara
     sim.running = true; // restaura manualmente para verificar que não dispara de novo
     let explosionCount = 0;
