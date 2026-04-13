@@ -218,8 +218,8 @@ describe('DemandSystem: game over após 240s', () => {
 describe('DemandSystem: reset ao recuperar energia (antes de stage 2)', () => {
     const sim = makeMockSim({ energyGeneration: 200, time: 0 });
     const ds = new DemandSystem(sim);
-    let fired = false;
-    ds.onShowTelex = () => { fired = true; };
+    let telexFired = false;
+    ds.onShowTelex = () => { telexFired = true; };
 
     ds.deficiencyStart = 0;
     sim.time = 31000;
@@ -230,6 +230,7 @@ describe('DemandSystem: reset ao recuperar energia (antes de stage 2)', () => {
     ds._checkDeficiency();
     assert(ds.warningStage === 0, 'stage resetado ao recuperar energia em stage 1');
     assert(ds.deficiencyStart === null, 'deficiencyStart resetado');
+    assert(telexFired === true, 'telex disparado antes do reset');
 });
 
 describe('DemandSystem: _tryDemandEvent dispara e aumenta cota', () => {

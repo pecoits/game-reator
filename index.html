@@ -37,6 +37,7 @@
             </div>
             <div class="header-right">
                 <button id="btn-manual" class="btn btn-manual">MANUAL</button>
+                <button id="btn-ranking" class="btn btn-ranking">АРХИВ</button>
                 <button id="btn-alerts" class="btn btn-alerts">⚠ 0</button>
                 <div class="sound-controls">
                     <button id="btn-mute" class="btn btn-sound" title="Вкл/Выкл звук">🔊</button>
@@ -395,8 +396,13 @@
                 <div class="exp-panel-row">РАДИАЦИЯ: <span id="exp-radiation">—</span></div>
                 <div class="exp-panel-sep"></div>
                 <div class="exp-panel-row">ВРЕМЯ СЛУЖБЫ: <span id="exp-time">—</span></div>
+                <div class="exp-panel-row">ЭНЕРГИЯ: <span id="exp-energy">—</span></div>
+                <div class="exp-panel-row">ИНЦИДЕНТЫ: <span id="exp-incidents">—</span></div>
             </div>
-            <button class="gameover-btn" onclick="window.location.reload()">НОВАЯ ИГРА — NOVA PARTIDA</button>
+            <div class="gameover-actions">
+                <button class="gameover-btn" onclick="window.location.reload()">НОВАЯ ИГРА — NOVA PARTIDA</button>
+                <button class="gameover-btn gameover-btn-archive" id="btn-exp-ranking">АРХИВ ОПЕРАТОРОВ</button>
+            </div>
         </div>
     </div>
 
@@ -419,9 +425,34 @@
             <hr class="telex-hr" style="border-color: #8a7a60; margin: 8px 0;">
             <div class="dis-stats">
                 Cota não cumprida: <strong id="dis-quota">—</strong><br>
-                Déficit final: <strong id="dis-deficit">—</strong>
+                Déficit final: <strong id="dis-deficit">—</strong><br>
+                Energia gerada: <strong id="dis-energy">—</strong><br>
+                Incidentes: <strong id="dis-incidents">—</strong>
             </div>
             <button class="gameover-btn dis-btn" onclick="window.location.reload()">НОВАЯ ИГРА — NOVA PARTIDA</button>
+            <button class="gameover-btn dis-btn dis-btn-archive" id="btn-dis-ranking">АРХИВ ОПЕРАТОРОВ</button>
+        </div>
+    </div>
+
+    <!-- Ranking Overlay -->
+    <div id="ranking-overlay" class="modal" style="display: none;">
+        <div class="ranking-doc">
+            <div class="ranking-secret">СЕКРЕТНО</div>
+            <div class="ranking-ministry">МИНГОСЭНЕРГО СССР</div>
+            <div class="ranking-title-text">АРХИВ ОПЕРАТОРОВ — KJNP-1</div>
+            <div class="ranking-subtitle-text">Журнал службы персонала / Registro de Operadores</div>
+            <hr class="telex-hr" style="border-color:#8a7a60; margin: 10px 0;">
+            <div class="rank-header-row">
+                <span class="rank-num">#</span>
+                <span class="rank-date">DATA</span>
+                <span class="rank-svc">СЛУЖБА</span>
+                <span class="rank-stamp">ИСХОД</span>
+                <span class="rank-energy">ЭНЕРГИЯ</span>
+                <span class="rank-detail">ПРИЧИНА / ДЕТАЛИ</span>
+            </div>
+            <div id="ranking-list" class="ranking-list"></div>
+            <hr class="telex-hr" style="border-color:#8a7a60; margin: 10px 0;">
+            <button class="dis-btn" id="btn-ranking-close">ЗАКРЫТЬ — FECHAR</button>
         </div>
     </div>
 
@@ -438,6 +469,7 @@
         </div>
     </div>
 
+    <script src="js/ranking-system.js"></script>
     <script src="js/config.js"></script>
     <script src="js/reactor-simulation.js"></script>
     <script src="js/three.min.js"></script>
@@ -451,5 +483,17 @@
     <script src="js/demand-system.js"></script>
     <script src="js/game-over-system.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        // Botões АРХИВ nas telas de game over
+        document.addEventListener('DOMContentLoaded', function() {
+            var btnExpRanking = document.getElementById('btn-exp-ranking');
+            var btnDisRanking = document.getElementById('btn-dis-ranking');
+            function openRanking() {
+                if (window.game) window.game.showRanking();
+            }
+            if (btnExpRanking) btnExpRanking.addEventListener('click', openRanking);
+            if (btnDisRanking) btnDisRanking.addEventListener('click', openRanking);
+        });
+    </script>
 </body>
 </html>

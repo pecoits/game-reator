@@ -782,7 +782,149 @@ body {
     color: #888;
 }
 
-/* Responsive */
+/* ===== RANKING ===== */
+.btn-ranking {
+    border-color: var(--gold-soviet);
+    color: var(--gold-soviet);
+}
+
+.ranking-doc {
+    background: #f0e8d0;
+    border: 2px solid #8a7a60;
+    padding: 24px 28px;
+    max-width: 640px;
+    width: 95%;
+    max-height: 85vh;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #2a1a0a;
+    box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.4);
+    position: relative;
+}
+
+.ranking-secret {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    color: #cc2222;
+    border: 2.5px solid #cc2222;
+    padding: 2px 8px;
+    font-size: 10px;
+    letter-spacing: 3px;
+    transform: rotate(-7deg);
+    opacity: 0.85;
+    font-weight: bold;
+}
+
+.ranking-ministry {
+    font-weight: bold;
+    font-size: 13px;
+    text-align: center;
+    letter-spacing: 1.5px;
+    margin-bottom: 2px;
+}
+
+.ranking-title-text {
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+
+.ranking-subtitle-text {
+    text-align: center;
+    font-size: 10px;
+    color: #6a5a4a;
+    margin-bottom: 4px;
+}
+
+.rank-header-row,
+.rank-entry {
+    display: grid;
+    grid-template-columns: 28px 60px 52px 60px 80px 1fr;
+    gap: 6px;
+    align-items: center;
+    padding: 4px 0;
+    font-size: 11px;
+    border-bottom: 1px dotted #c8bfa8;
+}
+
+.rank-header-row {
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    color: #6a5a4a;
+    font-weight: bold;
+    border-bottom: 1px solid #8a7a60;
+    padding-bottom: 6px;
+    margin-bottom: 2px;
+}
+
+.rank-num   { color: #8a7a60; font-weight: bold; }
+.rank-date  { color: #5a4a3a; font-size: 10px; }
+.rank-svc   { font-weight: bold; color: #3a2a1a; }
+.rank-energy { font-size: 10px; color: #5a4a3a; }
+.rank-detail { font-size: 10px; color: #6a5a4a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.rank-stamp {
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 1px 4px;
+    border: 1px solid;
+    text-align: center;
+}
+
+.rank-stamp-explosion {
+    color: #cc2222;
+    border-color: #cc2222;
+    background: rgba(204, 34, 34, 0.07);
+}
+
+.rank-stamp-dismissal {
+    color: #6a5a4a;
+    border-color: #8a7a60;
+    background: rgba(138, 122, 96, 0.1);
+}
+
+.ranking-list {
+    min-height: 40px;
+}
+
+.ranking-empty {
+    text-align: center;
+    color: #6a5a4a;
+    padding: 16px 0;
+    font-style: italic;
+}
+
+/* Game over extra action buttons */
+.gameover-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.gameover-btn-archive {
+    background: #332211;
+    color: #c8a86a;
+    border-color: #664422;
+    font-size: 11px;
+}
+
+.gameover-btn-archive:hover { background: #553322; }
+
+.dis-btn-archive {
+    margin-top: 6px;
+    background: #3a2a1a;
+    color: #c8b890;
+    border-color: #5a4a3a;
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1200px) {
     .control-room {
         grid-template-columns: 1fr;
@@ -790,12 +932,82 @@ body {
     }
 
     .panel {
-        min-height: 400px;
+        min-height: 300px;
     }
 
     .gauges-grid {
         grid-template-columns: repeat(4, 1fr);
     }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 8px 12px;
+        margin: 6px;
+    }
+
+    .header-title h1 { font-size: 12px; letter-spacing: 1px; }
+    .header-title p  { display: none; }
+
+    .volume-slider { display: none; }
+
+    .control-room {
+        padding: 0 6px 6px;
+        gap: 8px;
+    }
+
+    .panel { min-height: 0; }
+
+    .gauges-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .gauge-svg   { width: 110px; height: 110px; }
+    .gauge-label { font-size: 10px; }
+    .gauge-value { font-size: 12px; }
+
+    .panel-title { font-size: 11px; }
+
+    .modal-content { max-width: 95vw; }
+    .modal-alerts  { width: 95%; }
+
+    .ranking-doc {
+        padding: 18px 16px;
+        font-size: 11px;
+    }
+
+    .rank-header-row,
+    .rank-entry {
+        grid-template-columns: 24px 52px 44px 52px 68px 1fr;
+        font-size: 10px;
+    }
+
+    .dis-document,
+    .telex-paper { max-width: 95vw; padding: 20px 16px; }
+}
+
+@media (max-width: 480px) {
+    .soviet-emblem { font-size: 24px; }
+
+    .header-title h1 { font-size: 10px; }
+    .btn { padding: 5px 8px; font-size: 10px; }
+
+    .gauges-grid { gap: 6px; }
+    .gauge-svg   { width: 90px; height: 90px; }
+
+    .knob { width: 46px; height: 46px; }
+
+    .rank-header-row,
+    .rank-entry {
+        grid-template-columns: 22px 48px 40px 48px 1fr;
+        gap: 4px;
+    }
+
+    /* Oculta coluna de energia no mobile pequeno */
+    .rank-energy { display: none; }
+
+    .exp-content { padding: 20px 12px; }
+    .exp-title-ru { font-size: 36px; }
 }
 
 /* Error/Confirm Modal Styles */

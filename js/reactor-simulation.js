@@ -34,6 +34,8 @@ class ReactorSimulation {
         // Simulation state
         this.time                 = 0;
         this.ticks                = 0;
+        this.totalEnergyMWh       = 0;
+        this.totalAlerts          = 0;
         this.alerts               = [];
         this.events               = [];
         this.running              = false;
@@ -78,6 +80,7 @@ class ReactorSimulation {
 
         this.time += deltaTime;
         this.ticks++;
+        this.totalEnergyMWh += this.energyGeneration * (deltaTime / 3600000);
 
         // Update simulation physics
         this.updateControlRodsEffect();
@@ -228,6 +231,7 @@ class ReactorSimulation {
                 message: message,
                 time: this.time
             };
+            this.totalAlerts++;
             this.alerts.push(alert);
             if (this.alerts.length > this.maxAlertHistory) {
                 this.alerts.splice(0, this.alerts.length - this.maxAlertHistory);
@@ -341,7 +345,9 @@ class ReactorSimulation {
             scramActive: this.scramActive,
             alerts: this.alerts,
             time: this.time,
-            gracePeriodActive: !this.eventsEnabled
+            gracePeriodActive: !this.eventsEnabled,
+            totalEnergyMWh: this.totalEnergyMWh,
+            totalAlerts: this.totalAlerts
         };
     }
 

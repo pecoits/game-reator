@@ -1,10 +1,11 @@
 // ===== GAME OVER SYSTEM =====
 // Gerencia as telas de fim de jogo: explosão (parâmetros críticos) e demissão misteriosa.
 class GameOverSystem {
-    constructor(simulation, saveSystem) {
-        this.simulation = simulation;
-        this.saveSystem = saveSystem;
-        this.triggered  = false;
+    constructor(simulation, saveSystem, rankingSystem) {
+        this.simulation    = simulation;
+        this.saveSystem    = saveSystem;
+        this.rankingSystem = rankingSystem;
+        this.triggered     = false;
     }
 
     // Chamado a cada tick pelo game loop
@@ -47,13 +48,29 @@ class GameOverSystem {
         this.simulation.stop();
         this.saveSystem.clear();
 
+        const timeMs = this.simulation.time;
         const data = {
             cause,
-            temp:     temp.toFixed(1),
-            pressure: pres.toFixed(2),
-            radiation: rad.toFixed(2),
-            time:     this._formatTime(this.simulation.time)
+            temp:       temp.toFixed(1),
+            pressure:   pres.toFixed(2),
+            radiation:  rad.toFixed(2),
+            time:       this._formatTime(timeMs),
+            energyMWh:  this.simulation.totalEnergyMWh,
+            totalAlerts: this.simulation.totalAlerts
         };
+
+        if (this.rankingSystem) {
+            this.rankingSystem.record({
+                date:          Date.now(),
+                outcome:       'explosion',
+                timeMs,
+                timeFormatted: data.time,
+                energyMWh:     Math.round(this.simulation.totalEnergyMWh),
+                totalAlerts:   this.simulation.totalAlerts,
+                cause:         cause.ru
+            });
+        }
+
         this._showExplosionScreen(data);
     }
 
@@ -62,7 +79,30 @@ class GameOverSystem {
         if (this.triggered) return;
         this.triggered = true;
         this.saveSystem.clear();
-        this._showDismissalScreen(stats);
+
+        const timeMs     = this.simulation ? this.simulation.time : (stats.time || 0);
+        const energyMWh  = this.simulation ? this.simulation.totalEnergyMWh : 0;
+        const totalAlerts = this.simulation ? this.simulation.totalAlerts : 0;
+        const timeFormatted = this._formatTime(timeMs);
+
+        if (this.rankingSystem) {
+            this.rankingSystem.record({
+                date:          Date.now(),
+                outcome:       'dismissal',
+                timeMs,
+                timeFormatted,
+                energyMWh:     Math.round(energyMWh),
+                totalAlerts,
+                blackouts:     stats.blackouts,
+                quota:         stats.quota
+            });
+        }
+
+        this._showDismissalScreen(Object.assign({}, stats, {
+            timeFormatted,
+            energyMWh,
+            totalAlerts
+        }));
     }
 
     // Exibe o telex burocrático e pausa o jogo
@@ -129,6 +169,8 @@ class GameOverSystem {
         set('exp-pressure',  data.pressure + ' МПа');
         set('exp-radiation', data.radiation + ' мЗв/ч');
         set('exp-time',      data.time);
+        set('exp-energy',    Math.round(data.energyMWh) + ' MWh');
+        set('exp-incidents', String(data.totalAlerts));
 
         screen.style.display = 'flex';
     }
@@ -142,10 +184,12 @@ class GameOverSystem {
             if (el) el.textContent = val;
         };
 
-        set('dis-time',      this._formatTime(stats.time));
+        set('dis-time',      stats.timeFormatted);
         set('dis-blackouts', stats.blackouts);
         set('dis-quota',     stats.quota + ' MW');
         set('dis-deficit',   (stats.quota - stats.energy) + ' MW');
+        set('dis-energy',    Math.round(stats.energyMWh) + ' MWh');
+        set('dis-incidents', String(stats.totalAlerts));
 
         screen.style.display = 'flex';
     }

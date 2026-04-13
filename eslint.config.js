@@ -30,11 +30,14 @@ module.exports = [
                 showGameConfirm: 'readonly',
                 UIControllerNew: 'readonly',
                 manualPagesPT: 'readonly',
-                manualPagesEN: 'readonly'
+                manualPagesEN: 'readonly',
+                GameOverSystem: 'readonly',
+                DemandSystem: 'readonly',
+                RankingSystem: 'readonly'
             }
         },
         rules: {
-            'no-unused-vars': ['error', { args: 'none', caughtErrors: 'all', caughtErrorsIgnorePattern: '^_', varsIgnorePattern: '^(REACTOR_CONFIG|SaveSystem|IntroSystem|showGameConfirm)$', ignoreRestSiblings: true }],
+            'no-unused-vars': ['error', { args: 'none', caughtErrors: 'all', caughtErrorsIgnorePattern: '^_', varsIgnorePattern: '^(REACTOR_CONFIG|SaveSystem|IntroSystem|showGameConfirm|RankingSystem)$', ignoreRestSiblings: true }],
             'no-undef': 'error'
         }
     },

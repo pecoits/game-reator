@@ -9,7 +9,8 @@ class GameApp {
         this.gameLoop = null;
         this.lastTime = 0;
         this.loadingComplete = false;
-        this.saveSystem = new SaveSystem();
+        this.saveSystem     = new SaveSystem();
+        this.rankingSystem  = new RankingSystem();
         this.gameOverSystem = null;
         this.demandSystem   = null;
 
@@ -118,7 +119,16 @@ class GameApp {
 
             console.log('Initializing event system...');
             this.eventSystem = new EventSystem(this.simulation);
-            this.gameOverSystem = new GameOverSystem(this.simulation, this.saveSystem);
+            this.gameOverSystem = new GameOverSystem(this.simulation, this.saveSystem, this.rankingSystem);
+
+            // Ranking button
+            var btnRanking = document.getElementById('btn-ranking');
+            if (btnRanking) btnRanking.addEventListener('click', () => this.showRanking());
+            var btnRankingClose = document.getElementById('btn-ranking-close');
+            if (btnRankingClose) btnRankingClose.addEventListener('click', function() {
+                var overlay = document.getElementById('ranking-overlay');
+                if (overlay) overlay.style.display = 'none';
+            });
             this.demandSystem   = new DemandSystem(this.simulation);
             this.demandSystem.onShowTelex = (stage, text, quota, count) => {
                 this.gameOverSystem.showTelex(stage, text, quota, count);
@@ -184,6 +194,37 @@ class GameApp {
             requestAnimationFrame(loop);
         };
         requestAnimationFrame(loop);
+    }
+
+    showRanking() {
+        const entries = this.rankingSystem.load();
+        const listEl  = document.getElementById('ranking-list');
+        if (!listEl) return;
+
+        if (entries.length === 0) {
+            listEl.innerHTML = '<p class="ranking-empty">Нет данных — Nenhuma partida registrada.</p>';
+        } else {
+            listEl.innerHTML = entries.map(function(e, i) {
+                const outcomeClass = e.outcome === 'explosion' ? 'rank-stamp-explosion' : 'rank-stamp-dismissal';
+                const outcomeText  = e.outcome === 'explosion'  ? 'ВЗРЫВ' : 'УВОЛЕН';
+                const detail = e.outcome === 'explosion'
+                    ? (e.cause || '—')
+                    : (e.blackouts + ' apagões | cota ' + (e.quota || '—') + ' MW');
+                const dateStr = new Date(e.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
+                const energy  = typeof e.energyMWh === 'number' ? e.energyMWh + ' MWh' : '—';
+                return '<div class="rank-entry">' +
+                    '<span class="rank-num">#' + (i + 1) + '</span>' +
+                    '<span class="rank-date">' + dateStr + '</span>' +
+                    '<span class="rank-svc">' + (e.timeFormatted || '00:00') + '</span>' +
+                    '<span class="rank-stamp ' + outcomeClass + '">' + outcomeText + '</span>' +
+                    '<span class="rank-energy">' + energy + '</span>' +
+                    '<span class="rank-detail">' + detail + '</span>' +
+                    '</div>';
+            }).join('');
+        }
+
+        const overlay = document.getElementById('ranking-overlay');
+        if (overlay) overlay.style.display = 'flex';
     }
 }
 
