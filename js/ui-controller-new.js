@@ -1,6 +1,5 @@
 // ===== UI CONTROLLER - NEW CONTROL ROOM STYLE =====
 import { SoundSystem } from './sound-system.js';
-import { showGameConfirm } from './utils.js';
 
 export var UIControllerNew = (function() {
     function UIControllerNew(simulation) {

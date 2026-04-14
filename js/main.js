@@ -1,17 +1,16 @@
 import { ReactorSimulation } from './reactor-simulation.js';
 import { UIControllerNew } from './ui-controller-new.js';
 import { SaveSystem } from './save-system.js';
-import { SoundSystem } from './sound-system.js';
 import { IntroSystem } from './intro-system.js';
 import { EventSystem } from './event-system.js';
 import { GameOverSystem } from './game-over-system.js';
 import { DemandSystem } from './demand-system.js';
 import { RankingSystem } from './ranking-system.js';
 import { TutorialSystem } from './tutorial-system.js';
+import { showGameError, showBootError } from './utils.js';
 
 // Global configurations
 // REACTOR_CONFIG is global from config.js, Vite should handle it if loaded.
-// However, since we are in a module, we should ideally import it.
 
 // ===== MAIN APPLICATION =====
 class GameApp {
