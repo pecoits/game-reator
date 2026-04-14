@@ -1,6 +1,6 @@
 // ===== DEMAND SYSTEM =====
 // Gerencia a cota de energia exigida pelo Partido e escala avisos burocráticos.
-class DemandSystem {
+export class DemandSystem {
     constructor(simulation) {
         this.simulation = simulation;
 

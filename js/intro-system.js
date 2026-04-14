@@ -327,7 +327,7 @@ var introTexts = {
     }
 };
 
-var IntroSystem = (function() {
+export var IntroSystem = (function() {
     function IntroSystem(gameApp) {
         this.gameApp = gameApp;
         this.selectedLanguage = null;

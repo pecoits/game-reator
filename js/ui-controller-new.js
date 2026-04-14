@@ -1,5 +1,5 @@
 // ===== UI CONTROLLER - NEW CONTROL ROOM STYLE =====
-var UIControllerNew = (function() {
+export var UIControllerNew = (function() {
     function UIControllerNew(simulation) {
         this.simulation = simulation;
         this.soundSystem = new SoundSystem();

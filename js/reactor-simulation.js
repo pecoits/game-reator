@@ -1,5 +1,5 @@
 // ===== REACTOR SIMULATION ENGINE =====
-class ReactorSimulation {
+export class ReactorSimulation {
     constructor() {
         this.maxAlertHistory      = 200;
         this.maxEventHistory      = 500;

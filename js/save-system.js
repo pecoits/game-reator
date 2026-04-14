@@ -2,7 +2,7 @@
 const SAVE_PREFIX = 'game_reator_save_';
 const SAVE_VERSION = 1;
 
-class SaveSystem {
+export class SaveSystem {
     constructor() {
         this.currentSlot = 1;
     }

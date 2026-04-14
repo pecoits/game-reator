@@ -1,6 +1,6 @@
 // ===== GAME OVER SYSTEM =====
 // Gerencia as telas de fim de jogo: explosão (parâmetros críticos) e demissão misteriosa.
-class GameOverSystem {
+export class GameOverSystem {
     constructor(simulation, saveSystem, rankingSystem) {
         this.simulation    = simulation;
         this.saveSystem    = saveSystem;

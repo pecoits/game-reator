@@ -182,7 +182,7 @@ var TUTORIAL_LABELS = {
     fr: { header: 'INSTRUCTIONS',  skip: 'PASSER',   next: 'SUIVANT', close: 'COMPRIS',   of: 'sur' }
 };
 
-class TutorialSystem {
+export class TutorialSystem {
     constructor(simulation) {
         this.simulation     = simulation;
         this.lang           = window.selectedLanguage || 'en';

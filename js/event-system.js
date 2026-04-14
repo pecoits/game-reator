@@ -1,5 +1,5 @@
 // ===== EVENT SYSTEM =====
-class EventSystem {
+export class EventSystem {
     constructor(simulation) {
         this.simulation = simulation;
         this.scheduledEvents = [];

@@ -3,7 +3,7 @@
 const RANKING_KEY = 'game_reator_ranking';
 const RANKING_MAX = 10;
 
-class RankingSystem {
+export class RankingSystem {
     load() {
         try {
             const raw = localStorage.getItem(RANKING_KEY);

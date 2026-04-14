@@ -1,5 +1,5 @@
 // ===== SOUND SYSTEM =====
-class SoundSystem {
+export class SoundSystem {
     constructor() {
         this.audioContext = null;
         this.volume = 0.5; // Default volume (50%)
