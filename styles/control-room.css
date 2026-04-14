@@ -1,48 +1,112 @@
 /* ===== CONTROL ROOM - NEW INDUSTRIAL STYLE ===== */
 
 :root {
-    --bg-wall: #a79f90;
-    --bg-wall-dark: #968e7e;
-    --panel-bg: #d4ccb9;
-    --panel-bg-alt: #cdc4b0;
-    --panel-border: #8f8675;
-    --panel-inner: #8e846f;
-    --text-dark: #27231c;
-    --text-muted: #5f5648;
+    --bg-wall: #8a8275;
+    --bg-wall-dark: #6e675c;
+    --panel-bg: #c2b9a7;
+    --panel-bg-alt: #b8af9a;
+    --panel-border: #5c554a;
+    --panel-inner: #7a7161;
+    --text-dark: #1a1814;
+    --text-muted: #4a443a;
     --gold-soviet: #cc9900;
-    --red-soviet: #cc0000;
+    --red-soviet: #990000;
     --red-bright: #ff0000;
-    --green-led: #64ff8f;
-    --yellow-led: #ffe066;
-    --red-led: #ff6b6b;
-    --black-bg: #1a1a1a;
+    --green-led: #33ff66;
+    --yellow-led: #ffcc00;
+    --red-led: #ff3333;
+    --black-bg: #0a0a0a;
+    --crt-green: #00ff41;
+    --panel-shadow: inset 2px 2px 0px rgba(255,255,255,0.2), inset -2px -2px 0px rgba(0,0,0,0.3);
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Efeito de Vidro para Gauges */
+.gauge-glass {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.05) 100%);
+    pointer-events: none;
+    border-radius: 50%;
+    z-index: 10;
 }
 
-body {
-    font-family: 'Courier New', Consolas, monospace;
-    color: var(--text-dark);
-    background: linear-gradient(180deg, var(--bg-wall) 0%, var(--bg-wall-dark) 100%);
-    min-height: 100vh;
-    overflow-x: hidden;
+/* Detalhe de Parafuso */
+.screw {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #7a7161;
+    border-radius: 50%;
+    border: 1px solid #4a443a;
+    box-shadow: inset 1px 1px 2px rgba(255,255,255,0.3);
+}
+.screw::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: #4a443a;
+    transform: rotate(45deg);
 }
 
-/* ===== HEADER ===== */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 20px;
-    background: #d8cfbc;
-    border: 1px solid var(--panel-border);
+.panel {
+    border: 2px solid var(--panel-border);
+    border-radius: 4px; /* Cantos mais retos para visual industrial */
+    padding: 16px;
+    background: var(--panel-bg);
+    box-shadow: var(--panel-shadow), 4px 4px 15px rgba(0,0,0,0.4);
+    position: relative;
+}
+
+/* Monitor CRT Effect */
+.journal-display {
+    background: #050a05;
+    border: 4px solid #333;
     border-radius: 10px;
-    margin: 10px;
-    box-shadow: inset 0 0 0 1px #e6dfcf, 0 8px 20px rgba(55, 44, 26, 0.15);
+    box-shadow: inset 0 0 20px #000, 0 0 10px rgba(0,255,65,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.journal-display::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 3px, 3px 100%;
+    pointer-events: none;
+}
+
+.journal-display::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: rgba(18, 16, 16, 0.1);
+    opacity: 0;
+    z-index: 2;
+    pointer-events: none;
+    animation: crt-flicker 0.15s infinite;
+}
+
+@keyframes crt-flicker {
+    0% { opacity: 0.1; }
+    50% { opacity: 0.12; }
+    100% { opacity: 0.1; }
+}
+
+.journal-text {
+    color: var(--crt-green);
+    text-shadow: 0 0 5px var(--crt-green);
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
 }
 
 .header-left {

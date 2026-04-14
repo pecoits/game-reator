@@ -52,34 +52,115 @@
             
             <!-- Left Panel: Analog Gauges -->
             <section class="panel panel-left">
-                <h3 class="panel-title">ИНСТРУМЕНТЫ</h3>
+                <div class="screw" style="top: 10px; left: 10px;"></div>
+                <div class="screw" style="top: 10px; right: 10px;"></div>
+                <div class="screw" style="bottom: 10px; left: 10px;"></div>
+                <div class="screw" style="bottom: 10px; right: 10px;"></div>
+                
+                <h3 class="panel-title">ИНСТРУМЕНТЫ — GAUGES</h3>
                 
                 <div class="gauges-grid">
                     <!-- Temperature Gauge -->
                     <div class="gauge-card">
                         <div class="gauge-label">ТЕМПЕРАТУРА АКТИВНОЙ ЗОНЫ</div>
-                        <svg class="gauge-svg" viewBox="0 0 200 200">
-                            <defs>
-                                <linearGradient id="tempZones" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" style="stop-color:#00ff41;stop-opacity:0.3" />
-                                    <stop offset="60%" style="stop-color:#ffbf00;stop-opacity:0.5" />
-                                    <stop offset="80%" style="stop-color:#ff0040;stop-opacity:0.7" />
-                                </linearGradient>
-                            </defs>
-                            <circle class="gauge-bg" cx="100" cy="100" r="85"/>
-                            <!-- Danger zone arc (red) -->
-                            <path class="gauge-danger-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 174 88" fill="none" stroke="#ff0040" stroke-width="8" opacity="0.6" stroke-linecap="round"/>
-                            <!-- Warning zone arc (yellow) -->
-                            <path class="gauge-warning-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 155 52" fill="none" stroke="#ffbf00" stroke-width="8" opacity="0.5" stroke-linecap="round"/>
-                            <circle class="gauge-zones" cx="100" cy="100" r="85" 
-                                    stroke="url(#tempZones)" 
-                                    stroke-dasharray="370 180 80 90" 
-                                    stroke-dashoffset="0"
-                                    style="transform: rotate(90deg); transform-origin: center;"/>
-                            <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-130 100 100)"/>
-                            <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(-95 100 100)"/>
-                            <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-60 100 100)"/>
-                            <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(-25 100 100)"/>
+                        <div style="position: relative; width: 130px; height: 130px;">
+                            <div class="gauge-glass"></div>
+                            <svg class="gauge-svg" viewBox="0 0 200 200">
+                                <defs>
+                                    <linearGradient id="tempZones" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#00ff41;stop-opacity:0.3" />
+                                        <stop offset="60%" style="stop-color:#ffbf00;stop-opacity:0.5" />
+                                        <stop offset="80%" style="stop-color:#ff0040;stop-opacity:0.7" />
+                                    </linearGradient>
+                                </defs>
+                                <circle class="gauge-bg" cx="100" cy="100" r="85"/>
+                                <!-- Danger zone arc (red) -->
+                                <path class="gauge-danger-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 174 88" fill="none" stroke="#ff0040" stroke-width="8" opacity="0.6" stroke-linecap="round"/>
+                                <!-- Warning zone arc (yellow) -->
+                                <path class="gauge-warning-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 155 52" fill="none" stroke="#ffbf00" stroke-width="8" opacity="0.5" stroke-linecap="round"/>
+                                <circle class="gauge-zones" cx="100" cy="100" r="85" 
+                                        stroke="url(#tempZones)" 
+                                        stroke-dasharray="370 180 80 90" 
+                                        stroke-dashoffset="0"
+                                        style="transform: rotate(90deg); transform-origin: center;"/>
+                                <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-130 100 100)"/>
+                                <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(-95 100 100)"/>
+                                <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-60 100 100)"/>
+                                <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(-25 100 100)"/>
+                                <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(10 100 100)"/>
+                                <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(45 100 100)"/>
+                                <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(80 100 100)"/>
+                                <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(115 100 100)"/>
+                                <line id="needle-temp" class="gauge-needle" x1="100" y1="100" x2="100" y2="30" transform="rotate(-90 100 100)"/>
+                                <circle class="gauge-center" cx="100" cy="100" r="8"/>
+                            </svg>
+                        </div>
+                        <div class="gauge-value" id="val-temp">0°C</div>
+                        <svg class="sparkline" id="spark-temp" viewBox="0 0 60 20" preserveAspectRatio="none"><polyline id="spark-temp-line" points="" fill="none" stroke="#64ff8f" stroke-width="1.5"/></svg>
+                    </div>
+
+                    <!-- Pressure Gauge -->
+                    <div class="gauge-card">
+                        <div class="gauge-label">ДАВЛЕНИЕ В КОНТУРЕ <span class="fault-led" id="led-pressure"></span></div>
+                        <div style="position: relative; width: 130px; height: 130px;">
+                            <div class="gauge-glass"></div>
+                            <svg class="gauge-svg" viewBox="0 0 200 200">
+                                <defs>
+                                    <linearGradient id="pressureZones" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#00ff41;stop-opacity:0.3" />
+                                        <stop offset="60%" style="stop-color:#ffbf00;stop-opacity:0.5" />
+                                        <stop offset="80%" style="stop-color:#ff0040;stop-opacity:0.7" />
+                                    </linearGradient>
+                                </defs>
+                                <circle class="gauge-bg" cx="100" cy="100" r="85"/>
+                                <path class="gauge-danger-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 174 88" fill="none" stroke="#ff0040" stroke-width="8" opacity="0.6" stroke-linecap="round"/>
+                                <path class="gauge-warning-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 155 52" fill="none" stroke="#ffbf00" stroke-width="8" opacity="0.5" stroke-linecap="round"/>
+                                <circle class="gauge-zones" cx="100" cy="100" r="85" 
+                                        stroke="url(#pressureZones)" 
+                                        stroke-dasharray="370 180 80 90" 
+                                        stroke-dashoffset="0"
+                                        style="transform: rotate(90deg); transform-origin: center;"/>
+                                <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-130 100 100)"/>
+                                <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(-95 100 100)"/>
+                                <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-60 100 100)"/>
+                                <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(-25 100 100)"/>
+                                <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(10 100 100)"/>
+                                <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(45 100 100)"/>
+                                <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(80 100 100)"/>
+                                <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(115 100 100)"/>
+                                <line id="needle-pressure" class="gauge-needle" x1="100" y1="100" x2="100" y2="30" transform="rotate(-90 100 100)"/>
+                                <circle class="gauge-center" cx="100" cy="100" r="8"/>
+                            </svg>
+                        </div>
+                        <div class="gauge-value" id="val-pressure">0 МПа</div>
+                        <svg class="sparkline" id="spark-pressure" viewBox="0 0 60 20" preserveAspectRatio="none"><polyline id="spark-pressure-line" points="" fill="none" stroke="#64ff8f" stroke-width="1.5"/></svg>
+                    </div>
+
+                    <!-- Power Gauge -->
+                    <div class="gauge-card">
+                        <div class="gauge-label">МОЩНОСТЬ РЕАКТОРА</div>
+                        <div style="position: relative; width: 130px; height: 130px;">
+                            <div class="gauge-glass"></div>
+                            <svg class="gauge-svg" viewBox="0 0 200 200">
+                                <defs>
+                                    <linearGradient id="powerZones" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#00ff41;stop-opacity:0.3" />
+                                        <stop offset="60%" style="stop-color:#ffbf00;stop-opacity:0.5" />
+                                        <stop offset="80%" style="stop-color:#ff0040;stop-opacity:0.7" />
+                                    </linearGradient>
+                                </defs>
+                                <circle class="gauge-bg" cx="100" cy="100" r="85"/>
+                                <path class="gauge-danger-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 174 88" fill="none" stroke="#ff0040" stroke-width="8" opacity="0.6" stroke-linecap="round"/>
+                                <path class="gauge-warning-arc" d="M 100 100 L 100 25 A 75 75 0 0 1 155 52" fill="none" stroke="#ffbf00" stroke-width="8" opacity="0.5" stroke-linecap="round"/>
+                                <circle class="gauge-zones" cx="100" cy="100" r="85" 
+                                        stroke="url(#powerZones)" 
+                                        stroke-dasharray="370 180 80 90" 
+                                        stroke-dashoffset="0"
+                                        style="transform: rotate(90deg); transform-origin: center;"/>
+                                <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-130 100 100)"/>
+                                <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(-95 100 100)"/>
+                                <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(-60 100 100)"/>
+                                <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(-25 100 100)"/>
                             <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(10 100 100)"/>
                             <line class="gauge-tick" x1="100" y1="100" x2="100" y2="30" transform="rotate(45 100 100)"/>
                             <line class="gauge-tick major" x1="100" y1="100" x2="100" y2="25" transform="rotate(80 100 100)"/>
