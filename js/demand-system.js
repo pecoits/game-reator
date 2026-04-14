@@ -1,4 +1,6 @@
 // ===== DEMAND SYSTEM =====
+import { REACTOR_CONFIG } from './config.js';
+
 // Gerencia a cota de energia exigida pelo Partido e escala avisos burocráticos.
 export class DemandSystem {
     constructor(simulation) {

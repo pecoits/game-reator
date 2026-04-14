@@ -182,6 +182,9 @@ var TUTORIAL_LABELS = {
     fr: { header: 'INSTRUCTIONS',  skip: 'PASSER',   next: 'SUIVANT', close: 'COMPRIS',   of: 'sur' }
 };
 
+// ===== TUTORIAL SYSTEM =====
+import { REACTOR_CONFIG } from './config.js';
+
 export class TutorialSystem {
     constructor(simulation) {
         this.simulation     = simulation;

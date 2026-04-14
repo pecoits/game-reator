@@ -1,3 +1,4 @@
+import { REACTOR_CONFIG } from './config.js';
 import { ReactorSimulation } from './reactor-simulation.js';
 import { UIControllerNew } from './ui-controller-new.js';
 import { SaveSystem } from './save-system.js';

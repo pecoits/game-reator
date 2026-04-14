@@ -1,4 +1,6 @@
 // ===== EVENT SYSTEM =====
+import { REACTOR_CONFIG } from './config.js';
+
 export class EventSystem {
     constructor(simulation) {
         this.simulation = simulation;

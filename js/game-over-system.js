@@ -1,4 +1,6 @@
 // ===== GAME OVER SYSTEM =====
+import { REACTOR_CONFIG } from './config.js';
+
 // Gerencia as telas de fim de jogo: explosão (parâmetros críticos) e demissão misteriosa.
 export class GameOverSystem {
     constructor(simulation, saveSystem, rankingSystem) {

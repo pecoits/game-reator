@@ -1,4 +1,6 @@
 // ===== REACTOR SIMULATION ENGINE =====
+import { REACTOR_CONFIG } from './config.js';
+
 export class ReactorSimulation {
     constructor() {
         this.maxAlertHistory      = 200;
