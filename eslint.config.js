@@ -3,7 +3,7 @@ module.exports = [
         files: ['js/**/*.js'],
         languageOptions: {
             ecmaVersion: 2021,
-            sourceType: 'script',
+            sourceType: 'module',
             globals: {
                 window: 'readonly',
                 document: 'readonly',
@@ -19,28 +19,14 @@ module.exports = [
                 module: 'readonly',
                 confirm: 'readonly',
                 REACTOR_CONFIG: 'readonly',
-                SaveSystem: 'readonly',
-                IntroSystem: 'readonly',
-                ReactorSimulation: 'readonly',
-                ReactorViewport: 'readonly',
-                UIController: 'readonly',
-                EventSystem: 'readonly',
-                SoundSystem: 'readonly',
-                MANUAL_PAGES: 'readonly',
-                showGameConfirm: 'readonly',
-                UIControllerNew: 'readonly',
                 manualPagesPT: 'readonly',
                 manualPagesEN: 'readonly',
                 manualPagesES: 'readonly',
-                manualPagesFR: 'readonly',
-                GameOverSystem: 'readonly',
-                DemandSystem: 'readonly',
-                RankingSystem: 'readonly',
-                TutorialSystem: 'readonly'
+                manualPagesFR: 'readonly'
             }
         },
         rules: {
-            'no-unused-vars': ['error', { args: 'none', caughtErrors: 'all', caughtErrorsIgnorePattern: '^_', varsIgnorePattern: '^(REACTOR_CONFIG|SaveSystem|IntroSystem|showGameConfirm|RankingSystem)$', ignoreRestSiblings: true }],
+            'no-unused-vars': ['error', { args: 'none', caughtErrors: 'all', caughtErrorsIgnorePattern: '^_', varsIgnorePattern: '^(REACTOR_CONFIG)$', ignoreRestSiblings: true }],
             'no-undef': 'error'
         }
     },
