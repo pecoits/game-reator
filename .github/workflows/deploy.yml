@@ -43,13 +43,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare game assets
-        run: |
-          mkdir -p dist
-          cp index.html dist/
-          cp -r js dist/
-          cp -r styles dist/
-          find . -maxdepth 1 \( -name "*.png" -o -name "*.jpg" -o -name "*.ico" \) -exec cp {} dist/ \; 2>/dev/null || true
+      - name: Build
+        run: npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

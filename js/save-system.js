@@ -1,8 +1,12 @@
 // ===== SAVE SYSTEM =====
-const SAVE_KEY = 'game_reator_save';
+const SAVE_PREFIX = 'game_reator_save_';
 const SAVE_VERSION = 1;
 
 class SaveSystem {
+    constructor() {
+        this.currentSlot = 1;
+    }
+
     clamp(value, min, max, fallback) {
         if (typeof value !== 'number' || Number.isNaN(value)) return fallback;
         return Math.max(min, Math.min(max, value));
@@ -23,23 +27,25 @@ class SaveSystem {
             version: SAVE_VERSION,
             savedAt: typeof data.savedAt === 'number' ? data.savedAt : Date.now(),
             sim: {
-                coreTemperature: this.clamp(s.coreTemperature, 20, 1000, REACTOR_CONFIG.initial.coreTemperature),
-                pressure: this.clamp(s.pressure, 0, REACTOR_CONFIG.physics.pressureMax, REACTOR_CONFIG.initial.pressure),
-                radiationLevel: this.clamp(s.radiationLevel, 0, 100, REACTOR_CONFIG.initial.radiationLevel),
-                reactorPower: this.clamp(s.reactorPower, 0, 120, REACTOR_CONFIG.initial.reactorPower),
-                controlRodsPosition: this.clamp(s.controlRodsPosition, 0, 100, REACTOR_CONFIG.initial.controlRodsPosition),
-                mainPumpSpeed: this.clamp(s.mainPumpSpeed, 0, 100, REACTOR_CONFIG.initial.mainPumpSpeed),
+                coreTemperature: this.clamp(s.coreTemperature, 20, 1000, 280),
+                pressure: this.clamp(s.pressure, 0, 25, 6.9),
+                radiationLevel: this.clamp(s.radiationLevel, 0, 100, 0.15),
+                reactorPower: this.clamp(s.reactorPower, 0, 150, 100),
+                controlRodsPosition: this.clamp(s.controlRodsPosition, 0, 100, 50),
+                mainPumpSpeed: this.clamp(s.mainPumpSpeed, 0, 100, 70),
                 emergencyCoolingActive: this.toBoolean(s.emergencyCoolingActive, false),
                 extraPumpActive: this.toBoolean(s.extraPumpActive, false),
                 gridConnected: this.toBoolean(s.gridConnected, true),
                 scramActive: this.toBoolean(s.scramActive, false),
-                time: this.clamp(s.time, 0, Number.MAX_SAFE_INTEGER, 0)
+                time: this.clamp(s.time, 0, Number.MAX_SAFE_INTEGER, 0),
+                totalEnergyMWh: s.totalEnergyMWh || 0
             },
             completedMissions: Array.isArray(data.completedMissions) ? data.completedMissions : []
         };
     }
 
-    save(simState, completedMissions) {
+    save(simState, completedMissions, slot = null) {
+        const slotToUse = slot || this.currentSlot;
         try {
             const data = {
                 version: SAVE_VERSION,
@@ -55,34 +61,56 @@ class SaveSystem {
                     extraPumpActive:        simState.extraPumpActive,
                     gridConnected:          simState.gridConnected,
                     scramActive:            simState.scramActive,
-                    time:                   simState.time
+                    time:                   simState.time,
+                    totalEnergyMWh:         simState.totalEnergyMWh
                 },
                 completedMissions: completedMissions || []
             };
-            localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+            localStorage.setItem(SAVE_PREFIX + slotToUse, JSON.stringify(data));
         } catch (e) {
-            console.warn('SaveSystem: could not save:', e);
+            console.warn('SaveSystem: could not save to slot ' + slotToUse + ':', e);
         }
     }
 
-    load() {
+    load(slot = null) {
+        const slotToUse = slot || this.currentSlot;
         try {
-            const raw = localStorage.getItem(SAVE_KEY);
+            const raw = localStorage.getItem(SAVE_PREFIX + slotToUse);
             if (!raw) return null;
             const data = JSON.parse(raw);
             const validated = this.validate(data);
             if (!validated) {
-                this.clear();
+                this.clear(slotToUse);
                 return null;
             }
             return validated;
         } catch (e) {
-            console.warn('SaveSystem: could not load:', e);
+            console.warn('SaveSystem: could not load from slot ' + slotToUse + ':', e);
             return null;
         }
     }
 
-    clear() {
-        localStorage.removeItem(SAVE_KEY);
+    clear(slot = null) {
+        const slotToUse = slot || this.currentSlot;
+        localStorage.removeItem(SAVE_PREFIX + slotToUse);
+    }
+
+    getSlotsInfo() {
+        const slots = [];
+        for (let i = 1; i <= 3; i++) {
+            const data = this.load(i);
+            slots.push({
+                id: i,
+                empty: !data,
+                date: data ? data.savedAt : null,
+                energy: data ? Math.round(data.sim.totalEnergyMWh || 0) : 0,
+                time: data ? data.sim.time : 0
+            });
+        }
+        return slots;
+    }
+
+    setSlot(slot) {
+        this.currentSlot = slot;
     }
 }

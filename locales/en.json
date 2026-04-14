@@ -1,0 +1,16 @@
+{
+  "manual": {
+    "title": "RBMK-1000 NUCLEAR STATION",
+    "subtitle": "Technical Operations Manual",
+    "classified": "ДОКУМЕНТ ОГРАНИЧЕННОГО ДОСТУПА",
+    "version": "Krasnostan Republic · Ministry of Energy\nJanuary 1994 · NPS-1994-047 · {{version}}"
+  },
+  "intro": {
+    "title": "KRASNOSTAN-1994",
+    "start": "START OPERATION"
+  },
+  "ui": {
+    "system_error": "CRITICAL ERROR",
+    "reboot": "REBOOT SYSTEM"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "manual": {
+    "title": "CENTRALE NUCLÉAIRE RBMK-1000",
+    "subtitle": "Manuel des Opérations Techniques",
+    "classified": "ДОКУМЕНТ ОГРАНИЧЕННОГО ДОСТУПА",
+    "version": "République de Krasnostan · Ministère de l'Énergie\nJanvier 1994 · UEN-1994-047 · {{version}}"
+  },
+  "intro": {
+    "title": "KRASNOSTAN-1994",
+    "start": "DÉMARRER L'OPÉRATION"
+  },
+  "ui": {
+    "system_error": "ERREUR CRITIQUE",
+    "reboot": "REDÉMARRER LE SYSTÈME"
+  }
+}

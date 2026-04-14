@@ -521,21 +521,7 @@
     <div id="emergency-overlay"></div>
 
 
-    <script src="js/tutorial-system.js"></script>
-    <script src="js/ranking-system.js"></script>
-    <script src="js/config.js"></script>
-    <script src="js/reactor-simulation.js"></script>
-    <script src="js/three.min.js"></script>
-    <script src="js/3d-viewport.js"></script>
-    <script src="js/sound-system.js"></script>
-    <script src="js/ui-controller-new.js"></script>
-    <script src="js/event-system.js"></script>
-    <script src="js/manual-content.js"></script>
-    <script src="js/intro-system.js"></script>
-    <script src="js/save-system.js"></script>
-    <script src="js/demand-system.js"></script>
-    <script src="js/game-over-system.js"></script>
-    <script src="js/main.js"></script>
+    <script type="module" src="js/main.js"></script>
     <script>
         // Botões АРХИВ nas telas de game over
         document.addEventListener('DOMContentLoaded', function() {
@@ -546,6 +532,27 @@
                 if (btn) btn.addEventListener('click', openRanking);
             });
         });
+    </script>
+    <!-- Critical Error Overlay -->
+    <div id="critical-error-screen" class="gameover-overlay" style="display: none; background: #000; color: #ff0000; flex-direction: column; z-index: 9999;">
+        <div style="font-size: 48px; margin-bottom: 20px;">КРИТИЧЕСКАЯ ОШИБКА</div>
+        <div style="font-size: 18px; margin-bottom: 40px; font-family: monospace;">SYSTEM_FAILURE_CORE_DUMP_RECOVERY_IMPOSSIBLE</div>
+        <div id="error-details" style="font-size: 12px; color: #aa0000; margin-bottom: 40px; max-width: 80%; text-align: left; font-family: monospace;"></div>
+        <button class="gameover-btn" onclick="window.location.reload()" style="background: #330000; color: #ff0000; border-color: #ff0000;">
+            ПЕРЕЗАГРУЗИТЬ СИСТЕМУ (REBOOT)
+        </button>
+    </div>
+
+    <script>
+        window.onerror = function(msg, url, line, col, error) {
+            document.getElementById('critical-error-screen').style.display = 'flex';
+            document.getElementById('error-details').textContent = msg + '\n' + url + ':' + line + ':' + col;
+            return false;
+        };
+        window.onunhandledrejection = function(event) {
+            document.getElementById('critical-error-screen').style.display = 'flex';
+            document.getElementById('error-details').textContent = 'Unhandled Rejection: ' + event.reason;
+        };
     </script>
 </body>
 </html>

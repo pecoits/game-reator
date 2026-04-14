@@ -4,11 +4,16 @@
   "private": true,
   "description": "Browser reactor operations simulator",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "node tests/reactor.test.js",
     "lint": "eslint js tests --max-warnings=0",
     "lint:fix": "eslint js tests --fix"
   },
   "devDependencies": {
-    "eslint": "^9.0.0"
+    "eslint": "^9.0.0",
+    "vite": "^5.0.0",
+    "vite-plugin-pwa": "^0.17.0"
   }
 }
