@@ -313,18 +313,27 @@ class GameApp {
     }
 }
 
-// Start the game when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, starting game...');
-    console.log('IntroSystem available:', typeof IntroSystem !== 'undefined');
-    console.log('ReactorSimulation available:', typeof ReactorSimulation !== 'undefined');
+// Start the game
+try {
+    console.log('Main module execution started');
+    console.log('Checking dependencies:');
+    console.log('- SaveSystem:', typeof SaveSystem);
+    console.log('- ReactorSimulation:', typeof ReactorSimulation);
+    console.log('- IntroSystem:', typeof IntroSystem);
 
-    try {
-        window.game = new GameApp();
-        console.log('GameApp initialized successfully');
-    } catch (error) {
-        console.error('Failed to start game:', error);
-        console.error(error.stack);
-        showBootError('Ошибка запуска: ' + error.message);
+    window.game = new GameApp();
+    window.GameApp = GameApp;
+    console.log('GameApp instance created and exported to window.game');
+} catch (error) {
+    console.error('CRITICAL: Failed to start game from main module:', error);
+    console.error(error.stack);
+    
+    // Fallback error display if showBootError fails
+    const bootErrorMsg = document.getElementById('boot-error-message');
+    if (bootErrorMsg) {
+        bootErrorMsg.textContent = 'Ошибка запуска: ' + error.message;
+        document.getElementById('boot-error-modal').style.display = 'flex';
+    } else {
+        alert('КРИТИЧЕСКАЯ ОШИБКА: ' + error.message);
     }
-});
+}

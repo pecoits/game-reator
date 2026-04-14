@@ -602,9 +602,12 @@
     <div id="emergency-overlay"></div>
 
 
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <script type="module" src="js/main.js"></script>
-    <script>
-        // Botões АРХИВ nas telas de game over
+    <script type="module">
+        // Botões АРХИВ nas telas de game over (como módulo para aguardar o main.js)
         document.addEventListener('DOMContentLoaded', function() {
             function openRanking() { if (window.game) window.game.showRanking(); }
             var ids = ['btn-exp-ranking', 'btn-dis-ranking', 'btn-shift-ranking'];
