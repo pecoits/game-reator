@@ -1,7 +1,7 @@
 // ===== MANUAL CONTENT =====
 // Structured page data rendered by UIController.renderManualPage()
 
-var MANUAL_PAGES = {
+export var MANUAL_PAGES = {
     pt: [
         // Page 1: Cover
         {

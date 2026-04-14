@@ -1,4 +1,8 @@
 // ===== UI CONTROLLER =====
+import { SoundSystem } from './sound-system.js';
+import { showGameConfirm } from './utils.js';
+import { MANUAL_PAGES } from './manual-content.js';
+
 // Ensure SoundSystem is available
 if (typeof SoundSystem === 'undefined') {
     console.error('SoundSystem not loaded!');
