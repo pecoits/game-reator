@@ -1,4 +1,4 @@
-module.exports = [
+export default [
     {
         files: ['js/**/*.js'],
         languageOptions: {
@@ -34,12 +34,13 @@ module.exports = [
         files: ['tests/**/*.js'],
         languageOptions: {
             ecmaVersion: 2021,
-            sourceType: 'commonjs',
+            sourceType: 'module',
             globals: {
                 console: 'readonly',
                 process: 'readonly',
                 __dirname: 'readonly',
                 global: 'readonly',
+                globalThis: 'readonly',
                 REACTOR_CONFIG: 'readonly'
             }
         },

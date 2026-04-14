@@ -1,6 +1,6 @@
 // ===== REACTOR PHYSICS CONFIG =====
 // Central location for all tunable simulation parameters.
-var REACTOR_CONFIG = {
+export var REACTOR_CONFIG = {
     initial: {
         coreTemperature: 280,
         pressure: 15.5,
