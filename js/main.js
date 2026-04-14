@@ -327,13 +327,5 @@ try {
 } catch (error) {
     console.error('CRITICAL: Failed to start game from main module:', error);
     console.error(error.stack);
-    
-    // Fallback error display if showBootError fails
-    const bootErrorMsg = document.getElementById('boot-error-message');
-    if (bootErrorMsg) {
-        bootErrorMsg.textContent = 'Ошибка запуска: ' + error.message;
-        document.getElementById('boot-error-modal').style.display = 'flex';
-    } else {
-        alert('КРИТИЧЕСКАЯ ОШИБКА: ' + error.message);
-    }
+    showBootError('Ошибка запуска: ' + error.message);
 }
