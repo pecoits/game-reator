@@ -147,6 +147,9 @@ class GameApp {
                 if (overlay) overlay.style.display = 'none';
             });
             this.demandSystem   = new DemandSystem(this.simulation);
+            if (this.uiController && typeof this.uiController.setDemandSystem === 'function') {
+                this.uiController.setDemandSystem(this.demandSystem);
+            }
             this.demandSystem.onShowTelex = (stage, text, quota, count) => {
                 this.gameOverSystem.showTelex(stage, text, quota, count);
             };

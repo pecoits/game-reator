@@ -1,5 +1,6 @@
 // ===== UI CONTROLLER - NEW CONTROL ROOM STYLE =====
 import { SoundSystem } from './sound-system.js';
+import { MANUAL_PAGES } from './manual-content.js';
 
 export var UIControllerNew = (function() {
     function UIControllerNew(simulation) {
@@ -13,11 +14,16 @@ export var UIControllerNew = (function() {
         this.prevPumpFault     = false;
         this.prevRodFault      = false;
         this.prevPressureFault = false;
+        this.demandSystem      = null;
         
         this.elements = {};
         
         this.init();
     }
+
+    UIControllerNew.prototype.setDemandSystem = function(demandSystem) {
+        this.demandSystem = demandSystem;
+    };
 
     UIControllerNew.prototype.init = function() {
         var self = this;
@@ -145,6 +151,7 @@ export var UIControllerNew = (function() {
         this.elements.statTime   = document.getElementById('stat-time');
         this.elements.statEnergy = document.getElementById('stat-energy');
         this.elements.statAlerts = document.getElementById('stat-alerts');
+        this.elements.statQuota  = document.getElementById('stat-quota');
         this.elements.statShift  = document.getElementById('stat-shift');
         
         // Fault LEDs
@@ -384,6 +391,9 @@ export var UIControllerNew = (function() {
         if (this.elements.statTime)   this.elements.statTime.textContent   = this.formatTime(state.time);
         if (this.elements.statEnergy) this.elements.statEnergy.textContent = Math.round(state.totalEnergyMWh || 0);
         if (this.elements.statAlerts) this.elements.statAlerts.textContent = state.totalAlerts || 0;
+        if (this.elements.statQuota && this.demandSystem) {
+            this.elements.statQuota.textContent = this.demandSystem.getQuota();
+        }
         if (this.elements.statShift) {
             var shiftRemaining = Math.max(0, (REACTOR_CONFIG.shiftDuration || 600000) - (state.time || 0));
             var shiftPct = 1 - shiftRemaining / (REACTOR_CONFIG.shiftDuration || 600000);
@@ -492,13 +502,61 @@ export var UIControllerNew = (function() {
         }
     };
 
+    UIControllerNew.prototype.renderManualSection = function(section, version) {
+        switch (section.type) {
+            case 'cover':
+                return (section.content || '').replace('{{version}}', version);
+            case 'footer':
+                return '<div class="manual-footer">' + (section.content || '') + '</div>';
+            case 'heading':
+                return '<h3 class="manual-heading">' + (section.content || '') + '</h3>';
+            case 'text':
+                return '<p class="manual-text">' + (section.content || '') + '</p>';
+            case 'warning':
+                return '<div class="manual-warning">' + (section.content || '') + '</div>';
+            case 'list': {
+                var tag = section.ordered ? 'ol' : 'ul';
+                var items = (section.items || []).map(function(item) {
+                    return '<li>' + item + '</li>';
+                }).join('');
+                return '<' + tag + ' class="manual-list">' + items + '</' + tag + '>';
+            }
+            case 'table': {
+                var rows = (section.rows || []).map(function(row, rowIndex) {
+                    var cellTag = rowIndex === 0 ? 'th' : 'td';
+                    return '<tr>' + row.map(function(cell) {
+                        return '<' + cellTag + '>' + cell + '</' + cellTag + '>';
+                    }).join('') + '</tr>';
+                }).join('');
+                return '<table class="manual-table">' + rows + '</table>';
+            }
+            default:
+                return '';
+        }
+    };
+
+    UIControllerNew.prototype.renderManualPage = function(page, index, version) {
+        var titleHtml = index === 0 ? '' : '<h2 class="manual-page-title">' + (page.title || '') + '</h2>';
+        var self = this;
+        return '<div class="manual-page" data-page="' + (index + 1) + '">' +
+            titleHtml +
+            (page.sections || []).map(function(section) {
+                return self.renderManualSection(section, version);
+            }).join('') +
+            '</div>';
+    };
+
     UIControllerNew.prototype.openManual = function() {
         var lang = window.selectedLanguage || 'en';
-        var pages = lang === 'pt' ? manualPagesPT :
-                    lang === 'es' ? manualPagesES :
-                    lang === 'fr' ? manualPagesFR : manualPagesEN;
-        
-        if (!pages || pages.length === 0) return;
+        var pagesSource = MANUAL_PAGES[lang] || MANUAL_PAGES.en || MANUAL_PAGES.pt;
+
+        if (!pagesSource || pagesSource.length === 0) return;
+
+        var version = 'Rev.' +
+            (Math.floor(Math.random() * 5) + 2) + '.' +
+            Math.floor(Math.random() * 10) + '.' +
+            (Math.floor(Math.random() * 9) + 1);
+        var pages = pagesSource.map((page, index) => this.renderManualPage(page, index, version));
         
         var html = '<div id="manual-pages-container">';
 

@@ -20,49 +20,45 @@ Você é o novo operador de uma usina nuclear em uma república socialista fict�
 
 ### ✨ Funcionalidades Atuais
 
-- **🌍 Introdução Cinematográfica** com seleção de idioma (Português/Inglês)
-- **📖 Manual Técnico Bilíngue** (PT/EN) com termos russos para referência
-- **🎛️ Interface 100% em Russo** (cirílico) - imersão total!
+- **🌍 Introdução Cinematográfica** com seleção de idioma
+- **📖 Manual Técnico** em Português, Inglês, Espanhol e Francês com termos russos
+- **🎛️ Sala de Controle Imersiva** com medidores analógicos, displays digitais, knobs e chaves
 - **⚛️ Simulação Realista** de reator nuclear RBMK-1000
-- **🎨 Visualização 2D** do reator (com fallback automático)
-- **🔊 Sistema de Sons** com alarmes e beeps de alerta
-- **⏱️ Período de Graça** (2 minutos) para ambientação antes dos primeiros eventos
-- **🎯 Sistema de Missões** desafiadoras
-- **📊 Configuração Estável Inicial** para aprendizado gradual
-- **🔇 Controles de Volume** e mute no header
+- **🔊 Sistema de Sons** com alarmes, beeps de falha e ambiência industrial
+- **⏱️ Período de Graça** para ambientação antes dos primeiros eventos
+- **🎯 Sistema de Missões** e eventos operacionais
+- **📡 Sistema de Demanda do Partido** com cotas de energia e telex burocráticos
+- **💀 Game Over** por explosão, demissão misteriosa ou turno concluído
+- **🏆 Ranking Local** com arquivo de operadores
+- **🧹 Tutorial Interativo** conduzido por Domingos Ferreira
 
 ---
 
-## 🚀 Próximas Implementações (Em Breve!)
+## 🚀 Próximas Implementações
 
 Estamos trabalhando ativamente nas seguintes melhorias:
 
 ### 🎛️ Interface e Visual
-- **Sala de Controle Imersiva** - Painel estilo soviético com mostradores analógicos (ponteiros) e displays digitais (7 segmentos)
-- **Monitor de Sistema** - Pequena tela para mensagens em cirílico (erros, avisos, sucesso)
-- **Controles Físicos Estilizados** - Interruptores, botões e knobs que simulam hardware real
-- **Remoção da visualização externa** - Foco total no painel interno
+- **Polimento da Sala de Controle** - Ajustes finos de responsividade, densidade visual e legibilidade
+- **Estados de Falha Mais Claros** - Feedback visual e sonoro mais específico para cada tipo de falha
+- **Mais Instrumentos Operacionais** - Leituras adicionais de fluxo, cota e estabilidade
 
 ### 💀 Sistema de Game Over
-- **Final Explosão** - Fusão do reator com efeitos dramáticos
-- **Final Demissão Misteriosa** - Carta oficial do Ministério + "transferência para reeducação"
-- **Tela de Estatísticas** - Tempo sobrevivido, energia gerada, incidentes
+- **Finais Expandidos** - Mais variações narrativas para explosão, demissão e turno concluído
+- **Estatísticas Pós-Partida** - Eficiência, estabilidade, resposta a falhas e cumprimento de cotas
 
 ### 🏆 Ranking e Placar
-- **Ficha de Pessoal Soviética** - Sistema de ranking com tema de documentos oficiais
-- **Salvamento Local** - Histórico de partidas no navegador
-- **Métricas Diversas** - Tempo, eficiência, incidentes evitados
+- **Métricas Mais Ricas** - Eficiência média, incidentes evitados e energia entregue à cota
 
 ### 📱 Melhorias de Acessibilidade
-- **Responsividade Mobile** - Jogar em celulares e tablets
-- **Mais Idiomas** - Espanhol e Francês
+- **Responsividade Mobile** - Melhorar a ergonomia em celulares e tablets
+- **Acessibilidade de Controles** - Suporte mais completo a teclado e foco visível
 
 ### 🔊 Áudio e Atmosfera
-- **Sons Ambientais** - Ruído industrial, hum do reator
-- **Efeitos Sonoros Expandidos** - Mais variedade de alertas
+- **Efeitos Sonoros Expandidos** - Mais variedade de alertas e sons de operação
 
 ### 📊 Dados e Gráficos
-- **Gráficos Históricos** - Linhas de temperatura/potência em tempo real
+- **Histórico Operacional Expandido** - Tendências mais longas e diagnóstico por evento
 - **Dashboard de Performance** - Métricas detalhadas da operação
 
 ---
@@ -96,11 +92,12 @@ Estamos trabalhando ativamente nas seguintes melhorias:
 
 ## 🛠️ Tecnologias
 
-- **HTML5/CSS3** - Estrutura e estilização com tema soviético
-- **JavaScript (ES5)** - Lógica do jogo (máxima compatibilidade)
-- **Three.js r128** - Renderização 3D (com fallback 2D)
-- **Web Audio API** - Sistema de sons procedural
-- **Zero dependências externas** - 100% browser!
+- **HTML5/CSS3** - Estrutura e estilização com tema soviético industrial
+- **JavaScript ESM** - Sistemas modulares de simulação, UI, eventos, save e ranking
+- **Vite** - Build e servidor de desenvolvimento
+- **Web Audio API** - Sistema de sons procedural e ambiência
+- **localStorage** - Salvamento local, ranking e progresso do tutorial
+- **ESLint** - Verificação estática dos módulos JS e testes
 
 ---
 
@@ -110,17 +107,23 @@ Estamos trabalhando ativamente nas seguintes melhorias:
 game-reator/
 ├── index.html                  # Página principal
 ├── styles/
-│   ├── main.css               # Estilos principais
-│   └── intro.css              # Estilos da introdução
+│   ├── control-room.css       # Sala de controle, HUD, modais e game over
+│   ├── intro.css              # Estilos da introdução
+│   └── main.css               # Estilos legados/apoio
 ├── js/
 │   ├── main.js                # Aplicação principal
 │   ├── intro-system.js        # Sistema de introdução e idiomas
 │   ├── reactor-simulation.js  # Motor de simulação
-│   ├── 3d-viewport.js         # Visualização 2D/3D
-│   ├── ui-controller.js       # Controlador da interface
+│   ├── ui-controller-new.js   # Controlador da sala de controle atual
 │   ├── sound-system.js        # Sistema de sons
 │   ├── event-system.js        # Eventos e missões
-│   └── manual-content.js      # Manuais PT/EN
+│   ├── demand-system.js       # Cotas de energia e telex do Partido
+│   ├── game-over-system.js    # Finais e estatísticas
+│   ├── ranking-system.js      # Arquivo local de operadores
+│   ├── tutorial-system.js     # Tutorial interativo
+│   └── manual-content.js      # Manuais PT/EN/ES/FR
+├── tests/
+│   └── reactor.test.js        # Testes da simulação
 ├── .github/workflows/
 │   └── deploy.yml             # Deploy automático GitHub Pages
 └── README.md                  # Este arquivo
@@ -163,10 +166,13 @@ O jogo incorpora elementos visuais da era soviética dos anos 90:
 ## 🚀 Rodando Localmente
 
 ```bash
-# Usando Python 3
-python -m http.server 8080
+npm install
+npm run dev
 
-# Acesse: http://localhost:8080
+# Em outro terminal, quando quiser validar:
+npm test
+npm run lint
+npm run build
 ```
 
 ---
@@ -183,11 +189,11 @@ Este é um jogo fictício criado para fins educacionais e de entretenimento. Nã
 
 | Versão | Features Planejadas |
 |--------|---------------------|
-| **v1.0** (Atual) | Jogo base, introdução, manual, sons básicos |
-| **v1.1** | Painel de controle imersivo, game over com 2 finais |
-| **v1.2** | Ranking/placar, responsividade mobile |
-| **v1.3** | Mais idiomas, gráficos históricos, efeitos visuais |
-| **v2.0** | Sistema de shifts, tutorial interativo, eventos expandidos |
+| **v1.0** (Atual) | Sala de controle, simulação, tutorial, ranking, game over e cotas |
+| **v1.1** | Polimento mobile, acessibilidade e feedback de falhas |
+| **v1.2** | Histórico operacional expandido e métricas pós-partida |
+| **v1.3** | Eventos expandidos, sons adicionais e balanceamento |
+| **v2.0** | Sistema de turnos avançado e progressão de operadores |
 
 ---
 
