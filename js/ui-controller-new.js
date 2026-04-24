@@ -1,6 +1,7 @@
 // ===== UI CONTROLLER - NEW CONTROL ROOM STYLE =====
 import { SoundSystem } from './sound-system.js';
 import { MANUAL_PAGES } from './manual-content.js';
+import { REACTOR_CONFIG } from './config.js';
 
 export var UIControllerNew = (function() {
     function UIControllerNew(simulation) {
